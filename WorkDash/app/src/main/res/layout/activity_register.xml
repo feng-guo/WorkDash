@@ -24,10 +24,18 @@
             android:layout_marginBottom="16dp"/>
 
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/editTextFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
             android:inputType="textPersonName"
             android:layout_marginBottom="16dp"/>
 
