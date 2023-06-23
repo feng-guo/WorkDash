@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.workdash.models.BottomBarScreen
 import com.example.workdash.models.ScreenRoute
+import com.example.workdash.screen.EmpolyerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
@@ -38,6 +39,11 @@ fun BottomNavGraph(
             route = ScreenRoute.Home.route
         ){
             HomeScreen(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.CurrentJobPostsEmployer.route
+        ){
+            CurrentJobPostsEmployerScreen(navController = navController)
         }
     }
 }

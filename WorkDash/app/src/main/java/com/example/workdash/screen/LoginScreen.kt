@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.workdash.models.ScreenRoute
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,15 +43,17 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             "WorkDash",
-            fontSize = 30.sp,
+            fontSize = 50.sp,
             fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.height(32.dp))
         OutlinedTextField(
             value = emailOrPhone,
             onValueChange = { it ->  emailOrPhone = it},
@@ -68,17 +72,28 @@ fun LoginScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text("Forgot password?", modifier = Modifier.clickable { /* Handle click event */ })
-            Spacer(modifier = Modifier.width(16.dp))
-            Text("Sign Up", modifier = Modifier.clickable { /* Handle click event */ })
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
             //onLoginClicked(emailOrPhone, password)
-
+            navController.navigate(route = ScreenRoute.Home.route) {
+                popUpTo(ScreenRoute.Login.route){
+                    inclusive = true
+                }
+            }
         }) {
             Text("Log In")
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = {
+                //onLoginClicked(emailOrPhone, password)
+
+            }) {
+            Text("Sign Up", modifier = Modifier.clickable { /* Handle click event */ })
+        }
+
     }
 
 }

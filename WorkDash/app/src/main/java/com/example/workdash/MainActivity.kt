@@ -1,14 +1,13 @@
 package com.example.workdash
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import com.example.workdash.screen.MainScreen
 import com.example.workdash.ui.theme.WorkDashTheme
-import android.content.Intent
-import android.widget.Button
 
 class MainActivity : ComponentActivity() {
 

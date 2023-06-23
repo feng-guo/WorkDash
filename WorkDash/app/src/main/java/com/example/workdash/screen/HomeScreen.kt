@@ -1,7 +1,10 @@
 package com.example.workdash.screen
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.ScreenRoute
 
@@ -17,16 +21,35 @@ import com.example.workdash.models.ScreenRoute
 fun HomeScreen(
     navController: NavController
 ) {
-    Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ){
         Text(
-            text = "This is Home Page",
-            color = Color.White,
+            text = "What you want to do?",
+            color = MaterialTheme.colorScheme.primary,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(
+            onClick = {
+                navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
+                        inclusive = true
+                    }
+                }
+            }
+        ) {
+            Text(
+                text = "I want to find a job",
+                color = Color.White,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
                 navController.navigate(route = ScreenRoute.Login.route) {
@@ -37,7 +60,7 @@ fun HomeScreen(
             }
         ) {
             Text(
-                text = "Go to Login Page",
+                text = "I want to post a job",
                 color = Color.White,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontWeight = FontWeight.Bold
