@@ -1,5 +1,6 @@
 package com.example.workdash.screen.EmpolyerScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.R
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CurrentJobPostsEmployerScreen(
     navController: NavController,
@@ -60,7 +62,7 @@ fun CurrentJobPostsEmployerScreen(
             )
         }
     ) {
-            padding -> LazyColumn(
+            LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(jobs) { job ->
@@ -108,12 +110,13 @@ fun JobCard(job: Job) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier
+                    .fillMaxHeight()
                     .padding(
-                    bottom = 8.dp,
-                    top = 16.dp,
-                    start = 16.dp,
-                ),
+                        bottom = 8.dp,
+                        top = 16.dp,
+                        start = 16.dp,
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -124,27 +127,54 @@ fun JobCard(job: Job) {
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(
-                        text = job.title,
-                        style = MaterialTheme.typography.body2,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = job.location,
-                        style = MaterialTheme.typography.body2,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = job.currentState,
-                        style = MaterialTheme.typography.body2,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray
-                    )
+                    Row() {
+                        Text(
+                            text = "Job Title: ",
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = job.title,
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Gray
+                        )
+                    }
+                    Row() {
+                        Text(
+                            text = "Location: ",
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = job.location,
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Gray
+                        )
+                    }
+                    Row() {
+                        Text(
+                            text = "Current state: ",
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = job.currentState,
+                            style = MaterialTheme.typography.body2,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Gray
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -152,8 +182,8 @@ fun JobCard(job: Job) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(
-                            color = androidx.compose.material3.MaterialTheme.colorScheme.background,
-                        ),
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.background,
+                    ),
                 onClick = { /* Handle arrow button click */ }
             ) {
                 Icon(
