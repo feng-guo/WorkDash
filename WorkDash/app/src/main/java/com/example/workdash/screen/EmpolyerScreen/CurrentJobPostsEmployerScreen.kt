@@ -3,7 +3,6 @@ package com.example.workdash.screen.EmpolyerScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.R
+import com.example.workdash.models.ScreenRoute
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -66,7 +66,7 @@ fun CurrentJobPostsEmployerScreen(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(jobs) { job ->
-                JobCard(job = job)
+                JobCard(job = job, navController = navController)
             }
         }
     }
@@ -95,14 +95,12 @@ val jobs = listOf(
             currentState = "Current State 3"
         )
     )
-
 @Composable
-fun JobCard(job: Job) {
+fun JobCard(job: Job, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
-            .clickable { /* Handle card click */ },
+            .padding(bottom = 8.dp),
         elevation = 4.dp
     ) {
         Row(
@@ -182,9 +180,13 @@ fun JobCard(job: Job) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.background,
+                        color = Color.White,
                     ),
-                onClick = { /* Handle arrow button click */ }
+                onClick = {
+                    navController.navigate(
+                        ScreenRoute.JobDetailsEmployer.route
+                    )
+                }
             ) {
                 Icon(
                     Icons.Default.ArrowForward,
