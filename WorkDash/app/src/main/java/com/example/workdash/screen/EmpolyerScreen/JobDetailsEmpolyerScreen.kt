@@ -68,7 +68,7 @@ fun JobDetailsEmployerScreen(
                         text = "Job details:",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
+                            .padding(4.dp),
                         style = MaterialTheme.typography.body1,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -78,7 +78,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Job Position: ",
@@ -98,7 +98,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Employer Name: ",
@@ -118,7 +118,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Address: ",
@@ -138,7 +138,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Time: ",
@@ -158,7 +158,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Pay: ",
@@ -178,7 +178,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Requirement: ",
@@ -198,7 +198,7 @@ fun JobDetailsEmployerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                     ) {
                         Text(
                             text = "Position Left: ",
@@ -220,7 +220,7 @@ fun JobDetailsEmployerScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
                     .clickable { /* Handle card click */ },
                 elevation = 4.dp
             ){
