@@ -1,4 +1,4 @@
-package com.example.workdash.models
+package com.example.workdash.routes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

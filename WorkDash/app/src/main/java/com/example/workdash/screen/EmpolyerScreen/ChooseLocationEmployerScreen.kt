@@ -33,7 +33,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.R
-import com.example.workdash.models.ScreenRoute
+import com.example.workdash.models.LocationModel
+import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.viewModels.LocationViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,6 +43,7 @@ fun ChooseLocationEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
+    val locationsViewModel= LocationViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -67,27 +70,16 @@ fun ChooseLocationEmployerScreen(
         LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(locations) { location ->
+            items(locationsViewModel.getLocationList()) { location ->
                 LocationCard(location = location, navController = navController)
             }
         }
     }
 }
 
-val locations = listOf(
-    Location(
-//            imageResId = R.drawable.job_image1,
-        name = "Popeyes",
-        address = "85 University Ave E, Waterloo"
-    ),
-    Location(
-//            imageResId = R.drawable.job_image2,
-        name = "Burger King",
-        address = "30 Northfield Dr E, Waterloo"
-    )
-)
+
 @Composable
-fun LocationCard(location: Location, navController: NavController) {
+fun LocationCard(location: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -105,8 +97,9 @@ fun LocationCard(location: Location, navController: NavController) {
                         bottom = 8.dp,
                         top = 16.dp,
                         start = 16.dp,
-                    ),
-                verticalAlignment = Alignment.CenterVertically
+                    )
+                    .weight(10f),
+                verticalAlignment = Alignment.Top
             ) {
                 Image(
                     //painter = painterResource(id = job.imageResId),
@@ -157,7 +150,8 @@ fun LocationCard(location: Location, navController: NavController) {
                     .fillMaxHeight()
                     .background(
                         color = Color.White,
-                    ),
+                    )
+                    .weight(1f),
                 onClick = {
                     navController.navigate(ScreenRoute.AddPostEmployer.route)
                 }
@@ -171,7 +165,3 @@ fun LocationCard(location: Location, navController: NavController) {
     }
 }
 
-data class Location(
-    val name: String,
-    val address: String,
-)

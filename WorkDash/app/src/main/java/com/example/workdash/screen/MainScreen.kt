@@ -14,7 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.workdash.BottomNavGraph
-import com.example.workdash.models.BottomBarScreen
+import com.example.workdash.routes.BottomBarScreen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

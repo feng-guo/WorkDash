@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.models.CandidateModel
+import com.example.workdash.viewModels.CandidateViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -35,6 +37,7 @@ fun JobDetailsEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
+    val candidateViewModel = CandidateViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -243,7 +246,7 @@ fun JobDetailsEmployerScreen(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(candidates) { candidate ->
+                        items(candidateViewModel.getCandidateList()) { candidate ->
                             CandidateCard(candidate = candidate)
                         }
                     }
@@ -256,30 +259,8 @@ fun JobDetailsEmployerScreen(
     }
 }
 
-data class Candidate(
-    val applyID: Int,
-    val selfDescription: String,
-    val Certification: String,
-    val Rating: Int
-)
-
-val candidates = listOf(
-    Candidate(
-        applyID = 0,
-        selfDescription = "Job Title 1",
-        Certification = "Job Location 1",
-        Rating = 4
-    ),
-    Candidate(
-        applyID = 0,
-        selfDescription = "Job Title 2",
-        Certification = "Job Location 2",
-        Rating = 5
-    )
-)
-
 @Composable
-fun CandidateCard(candidate: Candidate) {
+fun CandidateCard(candidate: CandidateModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

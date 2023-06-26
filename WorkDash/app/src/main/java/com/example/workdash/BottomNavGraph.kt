@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.workdash.models.BottomBarScreen
-import com.example.workdash.models.ScreenRoute
+import com.example.workdash.routes.BottomBarScreen
+import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.screen.EmpolyerScreen.AddLocationEmployerScreen
 import com.example.workdash.screen.EmpolyerScreen.AddPostEmployerScreen
 import com.example.workdash.screen.EmpolyerScreen.ChooseLocationEmployerScreen

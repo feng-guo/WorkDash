@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.workdash.models.ScreenRoute
+import com.example.workdash.routes.ScreenRoute
 
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package com.example.workdash.models
+package com.example.workdash.routes
 
 sealed class ScreenRoute(val route: String){
     object Login: ScreenRoute(route = "login_screen")
