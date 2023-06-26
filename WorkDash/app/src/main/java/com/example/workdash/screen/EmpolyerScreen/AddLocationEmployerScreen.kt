@@ -39,7 +39,6 @@ fun AddLocationEmployerScreen(
 ) {
     var propertyName by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
-    var schedule by remember { mutableStateOf("") }
     var verification by remember { mutableStateOf("") }
 
     Scaffold(
@@ -76,15 +75,8 @@ fun AddLocationEmployerScreen(
                 OutlinedTextField(
                     value = location,
                     onValueChange = { location = it },
-                    label = { androidx.compose.material3.Text("Location") },
+                    label = { androidx.compose.material3.Text("Address") },
                     visualTransformation = PasswordVisualTransformation()
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = schedule,
-                    onValueChange = { it ->  schedule = it},
-                    label = { androidx.compose.material3.Text("Schedule") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
@@ -94,7 +86,9 @@ fun AddLocationEmployerScreen(
                     visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = {
+
+                }) {
                     Text(text = "    Add    ")
                 }
             }

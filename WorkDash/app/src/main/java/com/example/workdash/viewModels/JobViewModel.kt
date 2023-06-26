@@ -16,10 +16,10 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
-            location = locationViewModel.getLocation()
+            location = locationViewModel.getLocation(0)
         ),
         JobModel(
-            jobID = 123,
+            jobID = 432,
             position = "cleaner",
             employerName = "Popeyes",
             currentState = "posted",
@@ -28,10 +28,10 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
-            location = locationViewModel.getLocation()
+            location = locationViewModel.getLocation(0)
         ),
         JobModel(
-            jobID = 123,
+            jobID = 153,
             position = "cleaner",
             employerName = "Popeyes",
             currentState = "posted",
@@ -40,7 +40,7 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
-            location = locationViewModel.getLocation()
+            location = locationViewModel.getLocation(0)
         )
     )
 
