@@ -1,4 +1,4 @@
-package com.example.workdash.screen.EmpolyerScreen
+package com.example.workdash.screen.EmployerScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -33,24 +33,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.R
-import com.example.workdash.models.JobModel
+import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.viewModels.JobViewModel
 import com.example.workdash.viewModels.LocationViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CurrentJobPostsEmployerScreen(
+fun ChooseLocationEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
-    val locationViewModel = LocationViewModel()
-    val jobViewModel = JobViewModel()
+    val locationsViewModel= LocationViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Current Jobs")
+                    Text("Select A Location")
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -61,7 +59,7 @@ fun CurrentJobPostsEmployerScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
+                        navController.navigate(ScreenRoute.AddLocationEmployer.route)
                     }) {
                         Icon(Icons.Default.Add, contentDescription = "Add")
                     }
@@ -69,18 +67,19 @@ fun CurrentJobPostsEmployerScreen(
             )
         }
     ) {
-            LazyColumn(
+        LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(jobViewModel.getJobList()) { job ->
-                JobCard(job = job, navController = navController)
+            items(locationsViewModel.getLocationList()) { location ->
+                LocationCard(location = location, navController = navController)
             }
         }
     }
 }
 
+
 @Composable
-fun JobCard(job: JobModel, navController: NavController) {
+fun LocationCard(location: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +99,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                         start = 16.dp,
                     )
                     .weight(10f),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 Image(
                     //painter = painterResource(id = job.imageResId),
@@ -112,14 +111,14 @@ fun JobCard(job: JobModel, navController: NavController) {
                 Column {
                     Row() {
                         Text(
-                            text = "Job Title: ",
+                            text = "Name: ",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Black
                         )
                         Text(
-                            text = job.position,
+                            text = location.name,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -128,36 +127,21 @@ fun JobCard(job: JobModel, navController: NavController) {
                     }
                     Row() {
                         Text(
-                            text = "Location: ",
+                            text = "Address: ",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Black
                         )
                         Text(
-                            text = job.location.address,
+                            text = location.address,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Gray
                         )
                     }
-                    Row() {
-                        Text(
-                            text = "Current state: ",
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = job.currentState,
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
-                        )
-                    }
+
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -169,9 +153,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                     )
                     .weight(1f),
                 onClick = {
-                    navController.navigate(
-                        ScreenRoute.JobDetailsEmployer.route
-                    )
+                    navController.navigate(ScreenRoute.AddPostEmployer.route)
                 }
             ) {
                 Icon(
@@ -183,32 +165,3 @@ fun JobCard(job: JobModel, navController: NavController) {
     }
 }
 
-
-//@Preview
-//@Composable
-//fun CurrentJobPostsEmployerScreenPreview() {
-//    val jobs = listOf(
-//        Job(
-////            imageResId = R.drawable.job_image1,
-//            imageResId = 0,
-//            title = "Job Title 1",
-//            location = "Job Location 1",
-//            currentState = "Current State 1"
-//        ),
-//        Job(
-////            imageResId = R.drawable.job_image2,
-//            imageResId = 0,
-//            title = "Job Title 2",
-//            location = "Job Location 2",
-//            currentState = "Current State 2"
-//        ),
-//        Job(
-////            imageResId = R.drawable.job_image3,
-//            imageResId = 0,
-//            title = "Job Title 3",
-//            location = "Job Location 3",
-//            currentState = "Current State 3"
-//        )
-//    )
-//    CurrentJobPostsEmployerScreen(jobs = jobs)
-//}

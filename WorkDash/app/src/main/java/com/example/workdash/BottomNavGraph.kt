@@ -6,11 +6,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.workdash.routes.BottomBarScreen
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.screen.EmpolyerScreen.AddLocationEmployerScreen
-import com.example.workdash.screen.EmpolyerScreen.AddPostEmployerScreen
-import com.example.workdash.screen.EmpolyerScreen.ChooseLocationEmployerScreen
-import com.example.workdash.screen.EmpolyerScreen.CurrentJobPostsEmployerScreen
-import com.example.workdash.screen.EmpolyerScreen.JobDetailsEmployerScreen
+import com.example.workdash.screen.EmployerScreen.AddLocationEmployerScreen
+import com.example.workdash.screen.EmployerScreen.AddPostEmployerScreen
+import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
+import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
+import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen

@@ -1,4 +1,4 @@
-package com.example.workdash.screen.EmpolyerScreen
+package com.example.workdash.screen.EmployerScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -34,18 +34,19 @@ import androidx.navigation.NavController
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AddLocationEmployerScreen(
+fun AddPostEmployerScreen(
     navController: NavController
 ) {
-    var propertyName by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var verification by remember { mutableStateOf("") }
+    var jobPosition by remember { mutableStateOf("") }
+    var schedule by remember { mutableStateOf("") }
+    var pay by remember { mutableStateOf("") }
+    var requirements by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Add Location")
+                    Text("Add Post")
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -66,30 +67,35 @@ fun AddLocationEmployerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = propertyName,
-                    onValueChange = { it ->  propertyName = it},
-                    label = { androidx.compose.material3.Text("Property Name") },
+                    value = jobPosition,
+                    onValueChange = { it ->  jobPosition = it},
+                    label = { androidx.compose.material3.Text("Job Position") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
-                    value = location,
-                    onValueChange = { location = it },
-                    label = { androidx.compose.material3.Text("Address") },
+                    value = schedule,
+                    onValueChange = { schedule = it },
+                    label = { androidx.compose.material3.Text("Schedule") },
                     visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
-                    value = verification,
-                    onValueChange = { verification = it },
-                    label = { androidx.compose.material3.Text("Verification") },
+                    value = pay,
+                    onValueChange = { pay = it },
+                    label = { androidx.compose.material3.Text("Pay") },
                     visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-
-                }) {
-                    Text(text = "    Add    ")
+                OutlinedTextField(
+                    value = requirements,
+                    onValueChange = { it ->  requirements = it},
+                    label = { androidx.compose.material3.Text("Requirements") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = "    Post    ")
                 }
             }
         }
