@@ -78,8 +78,8 @@ fun LoginScreen(
         Button(
             onClick = {
             //onLoginClicked(emailOrPhone, password)
-            navController.navigate(route = ScreenRoute.Home.route) {
-                popUpTo(ScreenRoute.Login.route){
+            navController.navigate(route = ScreenRoute.JobDetailsWorker.route) { // NOTE: change this routing to general postings
+                popUpTo(ScreenRoute.JobDetailsWorker.route){
                     inclusive = true
                 }
             }
