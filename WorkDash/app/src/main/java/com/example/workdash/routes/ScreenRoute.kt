@@ -13,4 +13,5 @@ sealed class ScreenRoute(val route: String){
     object AddPostEmployer: ScreenRoute(route = "add_post_employer_screen")
 // Worker page routes
     object JobDetailsWorker: ScreenRoute(route = "job_details_worker_screen")
+    object UserDetailsWorker: ScreenRoute(route = "user_details_worker_screen")
 }
