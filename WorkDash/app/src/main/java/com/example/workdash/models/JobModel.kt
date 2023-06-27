@@ -13,5 +13,6 @@ data class JobModel(
     val requirements: String,
     val totalPositionNumber: Int,
     val filledPositionNumber:Int,
+    val isFirstJob: Boolean, //might delete later
     val location: LocationModel
 )

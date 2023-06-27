@@ -95,7 +95,9 @@ fun JobCard2(job: JobModel, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 8.dp),
-        elevation = 4.dp
+        elevation = 4.dp,
+        backgroundColor = if (job.isFirstJob) Color.Gray else Color.White
+        //backgroundColor = Color.Gray
     ) {
         Row(
             modifier = Modifier.fillMaxHeight(),
@@ -133,7 +135,8 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
+                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //color = Color.Gray
                         )
                     }
                     Row() {
@@ -149,7 +152,8 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
+                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //color = Color.Gray
                         )
                     }
                     Row() {
@@ -165,57 +169,42 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
+                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //color = Color.Gray
                         )
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .background(
-                        color = Color.White,
-                    )
-                    .weight(1f),
-                onClick = {
-                    navController.navigate(
-                        ScreenRoute.JobDetailsWorker.route
-                    )
-                }
-            ) {
-//                Icon(
-//                    Icons.Default.ArrowForward,
-//                    contentDescription = "Arrow"
-//                )
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Your Content",
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        color = Color.Black
-                    )
-                }
-            }
-//            Box(
+//            Spacer(modifier = Modifier.weight(1f))
+//            IconButton(
 //                modifier = Modifier
 //                    .fillMaxHeight()
-//                    .background(color = Color.White)
-//                    .weight(1f)
-//                    .padding(horizontal = 16.dp),
-//                contentAlignment = Alignment.Center
+//                    .background(
+//                        color = Color.White,
+//                    )
+//                    .weight(1f),
+//                onClick = {
+//                    navController.navigate(
+//                        ScreenRoute.JobDetailsWorker.route
+//                    )
+//                }
 //            ) {
-//                Text(
-//                    text = "Your Content",
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 4.dp), // Adjust the vertical padding to make the text box smaller
-//                    color = Color.Black,
-//                    fontSize = 14.sp // Adjust the font size to make the text smaller
-//                )
+////                Icon(
+////                    Icons.Default.ArrowForward,
+////                    contentDescription = "Arrow"
+////                )
+////                Box(
+////                    modifier = Modifier.fillMaxSize(),
+////                    contentAlignment = Alignment.Center
+////                ) {
+////                    Text(
+////                        text = "Applied",
+////                        modifier = Modifier.padding(horizontal = 8.dp),
+////                        color = Color.Black
+////                    )
+////                }
 //            }
+
         }
     }
 }

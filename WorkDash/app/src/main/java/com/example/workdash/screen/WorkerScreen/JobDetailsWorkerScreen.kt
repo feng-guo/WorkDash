@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.ButtonDefaults
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.workdash.routes.ScreenRoute
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -230,7 +231,14 @@ fun JobDetailsWorkerScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
+
+                            popUpTo(ScreenRoute.JobDetailsWorker.route){
+                                inclusive = true
+                            }
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                 )
                 {

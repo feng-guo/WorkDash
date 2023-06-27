@@ -5,6 +5,7 @@ import com.example.workdash.models.JobModel
 
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
+    //val isFirstJob: Boolean = false //might delete later
     val jobs = listOf(
 
         JobModel(
@@ -20,6 +21,7 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
+            isFirstJob = true,
             location = locationViewModel.getLocation(0)
         ),
         JobModel(
@@ -35,6 +37,7 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
+            isFirstJob = false,
             location = locationViewModel.getLocation(0)
         ),
         JobModel(
@@ -50,6 +53,7 @@ class JobViewModel: ViewModel() {
             requirements = "N/A",
             totalPositionNumber = 5,
             filledPositionNumber = 4,
+            isFirstJob = false,
             location = locationViewModel.getLocation(0)
         )
     )
