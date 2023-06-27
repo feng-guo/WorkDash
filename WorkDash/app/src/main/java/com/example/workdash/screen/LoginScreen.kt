@@ -92,15 +92,11 @@ fun LoginScreen(
         Button(
             onClick = {
                 //onLoginClicked(emailOrPhone, password)
-                navController.navigate(route = ScreenRoute.Home.route) {
-                    popUpTo(ScreenRoute.Login.route){
-                        inclusive = true
-                    }
-                }
+
             },
             modifier = Modifier.height(40.dp).width(100.dp)
         ) {
-            Text("Sign Up")
+            Text("Sign Up", modifier = Modifier.clickable { /* Handle click event */ })
         }
 
     }

@@ -12,17 +12,17 @@ sealed class BottomBarScreen(
     var icon: ImageVector
 ){
     object Home: BottomBarScreen(
-        route = ScreenRoute.Home.route,
+        route = "home_screen",
         title = "Home",
         icon = Icons.Default.Home
     )
     object UserInfo: BottomBarScreen(
-        route = ScreenRoute.UserInfo.route,
+        route = "userinfo_screen",
         title = "UserInfo",
         icon = Icons.Default.Person
     )
     object Setting: BottomBarScreen(
-        route = ScreenRoute.Settings.route,
+        route = "settings_screen",
         title = "Settings",
         icon = Icons.Default.Settings
     )
