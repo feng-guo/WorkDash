@@ -48,7 +48,7 @@ fun ChooseLocationEmployerScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Current Jobs")
+                    Text("Select A Location")
                 },
                 navigationIcon = {
                     IconButton(onClick = {

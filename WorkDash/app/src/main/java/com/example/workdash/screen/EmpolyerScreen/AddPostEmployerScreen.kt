@@ -46,7 +46,7 @@ fun AddPostEmployerScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Add Location")
+                    Text("Add Post")
                 },
                 navigationIcon = {
                     IconButton(onClick = {

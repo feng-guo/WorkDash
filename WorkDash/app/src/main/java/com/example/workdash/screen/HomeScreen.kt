@@ -35,8 +35,8 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
-                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
+                navController.navigate(route = ScreenRoute.Login.route) {
+                    popUpTo(ScreenRoute.Login.route){
                         inclusive = true
                     }
                 }
@@ -52,8 +52,8 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-                navController.navigate(route = ScreenRoute.Login.route) {
-                    popUpTo(ScreenRoute.Login.route){
+                navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
                         inclusive = true
                     }
                 }
