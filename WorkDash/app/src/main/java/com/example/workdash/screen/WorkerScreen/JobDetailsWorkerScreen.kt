@@ -29,6 +29,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun JobDetailsWorkerScreen(
