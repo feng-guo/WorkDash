@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -82,7 +83,9 @@ fun LoginScreen(
                     inclusive = true
                 }
             }
-        }) {
+        },
+            modifier = Modifier.height(40.dp).width(100.dp)
+        ) {
             Text("Log In")
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -90,7 +93,9 @@ fun LoginScreen(
             onClick = {
                 //onLoginClicked(emailOrPhone, password)
 
-            }) {
+            },
+            modifier = Modifier.height(40.dp).width(100.dp)
+        ) {
             Text("Sign Up", modifier = Modifier.clickable { /* Handle click event */ })
         }
 
