@@ -92,7 +92,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 //onLoginClicked(emailOrPhone, password)
-                navController.navigate(route = ScreenRoute.Home.route) {
+                navController.navigate(route = ScreenRoute.UserProfileEmployee.route) {
                     popUpTo(ScreenRoute.Login.route){
                         inclusive = true
                     }

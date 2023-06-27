@@ -15,6 +15,7 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
+import com.example.workdash.screen.UserProfileEmployee
 
 @Composable
 fun BottomNavGraph(
@@ -68,6 +69,11 @@ fun BottomNavGraph(
             route = ScreenRoute.AddPostEmployer.route
         ){
             AddPostEmployerScreen(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.UserProfileEmployee.route
+        ){
+            UserProfileEmployee(navController = navController)
         }
     }
 }
