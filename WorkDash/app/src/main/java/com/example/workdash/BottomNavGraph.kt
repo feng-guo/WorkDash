@@ -17,6 +17,8 @@ import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
 import com.example.workdash.screen.UserProfileEmployee
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
+import com.example.workdash.screen.WorkerScreen.ListOfJobs
+import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
 
 @Composable
 fun BottomNavGraph(
@@ -79,6 +81,16 @@ fun BottomNavGraph(
             route = ScreenRoute.JobDetailsWorker.route
         ) {
             JobDetailsWorkerScreen(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.ListOfJobs.route
+        ) {
+            ListOfJobs(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.ListOfJobsApplied.route
+        ) {
+            ListOfJobsApplied(navController = navController)
         }
     }
 }
