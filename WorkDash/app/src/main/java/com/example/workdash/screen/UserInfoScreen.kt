@@ -33,7 +33,7 @@ fun UserInfo(
                     }
                 }
             },
-            modifier = Modifier.height(40.dp).width(100.dp)
+            modifier = Modifier.height(40.dp).width(110.dp)
         ) {
             Text("Log Out")
         }
