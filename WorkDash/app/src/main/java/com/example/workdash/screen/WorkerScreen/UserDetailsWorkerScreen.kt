@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.routes.ScreenRoute
 import java.util.Calendar
 import kotlin.math.roundToInt
 
@@ -211,7 +212,13 @@ fun UserDetailsWorkerScreen(
 
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Button(
-                    onClick = { },
+                    onClick = {
+                        navController.navigate(route = ScreenRoute.ListOfJobs.route) { // NOTE: change this routing to general postings
+                            popUpTo(ScreenRoute.ListOfJobs.route){
+                                inclusive = true
+                            }
+                        }
+                    },
                     Modifier.padding(horizontal = 20.dp)
                         .width(128.dp)
                         .height(40.dp)
