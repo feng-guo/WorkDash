@@ -27,7 +27,7 @@ class JobViewModel: ViewModel() {
         JobModel(
             jobID = 432,
             position = "cleaner",
-            position_for_employer = "Line Cook",
+            position_for_employer = "Cleaner",
             employerName_for_employee = "Mcdonalds",
             pay_for_employee = "$19/hour",
             employerName = "Popeyes",
@@ -38,12 +38,12 @@ class JobViewModel: ViewModel() {
             totalPositionNumber = 5,
             filledPositionNumber = 4,
             isFirstJob = false,
-            location = locationViewModel.getLocation(0)
+            location = locationViewModel.getLocation(1)
         ),
         JobModel(
             jobID = 153,
             position = "cleaner",
-            position_for_employer = "Line Cook",
+            position_for_employer = "Dish Washer",
             employerName_for_employee = "KFC",
             pay_for_employee = "$18/hour",
             employerName = "Popeyes",
@@ -54,7 +54,7 @@ class JobViewModel: ViewModel() {
             totalPositionNumber = 5,
             filledPositionNumber = 4,
             isFirstJob = false,
-            location = locationViewModel.getLocation(0)
+            location = locationViewModel.getLocation(2)
         )
     )
 

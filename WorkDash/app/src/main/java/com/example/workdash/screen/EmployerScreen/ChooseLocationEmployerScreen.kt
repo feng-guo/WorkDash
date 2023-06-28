@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.workdash.R
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
@@ -101,11 +102,10 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.Top
             ) {
-                Image(
-                    //painter = painterResource(id = job.imageResId),
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "Job Image",
-                    modifier = Modifier.size(80.dp)
+                AsyncImage(
+                    model = location.imgUrl,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
