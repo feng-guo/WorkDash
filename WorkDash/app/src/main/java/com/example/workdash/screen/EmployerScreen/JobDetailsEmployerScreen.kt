@@ -97,7 +97,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Job Position: ",
+                            text = "Line Cook",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -117,7 +117,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Employer Name: ",
+                            text = "Burger King",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -137,7 +137,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Address: ",
+                            text = "E7",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -157,7 +157,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Time: ",
+                            text = "July 3rd 13:00 - 19:00",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -177,7 +177,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Pay: ",
+                            text = "\$17/hr",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -197,7 +197,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Requirement: ",
+                            text = "Food Handler Certificate",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -217,7 +217,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Position Left: ",
+                            text = "2",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -354,7 +354,7 @@ fun CandidateCard(candidate: CandidateModel) {
                     color = Color.Black
                 )
                 Text(
-                    text = "Rating: ",
+                    text = "4.5 / 5",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

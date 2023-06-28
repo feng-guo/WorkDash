@@ -44,7 +44,7 @@ class JobViewModel: ViewModel() {
             jobID = 153,
             position = "cleaner",
             position_for_employer = "Dish Washer",
-            employerName_for_employee = "KFC",
+            employerName_for_employee = "Lazeez",
             pay_for_employee = "$18/hour",
             employerName = "Popeyes",
             currentState = "posted",
