@@ -8,14 +8,14 @@ class CandidateViewModel {
         CandidateModel(
             applyID = 0,
             selfDescription = "Job Title 1",
-            Certification = "Job Location 1",
-            Rating = 4
+            certification = "Job Location 1",
+            rating = 4
         ),
         CandidateModel(
             applyID = 0,
             selfDescription = "Job Title 2",
-            Certification = "Job Location 2",
-            Rating = 5
+            certification = "Job Location 2",
+            rating = 5
         )
     )
 

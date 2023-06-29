@@ -15,4 +15,17 @@ data class JobModel(
     val filledPositionNumber:Int,
     val isFirstJob: Boolean, //might delete later
     val location: LocationModel
+
+//    val locationId: String,
+//    val jobId: String,
+//
+//    val jobName: String,
+//    val jobState: String,
+//    val schedule: String, //This might have to be some sort of timeobject instead
+//    val payPerHour: Int,
+//    val totalCompensation: Int, //This might just be calculated on render instead of being stored
+//    val certificationsRequired: List<Certifications>,
+//    val totalPositionsRequired: Int,
+//    val totalPositionsFilled: Int
+
 )
