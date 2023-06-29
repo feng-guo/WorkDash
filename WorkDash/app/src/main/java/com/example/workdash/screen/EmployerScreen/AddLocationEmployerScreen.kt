@@ -30,6 +30,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.models.LocationModel
+import com.google.firebase.database.FirebaseDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -87,7 +89,8 @@ fun AddLocationEmployerScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-
+                    var locationModel = LocationModel(1, propertyName, location, "yes", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
+                    FirebaseDatabase.getInstance().reference.child("Locations").child("Testing company").setValue(locationModel)
                 }) {
                     Text(text = "    Add    ")
                 }
