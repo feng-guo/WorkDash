@@ -89,7 +89,8 @@ fun AddLocationEmployerScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-                    var locationModel = LocationModel(1, propertyName, location, "yes", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
+//                    var locationModel = LocationModel(1, propertyName, location, "yes", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
+                    var locationModel = LocationModel("1", propertyName, location, true, 1,"booger king", "king", "verify", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg" )
                     FirebaseDatabase.getInstance().reference.child("Locations").child("Testing company").setValue(locationModel)
                 }) {
                     Text(text = "    Add    ")

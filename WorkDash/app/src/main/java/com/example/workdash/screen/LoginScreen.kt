@@ -1,5 +1,6 @@
 package com.example.workdash.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +44,8 @@ fun LoginScreen(
 ) {
     var emailOrPhone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val contextForToast = LocalContext.current.applicationContext
+    val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,12 +82,28 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-            //onLoginClicked(emailOrPhone, password)
-            navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) { // NOTE: change this routing to general postings
-                popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
-                    inclusive = true
+                if (emailOrPhone.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(contextForToast, "Invalid Inputs", Toast.LENGTH_SHORT).show()
+                } else {
+                    auth.signInWithEmailAndPassword(emailOrPhone, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Login successful, navigate to the desired screen
+                                navController.navigate(ScreenRoute.CurrentJobPostsEmployer.route) {
+                                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                                        inclusive = true
+                                    }
+                                }
+                            } else {
+                                // Login failed, display an error message to the user
+                                Toast.makeText(
+                                    contextForToast,
+                                    "Login failed. Please check your credentials.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                 }
-            }
         },
             modifier = Modifier.height(40.dp).width(100.dp)
         ) {
