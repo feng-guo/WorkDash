@@ -1,8 +1,11 @@
 package com.example.workdash.screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -16,26 +19,40 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun UserInfo(
     navController: NavController
 ) {
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
-        Button(
-            onClick = {
-                navController.navigate(route = ScreenRoute.Home.route) { // NOTE: change this routing to general postings
-                    popUpTo(ScreenRoute.Home.route){
-                        inclusive = true
+        if (currentUser != null) {
+            // User is signed in, you can access their information
+            Text("Hello ${currentUser.email}")
+            Button(
+                onClick = {
+                    auth.signOut()
+                    navController.navigate(route = ScreenRoute.Home.route) { // NOTE: change this routing to general postings
+                        popUpTo(ScreenRoute.Home.route) {
+                            inclusive = true
+                        }
                     }
-                }
-            },
-            modifier = Modifier.height(40.dp).width(110.dp)
-        ) {
-            Text("Log Out")
+                },
+                Modifier.padding(top = 100.dp)
+                    .width(128.dp)
+                    .height(40.dp)
+            ) {
+                Text("Log Out")
+            }
+            // You can perform further actions with the user's information
+        } else {
+            Text("You are not logged in")
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.workdash.screen.WorkerScreen
 
+import android.widget.Toast
 import android.app.TimePickerDialog
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import java.util.Calendar
 import kotlin.math.roundToInt
 
@@ -58,7 +62,6 @@ fun UserDetailsWorkerScreen(
             toTime.value = "$mHour:$mMinute"
         }, mHour, mMinute, true
     )
-
 
     LazyColumn(
         modifier = Modifier
@@ -210,22 +213,7 @@ fun UserDetailsWorkerScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Button(
-                    onClick = {
-                        navController.navigate(route = ScreenRoute.ListOfJobs.route) { // NOTE: change this routing to general postings
-                            popUpTo(ScreenRoute.ListOfJobs.route){
-                                inclusive = true
-                            }
-                        }
-                    },
-                    Modifier.padding(horizontal = 20.dp)
-                        .width(128.dp)
-                        .height(40.dp)
-                ) {
-                    Text(text = "Sign Up")
-                }
-            }
+            SignUpButton(navController = navController, email = email, password = password)
         }
     }
 }
@@ -251,5 +239,62 @@ fun DayOfWeekItem(day: String) {
             modifier = Modifier.padding(0.dp),
             color = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primary
         )
+    }
+}
+
+@Composable
+fun SignUpButton(navController: NavController, email: String, password: String) {
+    val contextForToast = LocalContext.current.applicationContext
+    val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
+
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Button(
+            onClick = {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Signup successful, navigate to the desired screen
+                            navController.navigate(route = ScreenRoute.ListOfJobs.route) {
+                                popUpTo(ScreenRoute.ListOfJobs.route) {
+                                    inclusive = true
+                                }
+                            }
+                        } else {
+                            // Signup failed, display an error message to the user
+                            val exception = task.exception
+                            when (exception) {
+                                is FirebaseAuthUserCollisionException -> {
+                                    Toast.makeText(
+                                        contextForToast,
+                                        "Email already in use",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                is FirebaseAuthException -> {
+                                    Toast.makeText(
+                                        contextForToast,
+                                        "Signup failed: ${exception.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                else -> {
+                                    Toast.makeText(
+                                        contextForToast,
+                                        "Signup failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+            },
+            Modifier.padding(horizontal = 20.dp)
+                .width(128.dp)
+                .height(40.dp)
+        ) {
+            Text(text = "Sign Up")
+        }
     }
 }
