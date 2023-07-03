@@ -1,16 +1,21 @@
 package com.example.workdash
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.workdash.routes.BottomBarScreen
+import com.example.workdash.routes.IS_WORKER_ARG
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.screen.EmployerScreen.AddLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.AddPostEmployerScreen
 import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
+import com.example.workdash.screen.EmployerScreen.SignUpEmployerScreen
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
@@ -29,8 +34,12 @@ fun BottomNavGraph(
         startDestination = BottomBarScreen.Home.route
     ){
         composable(
-            route = ScreenRoute.Login.route
+            route = ScreenRoute.Login.route,
+            arguments = listOf(navArgument(IS_WORKER_ARG) {
+                type = NavType.BoolType
+            })
         ){
+            Log.d("Args", it.arguments?.getBoolean(IS_WORKER_ARG).toString())
             LoginScreen(navController = navController)
         }
         composable(
@@ -92,6 +101,11 @@ fun BottomNavGraph(
             route = ScreenRoute.ListOfJobsApplied.route
         ) {
             ListOfJobsApplied(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.SignUpEmployer.route
+        ) {
+            SignUpEmployerScreen(navController = navController)
         }
     }
 }

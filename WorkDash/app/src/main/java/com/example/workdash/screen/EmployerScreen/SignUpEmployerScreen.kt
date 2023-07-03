@@ -1,4 +1,4 @@
-package com.example.workdash.screen.WorkerScreen
+package com.example.workdash.screen.EmployerScreen
 
 import android.widget.Toast
 import android.app.TimePickerDialog
@@ -22,17 +22,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.routes.ScreenRoute
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.FirebaseDatabase
-import java.util.Calendar
-import kotlin.math.roundToInt
-import com.example.workdash.models.WorkerProfileModel
 
 @Composable
-fun UserDetailsWorkerScreen(
+fun SignUpEmployerScreen(
     navController: NavController
 ) {
     var name by remember { mutableStateOf("") }
@@ -41,30 +39,9 @@ fun UserDetailsWorkerScreen(
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var phone by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
-    var sliderPosition by remember { mutableStateOf(0f) }
-    val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
-    val workDays = remember { mutableSetOf<String>() }
     val IDs = listOf("Passport", "Driver's Licence", "Health Card", "Employee ID")
     val checkedIDs = remember { mutableStateListOf<String>() }
 
-    val mContext = LocalContext.current
-    val mCalendar = Calendar.getInstance()
-    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
-    val mMinute = mCalendar[Calendar.MINUTE]
-    val fromTime = remember { mutableStateOf("") }
-    val mTimePickerDialog1 = TimePickerDialog(
-        mContext,
-        { _, mHour: Int, mMinute: Int ->
-            fromTime.value = "$mHour:$mMinute"
-        }, mHour, mMinute, true
-    )
-    val toTime = remember { mutableStateOf("") }
-    val mTimePickerDialog2 = TimePickerDialog(
-        mContext,
-        { _, mHour: Int, mMinute: Int ->
-            toTime.value = "$mHour:$mMinute"
-        }, mHour, mMinute, true
-    )
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
 
     LazyColumn(
@@ -130,67 +107,8 @@ fun UserDetailsWorkerScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
-        item {
-            Text(text = "Salary: $sliderPosition CAD", style = MaterialTheme.typography.h6)
-            Slider(
-                value = sliderPosition,
-                onValueChange = { sliderPosition = it.roundToInt().toFloat() },
-                valueRange = 0f..50f
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            Text(text = "Working Days/hours", style = MaterialTheme.typography.h6)
-            Box(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                Row(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    daysOfWeek.forEach { day ->
-                        if (DayOfWeekItem(day)) {
-                            workDays.add(day)
-                        }
-                    }
-                }
-            }
-        }
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxSize().padding(4.dp)) {
-                Button(
-                    onClick = { mTimePickerDialog1.show() },
-                    Modifier.padding(horizontal = 20.dp)
-                    .width(128.dp)
-                    .height(40.dp)) {
-                    if (fromTime.value == "")
-                    {
-                        Text(text = "From", color = Color.White)
-                    }
-                    else
-                    {
-                        Text(text = fromTime.value, color = Color.White)
-                    }
-                }
 
-                Button(
-                    onClick = { mTimePickerDialog2.show() },
-                    Modifier.padding(horizontal = 20.dp)
-                        .width(128.dp)
-                        .height(40.dp)) {
-                    if (toTime.value == "")
-                    {
-                        Text(text = "To", color = Color.White)
-                    }
-                    else
-                    {
-                        Text(text = toTime.value, color = Color.White)
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
+        item {
             Column(modifier = Modifier.padding(0.dp)) {
                 Text(text = "Identity Proof Selection", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -224,49 +142,20 @@ fun UserDetailsWorkerScreen(
             // if the signup is successful, save the users information in the database
             if (auth.currentUser != null) {
                 var uid = auth.currentUser!!.uid
-                var workerProfile = WorkerProfileModel(
+                var employerProfile = EmployerProfileModel(
                     uid = uid,
-                    isWorker = true,
+                    isWorker = false,
                     name = name,
                     email = email,
                     phone = phone,
                     address = address,
-                    salary = sliderPosition.toInt(),
                     isVerified = true,
-                    workDays = workDays.toList(),
-                    startTime = fromTime.value,
-                    endTime = toTime.value,
                 )
 
-                FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
+                FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(employerProfile)
             }
         }
     }
-}
-
-
-@Composable
-fun DayOfWeekItem(day: String): Boolean {
-    var isSelected by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = { isSelected = !isSelected },
-        modifier = Modifier.padding(horizontal = 2.dp)
-            .width(48.dp)
-            .height(36.dp),
-        shape = MaterialTheme.shapes.small,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (isSelected) MaterialTheme.colors.primary else Color.Transparent,
-            contentColor = MaterialTheme.colors.primaryVariant
-        )
-    ) {
-        Text(
-            text = day,
-            modifier = Modifier.padding(0.dp),
-            color = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primary
-        )
-    }
-    return isSelected
 }
 
 @Composable
@@ -281,8 +170,8 @@ fun SignUpButton(navController: NavController, email: String, password: String) 
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             // Signup successful, navigate to the desired screen
-                            navController.navigate(route = ScreenRoute.ListOfJobs.route) {
-                                popUpTo(ScreenRoute.ListOfJobs.route) {
+                            navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+                                popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
                                     inclusive = true
                                 }
                             }
