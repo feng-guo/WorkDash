@@ -31,7 +31,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.LocationModel
-import com.google.firebase.database.FirebaseDatabase
+import com.example.workdash.viewModels.LocationViewModel
+import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,9 +40,11 @@ import com.google.firebase.database.FirebaseDatabase
 fun AddLocationEmployerScreen(
     navController: NavController
 ) {
-    var propertyName by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var verification by remember { mutableStateOf("") }
+    var locationName by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+//    var verification by remember { mutableStateOf("") }
+
+    val locationsViewModel= LocationViewModel()
 
     Scaffold(
         topBar = {
@@ -68,30 +71,32 @@ fun AddLocationEmployerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = propertyName,
-                    onValueChange = { it ->  propertyName = it},
-                    label = { androidx.compose.material3.Text("Property Name") },
+                    value = locationName,
+                    onValueChange = { it ->  locationName = it},
+                    label = { androidx.compose.material3.Text("Location Name") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
-                    value = location,
-                    onValueChange = { location = it },
+                    value = address,
+                    onValueChange = { address = it },
                     label = { androidx.compose.material3.Text("Address") },
-                    visualTransformation = PasswordVisualTransformation()
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+//                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = verification,
-                    onValueChange = { verification = it },
-                    label = { androidx.compose.material3.Text("Verification") },
-                    visualTransformation = PasswordVisualTransformation()
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                //TODO add verification to a location
+//                OutlinedTextField(
+//                    value = verification,
+//                    onValueChange = { verification = it },
+//                    label = { androidx.compose.material3.Text("Verification") },
+//                    visualTransformation = PasswordVisualTransformation()
+//                )
+//                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-//                    var locationModel = LocationModel(1, propertyName, location, "yes", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
-                    var locationModel = LocationModel("1", propertyName, location, true, 1,"booger king", "king", "verify", "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg" )
-                    FirebaseDatabase.getInstance().reference.child("Locations").child("Testing company").setValue(locationModel)
+                    //TODO generate proper location IDs
+                    var locationModel = LocationModel(ceil(Math.random()*100).toInt().toString(), "1", locationName, address, true, 1, "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
+                    locationsViewModel.addLocation(locationModel)
                 }) {
                     Text(text = "    Add    ")
                 }

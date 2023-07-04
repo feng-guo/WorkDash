@@ -1,7 +1,6 @@
 package com.example.workdash.screen.EmployerScreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,12 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.workdash.R
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.LocationViewModel
@@ -45,6 +42,7 @@ fun ChooseLocationEmployerScreen(
     //jobs: List<Job>
 ) {
     val locationsViewModel= LocationViewModel()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -118,7 +116,7 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = location.name,
+                            text = location.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

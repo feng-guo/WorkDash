@@ -1,17 +1,19 @@
 package com.example.workdash.models
 
 data class LocationModel(
-    val locationId: String,
-    val businessId: String,
-    val locationName: String,
+    var locationId: String,
+    var businessId: String,
+
+    //TODO implement address model later
 //    val address: AddressModel,
-    val isVerified: Boolean,
 
+    var locationName: String,
+    var address: String,
+    var isVerified: Boolean,
 
-
-    val imageResId: Int,
-    val name: String,
-    val address: String,
-    val verification: String,
-    val imgUrl: String
-)
+    //TODO we might have to change this later
+    var imageResId: Long,
+    var imgUrl: String
+) {
+    constructor() : this("", "", "", "", false, 0, "") {}
+}
