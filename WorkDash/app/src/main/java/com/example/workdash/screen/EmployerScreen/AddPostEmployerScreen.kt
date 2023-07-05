@@ -30,6 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.models.JobModel
+import com.example.workdash.viewModels.JobViewModel
+import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -37,10 +40,12 @@ import androidx.navigation.NavController
 fun AddPostEmployerScreen(
     navController: NavController
 ) {
-    var jobPosition by remember { mutableStateOf("") }
+    var jobName by remember { mutableStateOf("") }
     var schedule by remember { mutableStateOf("") }
-    var pay by remember { mutableStateOf("") }
-    var requirements by remember { mutableStateOf("") }
+    var payPerHour by remember { mutableStateOf("") }
+    var certificationsRequired by remember { mutableStateOf("") }
+
+    val jobViewModel = JobViewModel()
 
     Scaffold(
         topBar = {
@@ -67,8 +72,8 @@ fun AddPostEmployerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = jobPosition,
-                    onValueChange = { it ->  jobPosition = it},
+                    value = jobName,
+                    onValueChange = { it ->  jobName = it},
                     label = { androidx.compose.material3.Text("Job Position") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
@@ -81,20 +86,24 @@ fun AddPostEmployerScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
-                    value = pay,
-                    onValueChange = { pay = it },
+                    value = payPerHour,
+                    onValueChange = { payPerHour = it },
                     label = { androidx.compose.material3.Text("Pay") },
                     visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
-                    value = requirements,
-                    onValueChange = { it ->  requirements = it},
+                    value = certificationsRequired,
+                    onValueChange = { it ->  certificationsRequired = it},
                     label = { androidx.compose.material3.Text("Requirements") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = {
+                    //TODO change this to implement actual data
+                    var jobModel = JobModel("3", ceil(Math.random()*100).toInt().toString(), jobName, "In Progress", schedule, 10, certificationsRequired, 2, 0)
+                    jobViewModel.addJob(jobModel)
+                }) {
                     Text(text = "    Post    ")
                 }
             }

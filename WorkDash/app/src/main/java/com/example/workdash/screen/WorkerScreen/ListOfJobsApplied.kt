@@ -96,7 +96,9 @@ fun JobCard2(job: JobModel, navController: NavController) {
             .fillMaxWidth()
             .padding(bottom = 8.dp),
         elevation = 4.dp,
-        backgroundColor = if (job.isFirstJob) Color.Gray else Color.White
+        //TODO determine if user applied to job
+//        backgroundColor = if (job.isFirstJob) Color.Gray else Color.White
+        backgroundColor = if (true) Color.Gray else Color.White
         //backgroundColor = Color.Gray
     ) {
         Row(
@@ -114,11 +116,12 @@ fun JobCard2(job: JobModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AsyncImage(
-                    model = job.location.imgUrl,
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
+                //TODO get image
+//                AsyncImage(
+//                    model = job.location.imgUrl,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(100.dp)
+//                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Row() {
@@ -130,11 +133,12 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.position_for_employer,
+                            text = job.jobName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //TODO
+                            color = if (true) Color.White else Color.Black
                             //color = Color.Gray
                         )
                     }
@@ -147,11 +151,13 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.employerName_for_employee,
+                            //TODO get text for employer
+                            text = job.jobId,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //TODO
+                            color = if (true) Color.White else Color.Black
                             //color = Color.Gray
                         )
                     }
@@ -164,11 +170,12 @@ fun JobCard2(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.pay_for_employee,
+                            text = job.payPerHour.toString(),
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = if (job.isFirstJob) Color.White else Color.Black
+                            //TODO
+                            color = if (true) Color.White else Color.Black
                             //color = Color.Gray
                         )
                     }

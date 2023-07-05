@@ -103,11 +103,12 @@ fun JobCard(job: JobModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AsyncImage(
-                    model = job.location.imgUrl,
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
+                //TODO figure out images
+//                AsyncImage(
+//                    model = job.location.imgUrl,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(100.dp)
+//                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Row() {
@@ -119,7 +120,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.position,
+                            text = job.jobName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -135,7 +136,8 @@ fun JobCard(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.location.address,
+                            //TODO implement location
+                            text = job.jobId,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -151,7 +153,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.currentState,
+                            text = job.jobState,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
