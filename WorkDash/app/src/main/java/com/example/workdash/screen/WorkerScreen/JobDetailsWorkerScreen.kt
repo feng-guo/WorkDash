@@ -28,7 +28,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.ButtonDefaults
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.viewModels.JobViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -37,6 +39,7 @@ fun JobDetailsWorkerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
+    val jobViewModel = JobViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -232,6 +235,9 @@ fun JobDetailsWorkerScreen(
             ) {
                 Button(
                     onClick = {
+                        val jobApplicationModel = JobApplicationModel("test", "test", "test", "Pending")
+                        jobViewModel.applyToJob(jobApplicationModel)
+
                         navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
 
                             popUpTo(ScreenRoute.JobDetailsWorker.route){
