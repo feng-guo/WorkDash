@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeScreen(
     navController: NavController
 ) {
+    val auth = FirebaseAuth.getInstance()
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,11 +45,21 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                navController.navigate(route = ScreenRoute.Login.passIsWorker(true)) {
-                    popUpTo(ScreenRoute.Login.route) {
-                        inclusive = true
+                if(auth.currentUser == null){
+                    navController.navigate(route = ScreenRoute.Login.passIsWorker(true)) {
+                        popUpTo(ScreenRoute.Login.route) {
+                            inclusive = true
+                        }
                     }
                 }
+                else{
+                    navController.navigate(ScreenRoute.ListOfJobs.route){
+                        popUpTo(ScreenRoute.ListOfJobs.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+
             },
             Modifier.width(280.dp)
         ) {
@@ -61,11 +73,21 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-                navController.navigate(route = ScreenRoute.Login.passIsWorker(false)) {
-                    popUpTo(ScreenRoute.Login.route){
-                        inclusive = true
+                if(auth.currentUser == null){
+                    navController.navigate(route = ScreenRoute.Login.passIsWorker(false)) {
+                        popUpTo(ScreenRoute.Login.route){
+                            inclusive = true
+                        }
                     }
                 }
+                else {
+                    navController.navigate(ScreenRoute.CurrentJobPostsEmployer.route) {
+                        popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+
             },
             Modifier.width(280.dp)
         ) {
