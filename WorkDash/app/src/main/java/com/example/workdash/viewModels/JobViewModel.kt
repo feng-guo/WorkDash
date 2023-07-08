@@ -91,7 +91,7 @@ class JobViewModel: ViewModel() {
         return jobApplications
     }
     fun applyToJob(jobApplication: JobApplicationModel) {
-        FirebaseDatabase.getInstance().reference.child("Jobs").child(jobApplication.jobId).setValue(jobApplication)
+        FirebaseDatabase.getInstance().reference.child("JobApplications").child(jobApplication.jobId).setValue(jobApplication)
     }
 
     fun acceptApplication(jobApplication: JobApplicationModel) {
