@@ -5,5 +5,6 @@ object Constants {
         const val JOB_TABLE_NAME = "Jobs"
         const val JOB_APPLICATION_TABLE_NAME = "JobApplications"
         const val LOCATION_TABLE_NAME = "Locations"
+        const val ID_TABLE_NAME = "IDs"
     }
 }

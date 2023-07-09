@@ -46,6 +46,23 @@ object DatabaseService {
 //        entriesList.addValueEventListener(listener)
 //    }
 
+    fun readSingleValueFromDbTableWithId(tableName: String, id: String): String {
+        val entry = dbRef.child(tableName).child(id)
+        var returnObject = ""
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                returnObject = dataSnapshot.value as String
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        entry.addValueEventListener(listener)
+
+        return returnObject
+    }
+    
     fun <T> readSingleObjectFromDbTableWithId(tableName: String, id: String, returnObject: T): T {
         val entry = dbRef.child(tableName).child(id)
 
