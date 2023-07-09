@@ -1,10 +1,11 @@
 package com.example.workdash.models
 
 data class AddressModel(
-    val number: String,
-    val street: String,
-    val city: String,
-    val province: String,
-    val country: String,
-    val postalCode: String
-)
+    var address: String,
+    var city: String,
+    var province: String,
+    var country: String,
+    var postalCode: String
+) {
+    constructor() : this("", "", "", "", "")
+}

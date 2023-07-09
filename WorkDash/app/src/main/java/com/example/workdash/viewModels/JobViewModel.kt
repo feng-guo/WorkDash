@@ -77,9 +77,7 @@ class JobViewModel: ViewModel() {
         }
         jobApplicationList.addValueEventListener(jobApplicationListener)
     }
-    fun addJob(job: JobModel){
-        FirebaseDatabase.getInstance().reference.child("Jobs").child(job.jobId).setValue(job)
-    }
+
     fun getJobList(): List<JobModel>{
         return jobs
     }
@@ -89,17 +87,6 @@ class JobViewModel: ViewModel() {
 
     fun getJobApplicationList(): List<JobApplicationModel> {
         return jobApplications
-    }
-    fun applyToJob(jobApplication: JobApplicationModel) {
-        FirebaseDatabase.getInstance().reference.child("JobApplications").child(jobApplication.jobId).setValue(jobApplication)
-    }
-
-    fun acceptApplication(jobApplication: JobApplicationModel) {
-        //TODO
-    }
-
-    fun rejectApplication(jobApplication: JobApplicationModel) {
-        //TODO
     }
 }
 
