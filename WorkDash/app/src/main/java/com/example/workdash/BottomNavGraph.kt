@@ -24,6 +24,7 @@ import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
+import com.example.workdash.screen.EmployerScreen.WorkerRating
 
 @Composable
 fun BottomNavGraph(
@@ -106,6 +107,11 @@ fun BottomNavGraph(
             route = ScreenRoute.SignUpEmployer.route
         ) {
             SignUpEmployerScreen(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.WorkerRating.route
+        ) {
+            WorkerRating(navController = navController)
         }
     }
 }

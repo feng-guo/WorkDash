@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.CandidateModel
+import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.CandidateViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -253,7 +254,7 @@ fun JobDetailsEmployerScreen(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         items(candidateViewModel.getCandidateList()) { candidate ->
-                            CandidateCard(candidate = candidate)
+                            CandidateCard(candidate = candidate, navController = navController)
                         }
                     }
                 }
@@ -266,7 +267,7 @@ fun JobDetailsEmployerScreen(
 }
 
 @Composable
-fun CandidateCard(candidate: CandidateModel) {
+fun CandidateCard(candidate: CandidateModel, navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
 
     var enabled by remember {
@@ -372,6 +373,16 @@ fun CandidateCard(candidate: CandidateModel) {
                     onClick = {
                         Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
                         enabled = false
+                        navController.navigate(
+                            ScreenRoute.WorkerRating.route
+                        )
+                        {
+
+                            popUpTo(ScreenRoute.WorkerRating.route){
+                                inclusive = true
+                            }
+                        }
+
                     },
                     enabled = enabled,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
