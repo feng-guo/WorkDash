@@ -26,23 +26,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.JobModel
+import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
-import com.example.workdash.viewModels.LocationViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListOfJobs(
     navController: NavController,
-    //jobs: List<Job>
 ) {
-    val locationViewModel = LocationViewModel()
     val jobViewModel = JobViewModel()
     Scaffold(
         topBar = {
@@ -130,6 +128,10 @@ fun ListOfJobs(
 
 @Composable
 fun JobCard(job: JobModel, navController: NavController) {
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
+    LocationService.getLocationFromId(job.locationId, locationCallback)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,8 +186,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            //TODO get the employer name from the location and then business
-                            text = job.jobId,
+                            text = locationModel.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -220,7 +221,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                     .weight(1f),
                 onClick = {
                     navController.navigate(
-                        ScreenRoute.JobDetailsWorker.route
+                        route = ScreenRoute.JobDetailsWorker.passJobIdAndLocationId(job.jobId, job.locationId)
                     )
                 }
             ) {

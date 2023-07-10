@@ -12,12 +12,6 @@ class LocationViewModel {
     init {
         var dbRef = FirebaseDatabase.getInstance().reference
         var locationList = dbRef.child("Locations")
-//
-//        var locationsMap = locationList.chiget()
-//        println(locationsMap)
-////        for (location in locationsMap ) {
-////            locations.add(location.value as LocationModel)
-////        }
 
         val locationListListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -29,7 +23,8 @@ class LocationViewModel {
                         locationId = locationObj["locationId"].toString()
                         businessId = locationObj["businessId"].toString()
                         locationName = locationObj["locationName"].toString()
-                        address = locationObj["address"].toString()
+                        //TODO figure out how to retrieve the object
+//                        address = locationObj["address"].toString()
                         isVerified = locationObj["verified"] as Boolean
                         imageResId = locationObj["imageResId"] as Long
                         imgUrl= locationObj["imageUrl"].toString()
@@ -51,9 +46,5 @@ class LocationViewModel {
 
     fun getLocation(num:Int): LocationModel{
         return locations.get(num)
-    }
-
-    fun addLocation(location: LocationModel){
-        FirebaseDatabase.getInstance().reference.child("Locations").child(location.locationId).setValue(location)
     }
 }

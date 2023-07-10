@@ -1,6 +1,7 @@
 package com.example.workdash.screen.EmployerScreen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,13 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.workdash.models.LocationModel
-import com.example.workdash.viewModels.LocationViewModel
-import kotlin.math.ceil
+import com.example.workdash.services.AddressService
+import com.example.workdash.services.LocationService
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -43,9 +43,15 @@ fun AddLocationEmployerScreen(
 ) {
     var locationName by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
+    var city by remember { mutableStateOf("") }
+    var province by remember { mutableStateOf("") }
+    var country by remember { mutableStateOf("") }
+    var postalCode by remember { mutableStateOf("") }
+
+    val contextForToast = LocalContext.current.applicationContext
+
 //    var verification by remember { mutableStateOf("") }
 
-    val locationsViewModel= LocationViewModel()
 
     Scaffold(
         topBar = {
@@ -74,7 +80,7 @@ fun AddLocationEmployerScreen(
             ) {
                 OutlinedTextField(
                     value = locationName,
-                    onValueChange = { it ->  locationName = it},
+                    onValueChange = { locationName = it},
                     label = { androidx.compose.material3.Text("Location Name") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
@@ -87,6 +93,36 @@ fun AddLocationEmployerScreen(
 //                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = { city = it },
+                    label = { androidx.compose.material3.Text("City") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                //TODO this should probably be a dropdown
+                OutlinedTextField(
+                    value = province,
+                    onValueChange = { province = it },
+                    label = { androidx.compose.material3.Text("Province") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                //TODO This should also probably be a dropdown
+                OutlinedTextField(
+                    value = country,
+                    onValueChange = { country = it },
+                    label = { androidx.compose.material3.Text("Country") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = postalCode,
+                    onValueChange = { postalCode = it },
+                    label = { androidx.compose.material3.Text("Postal Code") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 //TODO add verification to a location
 //                OutlinedTextField(
 //                    value = verification,
@@ -96,9 +132,19 @@ fun AddLocationEmployerScreen(
 //                )
 //                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-                    //TODO generate proper location IDs
-                    var locationModel = LocationModel(ceil(Math.random()*100).toInt().toString(), "1", locationName, address, true, 1, "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg")
-                    locationsViewModel.addLocation(locationModel)
+                    val addressModel = AddressService.createAddress(address, city, province, country, postalCode)
+                    if (AddressService.verifyAddress(addressModel)) {
+                        //TODO add image upload
+                        val imgUrl = "https://media.cnn.com/api/v1/images/stellar/prod/230629010804-01-university-of-waterloo-sign-062823.jpg"
+                        LocationService.addLocation(locationName, addressModel, imgUrl)
+                    } else {
+                        Toast.makeText(
+                            contextForToast,
+                            //TODO make this not bad
+                            "This is not a real location",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }) {
                     Text(text = "    Add    ")
                 }

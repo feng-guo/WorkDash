@@ -71,7 +71,7 @@ fun ChooseLocationEmployerScreen(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(locationsViewModel.getLocationList()) { location ->
-                LocationCard(location = location, navController = navController)
+                LocationCard(locationModel = location, navController = navController)
             }
         }
     }
@@ -79,7 +79,7 @@ fun ChooseLocationEmployerScreen(
 
 
 @Composable
-fun LocationCard(location: LocationModel, navController: NavController) {
+fun LocationCard(locationModel: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +102,7 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                 verticalAlignment = Alignment.Top
             ) {
                 AsyncImage(
-                    model = location.imgUrl,
+                    model = locationModel.imgUrl,
                     contentDescription = null,
                     modifier = Modifier.size(100.dp)
                 )
@@ -117,7 +117,7 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = location.locationName,
+                            text = locationModel.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -133,7 +133,7 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = location.address,
+                            text = locationModel.address.address,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -152,7 +152,7 @@ fun LocationCard(location: LocationModel, navController: NavController) {
                     )
                     .weight(1f),
                 onClick = {
-                    navController.navigate(ScreenRoute.AddPostEmployer.route)
+                    navController.navigate(route = ScreenRoute.AddPostEmployer.passLocationId(locationModel.locationId))
                 }
             ) {
                 Icon(

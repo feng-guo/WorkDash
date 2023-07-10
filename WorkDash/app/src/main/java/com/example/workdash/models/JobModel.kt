@@ -1,22 +1,6 @@
 package com.example.workdash.models
 
 data class JobModel(
-    //TODO delete later
-//    val jobID: Int,
-//    val position: String,
-//    val position_for_employer: String,
-//    val employerName_for_employee: String,
-//    val pay_for_employee: String,
-//    val employerName: String,
-//    val currentState: String,
-//    val schedule: String,
-//    val pay: Int,
-//    val requirements: String,
-//    val totalPositionNumber: Int,
-//    val filledPositionNumber:Int,
-//    val isFirstJob: Boolean, //might delete later
-//    val location: LocationModel
-
     var locationId: String,
     var jobId: String,
 
@@ -32,5 +16,8 @@ data class JobModel(
     var totalPositionsFilled: Long
 
 ) {
-    constructor() : this("", "", "", "", "", 0, "", 0, 0) {}
+    constructor() : this("", "", "", "", "", 0, "", 0, 0)
+
+    //TODO change pending to a constant
+    constructor(locationId: String, jobId: String, jobName: String, schedule: String, payPerHour: Long, certificationsRequired: String, totalPositionsRequired: Long) : this(locationId, jobId, jobName, "Pending", schedule, payPerHour, certificationsRequired, totalPositionsRequired, 0)
 }

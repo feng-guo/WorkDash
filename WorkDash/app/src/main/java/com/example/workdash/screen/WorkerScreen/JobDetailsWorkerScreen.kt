@@ -28,18 +28,37 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.workdash.models.JobApplicationModel
+import com.example.workdash.models.JobModel
+import com.example.workdash.models.LocationModel
+import com.example.workdash.routes.JOB_ID_ARG
+import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.services.JobApplicationService
+import com.example.workdash.services.JobService
+import com.example.workdash.services.LocationService
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun JobDetailsWorkerScreen(
-    navController: NavController,
-    //jobs: List<Job>
+    navController: NavController
 ) {
-    val jobViewModel = JobViewModel()
+
+
+    val navBackStackEntry = navController.currentBackStackEntry
+    val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
+    val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
+
+    var jobModel = JobModel()
+    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
+    JobService.getJobFromId(jobId, jobCallback)
+
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
+    LocationService.getLocationFromId(locationId, locationCallback)
+
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,6 +89,7 @@ fun JobDetailsWorkerScreen(
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
+                    //TODO real image
                     AsyncImage(
                         model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
                         contentDescription = null,
@@ -99,7 +119,7 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Line Cook",
+                            text = jobModel.jobName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -119,7 +139,8 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Burger King",
+                            //TODO not sure what we should put as the location name
+                            text = locationModel.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -139,7 +160,8 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "E7",
+                            //TODO add more to the address
+                            text = locationModel.address.address,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -159,7 +181,7 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "July 3rd 13:00 - 19:00",
+                            text = jobModel.schedule,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -179,7 +201,7 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "$17/hr",
+                            text = jobModel.payPerHour.toString(),
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -192,14 +214,15 @@ fun JobDetailsWorkerScreen(
                             .padding(4.dp)
                     ) {
                         Text(
-                            text = "Requirement: ",
+                            text = "Requirement(s): ",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Black
                         )
                         Text(
-                            text = "Food Handler Certificate",
+                            //TODO convert this row into a list or combine the list
+                            text = jobModel.certificationsRequired,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -212,14 +235,14 @@ fun JobDetailsWorkerScreen(
                             .padding(4.dp)
                     ) {
                         Text(
-                            text = "Position Left: ",
+                            text = "Positions Left: ",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Black
                         )
                         Text(
-                            text = "2",
+                            text = (jobModel.totalPositionsRequired-jobModel.totalPositionsFilled).toString(),
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -236,11 +259,9 @@ fun JobDetailsWorkerScreen(
             ) {
                 Button(
                     onClick = {
-                        val jobApplicationModel = JobApplicationModel("test", "test", "test", "Pending")
-                        jobViewModel.applyToJob(jobApplicationModel)
-
-                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
-
+                        JobApplicationService.applyToJob(jobModel.jobId)
+                        //TODO we can probably eventually get rid of this
+                        navController.navigate(route = ScreenRoute.ListOfJobs.route) {
                             popUpTo(ScreenRoute.JobDetailsWorker.route){
                                 inclusive = true
                             }

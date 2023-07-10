@@ -41,9 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.workdash.models.CandidateModel
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.viewModels.CandidateViewModel
 //import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.models.WorkerProfileModel
 
@@ -57,7 +55,7 @@ fun WorkerRating(
 
     //jobs: List<Job>
 ) {
-    var rating by mutableStateOf(0)
+    var rating by remember {mutableStateOf(0)}
 
 
     //val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
