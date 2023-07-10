@@ -35,6 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.JobApplicationModel
+import com.example.workdash.models.JobModel
+import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.services.JobApplicationService
@@ -51,8 +53,15 @@ fun JobDetailsEmployerScreen(
     val navBackStackEntry = navController.currentBackStackEntry
     val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
-    val jobModel = JobService.getJobFromId(jobId)
-    val locationModel = LocationService.getLocationFromId(locationId)
+
+    var jobModel = JobModel()
+    val jobCallback = { job: JobModel? -> jobModel = job?: JobModel() }
+    JobService.getJobFromId(jobId, jobCallback)
+
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
+    LocationService.getLocationFromId(locationId, locationCallback)
+
 
     val jobViewModel = JobViewModel()
 

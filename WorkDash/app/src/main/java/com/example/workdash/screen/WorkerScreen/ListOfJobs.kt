@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.models.JobModel
+import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
@@ -76,7 +77,9 @@ fun ListOfJobs(
 
 @Composable
 fun JobCard(job: JobModel, navController: NavController) {
-    val locationModel = LocationService.getLocationFromId(job.locationId)
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
+    LocationService.getLocationFromId(job.locationId, locationCallback)
 
     Card(
         modifier = Modifier

@@ -12,7 +12,7 @@ object JobApplicationService {
     }
 
     private fun saveJobApplication(jobApplication: JobApplicationModel) {
-        DatabaseService.writeToDbTable(Constants.TableNames.JOB_APPLICATION_TABLE_NAME, jobApplication.jobId, jobApplication)
+        DatabaseService.writeToDbTable(Constants.TableNames.JOB_APPLICATION_TABLE_NAME, jobApplication.jobApplicationId, jobApplication)
     }
 
     fun acceptApplication(jobApplication: JobApplicationModel) {

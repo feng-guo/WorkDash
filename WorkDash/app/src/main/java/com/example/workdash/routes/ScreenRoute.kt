@@ -14,9 +14,9 @@ sealed class ScreenRoute(val route: String){
     object Settings: ScreenRoute(route = "settings_screen")
 //Employer page routes
     object CurrentJobPostsEmployer: ScreenRoute(route = "current_job_posts_employer_screen")
-    object JobDetailsEmployer: ScreenRoute(route = "job_details_employer_screen/{$JOB_ID_ARG$LOCATION_ID_ARG}") {
+    object JobDetailsEmployer: ScreenRoute(route = "job_details_employer_screen/{$JOB_ID_ARG}/{$LOCATION_ID_ARG}") {
         fun passJobIdAndLocationId(jobId: String, locationId: String): String {
-            return "job_details_employer_screen/$jobId$locationId"
+            return "job_details_employer_screen/$jobId/$locationId"
         }
     }
     object ChooseLocationEmployer: ScreenRoute(route = "choose_location_employer_screen")

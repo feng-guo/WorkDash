@@ -30,7 +30,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
-import com.example.workdash.routes.IS_WORKER_ARG
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
@@ -44,11 +43,19 @@ import com.example.workdash.services.LocationService
 fun JobDetailsWorkerScreen(
     navController: NavController
 ) {
+
+
     val navBackStackEntry = navController.currentBackStackEntry
     val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
-    val jobModel = JobService.getJobFromId(jobId)
-    val locationModel = LocationService.getLocationFromId(locationId)
+
+    var jobModel = JobModel()
+    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
+    JobService.getJobFromId(jobId, jobCallback)
+
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
+    LocationService.getLocationFromId(locationId, locationCallback)
 
 
 

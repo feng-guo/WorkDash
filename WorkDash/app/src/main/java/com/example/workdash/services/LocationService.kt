@@ -1,12 +1,9 @@
 package com.example.workdash.services
 
-import com.example.workdash.Constants
 import com.example.workdash.Constants.IdNames.LOCATION_ID_NAME
 import com.example.workdash.Constants.TableNames.LOCATION_TABLE_NAME
 import com.example.workdash.models.AddressModel
-import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
-import kotlin.math.ceil
 
 object LocationService {
 
@@ -15,7 +12,7 @@ object LocationService {
         //TODO should be businessId here
         val businessId = UserService.getCurrentUserId()
         //TODO what is imageResId
-        var locationModel = LocationModel(locationId, businessId, locationName, address, false, 1, imgUrl)
+        val locationModel = LocationModel(locationId, businessId, locationName, address, false, 1, imgUrl)
         saveLocation(locationModel)
     }
 
@@ -28,8 +25,8 @@ object LocationService {
         saveLocation(locationModel)
     }
 
-    fun getLocationFromId(locationId: String): LocationModel {
+    fun getLocationFromId(locationId: String, callback: (locationModel: LocationModel?) -> Unit) {
         val locationModel = LocationModel()
-        return DatabaseService.readSingleObjectFromDbTableWithId(LOCATION_TABLE_NAME, LOCATION_ID_NAME, locationId, locationModel)
+        DatabaseService.readSingleObjectFromDbTableWithId(LOCATION_TABLE_NAME, LOCATION_ID_NAME, locationId, locationModel, callback)
     }
 }

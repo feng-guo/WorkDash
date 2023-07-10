@@ -63,33 +63,23 @@ object DatabaseService {
         return returnObject
     }
     
-    fun <T> readSingleObjectFromDbTableWithId(tableName: String, idName: String, id: String, returnObject: T): T {
+    fun <T : Any> readSingleObjectFromDbTableWithId(tableName: String, idName: String, id: String, returnObject: T, callback: (obj: T?) -> Unit) {
         val entry = dbRef.child(tableName).orderByChild(idName).equalTo(id)
 
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val obj = dataSnapshot.value as HashMap<*, *>
-                loadObject(obj, returnObject)
+                if (dataSnapshot.exists()) {
+                    val obj = dataSnapshot.children.first().getValue(returnObject::class.java)
+                    callback.invoke(obj)
+                } else {
+                    callback.invoke(null)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 //TODO Idk do something if it fails
             }
         }
-        entry.addValueEventListener(listener)
-
-        return returnObject
-    }
-
-    private fun <T> loadObject(obj: HashMap<*, *>, returnObject: T): T {
-        when(returnObject) {
-            is JobModel -> {
-                loadJobModel(obj, returnObject)
-            }
-            is LocationModel -> {
-                loadLocationModel(obj, returnObject)
-            }
-        }
-        return returnObject
+        entry.addListenerForSingleValueEvent(listener)
     }
 
     private fun loadJobModel(jobObj: HashMap<*, *>, jobModel: JobModel) {
