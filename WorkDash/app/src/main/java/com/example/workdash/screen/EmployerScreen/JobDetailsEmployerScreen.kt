@@ -376,12 +376,12 @@ fun CandidateCard(candidate: CandidateModel, navController: NavController) {
                         navController.navigate(
                             ScreenRoute.WorkerRating.route
                         )
-                        {
-
-                            popUpTo(ScreenRoute.WorkerRating.route){
-                                inclusive = true
-                            }
-                        }
+//                        {
+//
+//                            popUpTo(ScreenRoute.WorkerRating.route){
+//                                inclusive = true
+//                            }
+//                        }
 
                     },
                     enabled = enabled,

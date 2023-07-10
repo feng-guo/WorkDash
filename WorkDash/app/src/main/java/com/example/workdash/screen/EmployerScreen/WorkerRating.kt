@@ -44,15 +44,23 @@ import androidx.navigation.NavController
 import com.example.workdash.models.CandidateModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.CandidateViewModel
+//import com.example.workdash.models.EmployerProfileModel
+import com.example.workdash.models.WorkerProfileModel
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun WorkerRating(
     navController: NavController,
 
+
+
     //jobs: List<Job>
 ) {
     var rating by mutableStateOf(0)
+
+
+    //val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
     Column(
 
         modifier = Modifier
@@ -61,12 +69,29 @@ fun WorkerRating(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "How satisfied are you with this employee?",
-            style = MaterialTheme.typography.h1,
-            fontSize = 24.sp,
-            textAlign = TextAlign.Center
-        )
+        val topstack = navController.currentBackStackEntry?.destination?.id
+
+        if(topstack == -1073570031) {
+            Text(
+
+
+                text = "How satisfied are you with this employee?",
+                style = MaterialTheme.typography.h1,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+
+        }
+        else{
+            Text(
+
+
+                text = "How satisfied were you with this job?",
+                style = MaterialTheme.typography.h1,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
         Row {
 //            var rating by mutableStateOf(0)
             for (i in 0..4) {
