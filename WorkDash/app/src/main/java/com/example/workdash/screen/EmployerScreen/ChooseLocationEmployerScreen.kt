@@ -46,6 +46,7 @@ fun ChooseLocationEmployerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Select A Location")
                 },

@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import com.example.workdash.models.CandidateModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.CandidateViewModel
+import com.example.workdash.viewModels.JobViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -44,10 +45,13 @@ fun JobDetailsEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
+    val jobViewModel = JobViewModel()
     val candidateViewModel = CandidateViewModel()
+    val currentJob = jobViewModel.getJobList()[0]
     Scaffold(
         topBar = {
             TopAppBar(
+                backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Job Detail")
                 },
@@ -98,7 +102,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "Line Cook",
+                            text = currentJob.jobName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -227,6 +231,44 @@ fun JobDetailsEmployerScreen(
                     }
                 }
             }
+            if(currentJob.jobState == "In Process"){
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
+                        .clickable { /* Handle card click */ },
+                    elevation = 4.dp
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                    ) {
+                        Text(
+                            text = "Current Workers: ",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            style = MaterialTheme.typography.body1,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                        LazyColumn(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            items(candidateViewModel.getCandidateList()) { candidate ->
+                                CandidateCard(candidate = candidate, navController = navController)
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -242,8 +284,8 @@ fun JobDetailsEmployerScreen(
                     Text(
                         text = "Candidates: ",
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                            .fillMaxWidth()
+                            .padding(8.dp),
                         style = MaterialTheme.typography.body1,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

@@ -1,14 +1,16 @@
-package com.example.workdash.screen.WorkerScreen
+package com.example.workdash.screen.EmployerScreen
+
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -21,31 +23,32 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.example.workdash.models.JobApplicationModel
-import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.viewModels.JobViewModel
-
+import com.example.workdash.models.CandidateModel
+import com.example.workdash.viewModels.CandidateViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun JobDetailsWorkerScreen(
+fun InProcessEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
-    val jobViewModel = JobViewModel()
+    val candidateViewModel = CandidateViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
-                backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 title = {
-                    Text("Job Details")
+                    Text("Job Detail")
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -57,7 +60,7 @@ fun JobDetailsWorkerScreen(
             )
         }
     ) {
-        Column {
+        Column() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,11 +73,6 @@ fun JobDetailsWorkerScreen(
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    AsyncImage(
-                        model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
-                        contentDescription = null,
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
                     Text(
                         text = "Job details:",
                         modifier = Modifier
@@ -179,7 +177,7 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = "$17/hr",
+                            text = "\$17/hr",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -228,30 +226,174 @@ fun JobDetailsWorkerScreen(
                     }
                 }
             }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
+                    .clickable { /* Handle card click */ },
+                elevation = 4.dp
+            ){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                ) {
+                    Text(
+                        text = "Worker: ",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        style = MaterialTheme.typography.body1,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        items(candidateViewModel.getCandidateList()) { candidate ->
+                            WorkerCard(candidate = candidate)
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+    }
+}
+
+@Composable
+fun WorkerCard(candidate: CandidateModel) {
+    val contextForToast = LocalContext.current.applicationContext
+
+    var enabled by remember {
+        mutableStateOf(true)
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+            .clickable { /* Handle card click */ },
+        elevation = 4.dp
+    ) {
+        Column() {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Requirement: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Requirement: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Self Description: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Self Description",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Certification: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Certification: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Rating: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "4.5 / 5",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 8.dp, start = 30.dp, end = 30.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = {
-                        val jobApplicationModel = JobApplicationModel("test", "test", "test", "Pending")
-                        jobViewModel.applyToJob(jobApplicationModel)
-
-                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
-
-                            popUpTo(ScreenRoute.JobDetailsWorker.route){
-                                inclusive = true
-                            }
-                        }
+                        Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
+                        enabled = false
                     },
+                    enabled = enabled,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                 )
                 {
-                    Text(text = "Apply", color = Color.Black)
+                    Text(text = "Accept", color = Color.White)
                 }
+                Button(
+                    onClick = {
+                        Toast.makeText(contextForToast, "Rejected", Toast.LENGTH_SHORT).show()
+                        enabled = false
+                    },
+                    enabled = enabled,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+                )
+                {
+                    Text(text = "Reject", color = Color.White)
+                }
+
             }
         }
     }
 }
+
+
