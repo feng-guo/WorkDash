@@ -18,6 +18,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ fun AddPostEmployerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                backgroundColor = MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Add Post")
                 },

@@ -62,6 +62,7 @@ fun JobDetailsWorkerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Job Details")
                 },

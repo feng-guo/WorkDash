@@ -34,41 +34,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.workdash.models.JobApplicationModel
-import com.example.workdash.models.JobModel
-import com.example.workdash.models.LocationModel
-import com.example.workdash.routes.JOB_ID_ARG
-import com.example.workdash.routes.LOCATION_ID_ARG
-import com.example.workdash.services.JobApplicationService
-import com.example.workdash.services.JobService
-import com.example.workdash.services.LocationService
-import com.example.workdash.viewModels.JobViewModel
-import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.models.CandidateModel
+import com.example.workdash.viewModels.CandidateViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun JobDetailsEmployerScreen(
-    navController: NavController
+fun InProcessEmployerScreen(
+    navController: NavController,
+    //jobs: List<Job>
 ) {
-    val navBackStackEntry = navController.currentBackStackEntry
-    val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
-    val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
-
-    var jobModel = JobModel()
-    val jobCallback = { job: JobModel? -> jobModel = job?: JobModel() }
-    JobService.getJobFromId(jobId, jobCallback)
-
-    var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
-    LocationService.getLocationFromId(locationId, locationCallback)
-
-
-    val jobViewModel = JobViewModel()
-
+    val candidateViewModel = CandidateViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
-                backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Job Detail")
                 },
@@ -119,7 +97,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = jobModel.jobName,
+                            text = "Line Cook",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -139,7 +117,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = locationModel.locationName,
+                            text = "Burger King",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -159,7 +137,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = locationModel.locationName,
+                            text = "E7",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -179,7 +157,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = jobModel.schedule,
+                            text = "July 3rd 13:00 - 19:00",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -199,7 +177,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = jobModel.payPerHour.toString(),
+                            text = "\$17/hr",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -219,7 +197,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = jobModel.certificationsRequired,
+                            text = "Food Handler Certificate",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -239,7 +217,7 @@ fun JobDetailsEmployerScreen(
                             color = Color.Black
                         )
                         Text(
-                            text = (jobModel.totalPositionsRequired-jobModel.totalPositionsFilled).toString(),
+                            text = "2",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -248,44 +226,6 @@ fun JobDetailsEmployerScreen(
                     }
                 }
             }
-            if(jobModel.jobState == "In Process"){
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
-                        .clickable { /* Handle card click */ },
-                    elevation = 4.dp
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    ) {
-                        Text(
-                            text = "Current Workers: ",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            style = MaterialTheme.typography.body1,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold
-                        )
-                        LazyColumn(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            items(jobViewModel.getJobApplicationList()) { candidate ->
-                                CandidateCard(jobApplicationModel = candidate, navController = navController)
-                            }
-                        }
-                    }
-                }
-
-            }
-
-
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -299,7 +239,7 @@ fun JobDetailsEmployerScreen(
                         .padding(bottom = 8.dp)
                 ) {
                     Text(
-                        text = "Candidates: ",
+                        text = "Worker: ",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
@@ -312,9 +252,8 @@ fun JobDetailsEmployerScreen(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        //TODO this should probably be queried based on the job id lol
-                        items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
-                            CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
+                        items(candidateViewModel.getCandidateList()) { candidate ->
+                            WorkerCard(candidate = candidate)
                         }
                     }
                 }
@@ -327,14 +266,12 @@ fun JobDetailsEmployerScreen(
 }
 
 @Composable
-fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavController) {
+fun WorkerCard(candidate: CandidateModel) {
     val contextForToast = LocalContext.current.applicationContext
 
     var enabled by remember {
-        mutableStateOf(jobApplicationModel.applicationStatus == "Pending")
+        mutableStateOf(true)
     }
-
-    //TODO have to load up actual information based on the user of the application :)
 
     Card(
         modifier = Modifier
@@ -357,7 +294,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "f",
+                    text = "Requirement: ",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -377,7 +314,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "something about the user",
+                    text = "Self Description",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -397,7 +334,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "user certifs",
+                    text = "Certification: ",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -417,7 +354,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "user rating",
+                    text = "4.5 / 5",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -433,19 +370,8 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
             ) {
                 Button(
                     onClick = {
-                        JobApplicationService.acceptApplication(jobApplicationModel)
                         Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
                         enabled = false
-                        navController.navigate(
-                            ScreenRoute.WorkerRating.route
-                        )
-//                        {
-//
-//                            popUpTo(ScreenRoute.WorkerRating.route){
-//                                inclusive = true
-//                            }
-//                        }
-
                     },
                     enabled = enabled,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
@@ -455,7 +381,6 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                 }
                 Button(
                     onClick = {
-                        JobApplicationService.rejectApplication(jobApplicationModel)
                         Toast.makeText(contextForToast, "Rejected", Toast.LENGTH_SHORT).show()
                         enabled = false
                     },
