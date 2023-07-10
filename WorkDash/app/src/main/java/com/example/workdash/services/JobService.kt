@@ -1,6 +1,8 @@
 package com.example.workdash.services
 
 import com.example.workdash.Constants
+import com.example.workdash.Constants.IdNames.JOB_ID_NAME
+import com.example.workdash.Constants.TableNames.JOB_TABLE_NAME
 import com.example.workdash.models.JobModel
 
 object JobService {
@@ -12,12 +14,12 @@ object JobService {
     }
 
     private fun saveJob(job: JobModel) {
-        DatabaseService.writeToDbTable(Constants.TableNames.JOB_TABLE_NAME, job.jobId, job)
+        DatabaseService.writeToDbTable(JOB_TABLE_NAME, job.jobId, job)
     }
 
     fun getJobFromId(jobId: String): JobModel {
         val jobModel = JobModel()
-        return DatabaseService.readSingleObjectFromDbTableWithId(Constants.TableNames.JOB_TABLE_NAME, jobId, jobModel)
+        return DatabaseService.readSingleObjectFromDbTableWithId(JOB_TABLE_NAME, JOB_ID_NAME, jobId, jobModel)
     }
 
     fun incrementTotalFilledPositions(jobId: String) {

@@ -1,6 +1,8 @@
 package com.example.workdash.services
 
 import com.example.workdash.Constants
+import com.example.workdash.Constants.IdNames.LOCATION_ID_NAME
+import com.example.workdash.Constants.TableNames.LOCATION_TABLE_NAME
 import com.example.workdash.models.AddressModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
@@ -18,7 +20,7 @@ object LocationService {
     }
 
     private fun saveLocation(locationModel: LocationModel){
-        DatabaseService.writeToDbTable(Constants.TableNames.LOCATION_TABLE_NAME, locationModel.locationId, locationModel)
+        DatabaseService.writeToDbTable(LOCATION_TABLE_NAME, locationModel.locationId, locationModel)
     }
 
     fun verifyLocation(locationModel: LocationModel) {
@@ -28,6 +30,6 @@ object LocationService {
 
     fun getLocationFromId(locationId: String): LocationModel {
         val locationModel = LocationModel()
-        return DatabaseService.readSingleObjectFromDbTableWithId(Constants.TableNames.LOCATION_TABLE_NAME, locationId, locationModel)
+        return DatabaseService.readSingleObjectFromDbTableWithId(LOCATION_TABLE_NAME, LOCATION_ID_NAME, locationId, locationModel)
     }
 }

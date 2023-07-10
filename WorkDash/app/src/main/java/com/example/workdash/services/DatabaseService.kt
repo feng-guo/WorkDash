@@ -63,8 +63,8 @@ object DatabaseService {
         return returnObject
     }
     
-    fun <T> readSingleObjectFromDbTableWithId(tableName: String, id: String, returnObject: T): T {
-        val entry = dbRef.child(tableName).child(id)
+    fun <T> readSingleObjectFromDbTableWithId(tableName: String, idName: String, id: String, returnObject: T): T {
+        val entry = dbRef.child(tableName).orderByChild(idName).equalTo(id)
 
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
