@@ -70,13 +70,26 @@ fun WorkerRating(
         Row {
 //            var rating by mutableStateOf(0)
             for (i in 0..4) {
+                var isHighlighted by remember { mutableStateOf(false) }
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    tint = if (i < rating) Color.Yellow else Color.Gray,
+                    //tint = if (i < rating) Color.Yellow else Color.Gray,
+                    tint = if (isHighlighted) Color.Yellow else Color.Gray,
                     modifier = Modifier
                         .size(40.dp)
-                        .clickable { rating = i + 1 }
+                        .clickable {
+                            rating = i + 1
+                            isHighlighted = !isHighlighted
+                            if (isHighlighted) {
+                                navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route){
+
+                                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        }
                         .offset(y = 20.dp)
                 )
             }
