@@ -5,10 +5,14 @@ import com.example.workdash.models.JobApplicationModel
 
 object JobApplicationService {
     fun applyToJob(jobId: String) {
-        val jobApplicationId = IdGeneratorService.generateJobApplicationId()
+        var jobApplicationId: String
         val employeeId = UserService.getCurrentUserId()
-        val jobApplicationModel = JobApplicationModel(jobApplicationId, jobId, employeeId, "Pending")
-        saveJobApplication(jobApplicationModel)
+        val lmd = { retrievedId : String ->
+            jobApplicationId = retrievedId
+            val jobApplicationModel = JobApplicationModel(jobApplicationId, jobId, employeeId)
+            saveJobApplication(jobApplicationModel)
+        }
+        IdGeneratorService.generateJobApplicationId(lmd)
     }
 
     private fun saveJobApplication(jobApplication: JobApplicationModel) {

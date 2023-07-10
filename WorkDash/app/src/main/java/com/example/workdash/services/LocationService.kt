@@ -8,12 +8,17 @@ import com.example.workdash.models.LocationModel
 object LocationService {
 
     fun addLocation(locationName: String, address: AddressModel, imgUrl: String) {
-        val locationId = IdGeneratorService.generateLocationId()
-        //TODO should be businessId here
+        var locationId: String
+//        TODO should be businessId here
         val businessId = UserService.getCurrentUserId()
-        //TODO what is imageResId
-        val locationModel = LocationModel(locationId, businessId, locationName, address, false, 1, imgUrl)
-        saveLocation(locationModel)
+
+        val lmd = { retrievedId : String ->
+            locationId = retrievedId
+            //TODO what is imageResId
+            val locationModel = LocationModel(locationId, businessId, locationName, address, false, 1, imgUrl)
+            saveLocation(locationModel)
+        }
+        IdGeneratorService.generateLocationId(lmd)
     }
 
     private fun saveLocation(locationModel: LocationModel){

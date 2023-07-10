@@ -12,30 +12,36 @@ object IdGeneratorService {
 //        return ""
 //    }
 
-    private fun retrieveId(id: String): String {
-        return DatabaseService.readSingleValueFromDbTableWithId(ID_TABLE_NAME, id)
+    private fun retrieveId(id: String, callback: (obj: String) -> Unit) {
+        val tmp: Long = 0
+        DatabaseService.readSingleValueFromDbTableWithId(ID_TABLE_NAME, id, tmp, callback)
     }
 
-    private fun updateId(id: String, value: String) {
+    private fun updateId(id: String, value: Long) {
         DatabaseService.writeToDbTable(ID_TABLE_NAME, id, value)
     }
 
     //TODO note these arent atomic so... I'll figure it out later
-    fun generateLocationId(): String {
-        val id = retrieveId(locationId)
-        updateId(locationId, (id.toLong()+1).toString())
-        return id
+
+    private fun generateId(idName: String, callback: (obj: String) -> Unit) {
+        var id: String
+        val lmd = { retrievedId : String ->
+            id = retrievedId
+            updateId(idName, id.toLong()+1)
+            callback.invoke(id)
+        }
+        retrieveId(idName, lmd)
     }
 
-    fun generateJobId(): String {
-        val id = retrieveId(jobId)
-        updateId(jobId, (id.toLong()+1).toString())
-        return id
+    fun generateLocationId(callback: (obj: String) -> Unit) {
+        generateId(locationId, callback)
     }
 
-    fun generateJobApplicationId(): String {
-        val id = retrieveId(jobApplicationId)
-        updateId(jobApplicationId, (id.toLong()+1).toString())
-        return id
+    fun generateJobId(callback: (obj: String) -> Unit) {
+        generateId(jobId, callback)
+    }
+
+    fun generateJobApplicationId(callback: (obj: String) -> Unit) {
+        generateId(jobApplicationId, callback)
     }
 }

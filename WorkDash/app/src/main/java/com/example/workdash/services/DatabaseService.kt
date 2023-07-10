@@ -46,21 +46,23 @@ object DatabaseService {
 //        entriesList.addValueEventListener(listener)
 //    }
 
-    fun readSingleValueFromDbTableWithId(tableName: String, id: String): String {
+    fun readSingleValueFromDbTableWithId(tableName: String, id: String, type: Any, callback: (obj: String) -> Unit) {
         val entry = dbRef.child(tableName).child(id)
-        var returnObject = ""
 
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                returnObject = dataSnapshot.value as String
+                if (dataSnapshot.exists()) {
+                    val obj = dataSnapshot.children.first().getValue(type::class.java)
+                    callback.invoke(obj?.toString()?:"")
+                } else {
+                    callback.invoke("")
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 //TODO Idk do something if it fails
             }
         }
-        entry.addValueEventListener(listener)
-
-        return returnObject
+        entry.addListenerForSingleValueEvent(listener)
     }
     
     fun <T : Any> readSingleObjectFromDbTableWithId(tableName: String, idName: String, id: String, returnObject: T, callback: (obj: T?) -> Unit) {

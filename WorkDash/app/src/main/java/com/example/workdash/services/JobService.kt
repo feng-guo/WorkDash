@@ -6,10 +6,13 @@ import com.example.workdash.models.JobModel
 
 object JobService {
     fun createJob(locationId: String, jobName: String, schedule: String, payPerHour: Long, certificationsRequired: String, totalPositionsRequired: Long ) {
-        val jobId = IdGeneratorService.generateJobId()
-        //TODO change pending to a constant
-        val jobModel = JobModel(locationId, jobId, jobName, "Pending", schedule, payPerHour, certificationsRequired, totalPositionsRequired, 0)
-        saveJob(jobModel)
+        var jobId: String
+        val lmd = { retrievedId : String ->
+            jobId = retrievedId
+            val jobModel = JobModel(locationId, jobId, jobName,  schedule, payPerHour, certificationsRequired, totalPositionsRequired)
+            saveJob(jobModel)
+        }
+        IdGeneratorService.generateJobId(lmd)
     }
 
     private fun saveJob(job: JobModel) {

@@ -17,4 +17,7 @@ data class JobModel(
 
 ) {
     constructor() : this("", "", "", "", "", 0, "", 0, 0)
+
+    //TODO change pending to a constant
+    constructor(locationId: String, jobId: String, jobName: String, schedule: String, payPerHour: Long, certificationsRequired: String, totalPositionsRequired: Long) : this(locationId, jobId, jobName, "Pending", schedule, payPerHour, certificationsRequired, totalPositionsRequired, 0)
 }
