@@ -41,6 +41,7 @@ import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.routes.ScreenRoute
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -265,7 +266,7 @@ fun JobDetailsEmployerScreen(
                     ) {
                         //TODO this should probably be queried based on the job id lol
                         items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
-                            CandidateCard(jobApplicationModel = jobApplicationModel)
+                            CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
                         }
                     }
                 }
@@ -278,7 +279,7 @@ fun JobDetailsEmployerScreen(
 }
 
 @Composable
-fun CandidateCard(jobApplicationModel: JobApplicationModel) {
+fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
 
     var enabled by remember {
@@ -387,6 +388,16 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel) {
                         JobApplicationService.acceptApplication(jobApplicationModel)
                         Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
                         enabled = false
+                        navController.navigate(
+                            ScreenRoute.WorkerRating.route
+                        )
+//                        {
+//
+//                            popUpTo(ScreenRoute.WorkerRating.route){
+//                                inclusive = true
+//                            }
+//                        }
+
                     },
                     enabled = enabled,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
