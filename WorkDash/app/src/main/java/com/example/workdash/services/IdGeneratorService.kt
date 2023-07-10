@@ -12,9 +12,8 @@ object IdGeneratorService {
 //        return ""
 //    }
 
-    private fun retrieveId(id: String, callback: (obj: String) -> Unit) {
-        val tmp: Long = 0
-        DatabaseService.readSingleValueFromDbTableWithId(ID_TABLE_NAME, id, tmp, callback)
+    private fun retrieveId(id: String, callback: (obj: Long) -> Unit) {
+        DatabaseService.readIdValueFromIdTable(ID_TABLE_NAME, id, callback)
     }
 
     private fun updateId(id: String, value: Long) {
@@ -23,25 +22,25 @@ object IdGeneratorService {
 
     //TODO note these arent atomic so... I'll figure it out later
 
-    private fun generateId(idName: String, callback: (obj: String) -> Unit) {
-        var id: String
-        val lmd = { retrievedId : String ->
+    private fun generateId(idName: String, callback: (obj: Long) -> Unit) {
+        var id: Long
+        val lmd = { retrievedId : Long ->
             id = retrievedId
-            updateId(idName, id.toLong()+1)
+            updateId(idName, id+1)
             callback.invoke(id)
         }
         retrieveId(idName, lmd)
     }
 
-    fun generateLocationId(callback: (obj: String) -> Unit) {
+    fun generateLocationId(callback: (obj: Long) -> Unit) {
         generateId(locationId, callback)
     }
 
-    fun generateJobId(callback: (obj: String) -> Unit) {
+    fun generateJobId(callback: (obj: Long) -> Unit) {
         generateId(jobId, callback)
     }
 
-    fun generateJobApplicationId(callback: (obj: String) -> Unit) {
+    fun generateJobApplicationId(callback: (obj: Long) -> Unit) {
         generateId(jobApplicationId, callback)
     }
 }

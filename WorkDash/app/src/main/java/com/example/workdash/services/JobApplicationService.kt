@@ -7,8 +7,8 @@ object JobApplicationService {
     fun applyToJob(jobId: String) {
         var jobApplicationId: String
         val employeeId = UserService.getCurrentUserId()
-        val lmd = { retrievedId : String ->
-            jobApplicationId = retrievedId
+        val lmd = { retrievedId : Long ->
+            jobApplicationId = retrievedId.toString()
             val jobApplicationModel = JobApplicationModel(jobApplicationId, jobId, employeeId)
             saveJobApplication(jobApplicationModel)
         }

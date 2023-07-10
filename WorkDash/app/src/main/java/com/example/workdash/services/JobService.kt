@@ -7,8 +7,8 @@ import com.example.workdash.models.JobModel
 object JobService {
     fun createJob(locationId: String, jobName: String, schedule: String, payPerHour: Long, certificationsRequired: String, totalPositionsRequired: Long ) {
         var jobId: String
-        val lmd = { retrievedId : String ->
-            jobId = retrievedId
+        val lmd = { retrievedId : Long ->
+            jobId = retrievedId.toString()
             val jobModel = JobModel(locationId, jobId, jobName,  schedule, payPerHour, certificationsRequired, totalPositionsRequired)
             saveJob(jobModel)
         }

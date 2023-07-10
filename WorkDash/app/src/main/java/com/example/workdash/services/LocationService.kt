@@ -12,8 +12,8 @@ object LocationService {
 //        TODO should be businessId here
         val businessId = UserService.getCurrentUserId()
 
-        val lmd = { retrievedId : String ->
-            locationId = retrievedId
+        val lmd = { retrievedId : Long ->
+            locationId = retrievedId.toString()
             //TODO what is imageResId
             val locationModel = LocationModel(locationId, businessId, locationName, address, false, 1, imgUrl)
             saveLocation(locationModel)

@@ -46,16 +46,39 @@ object DatabaseService {
 //        entriesList.addValueEventListener(listener)
 //    }
 
-    fun readSingleValueFromDbTableWithId(tableName: String, id: String, type: Any, callback: (obj: String) -> Unit) {
+    fun <T> readSingleValueFromDbTableWithId(tableName: String, id: String, type: T, callback: (obj: T?) -> Unit) {
         val entry = dbRef.child(tableName).child(id)
 
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    val obj = dataSnapshot.children.first().getValue(type::class.java)
-                    callback.invoke(obj?.toString()?:"")
+                    val obj = dataSnapshot.child(id).getValue(type!!::class.java)
+                    callback.invoke(obj)
                 } else {
-                    callback.invoke("")
+                    callback.invoke(null)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        entry.addListenerForSingleValueEvent(listener)
+    }
+
+    fun readIdValueFromIdTable(tableName: String, id: String, callback: (obj: Long) -> Unit) {
+        val entry = dbRef.child(tableName)
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val obj = dataSnapshot.child(id).getValue(Long::class.java)
+                    if (obj != null) {
+                        callback.invoke(obj)
+                    } else {
+                        callback.invoke(0)
+                    }
+                } else {
+                    callback.invoke(0)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
