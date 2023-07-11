@@ -260,8 +260,7 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
-                        //TODO we can probably eventually get rid of this
-                        navController.navigate(route = ScreenRoute.ListOfJobs.route) {
+                        navController.navigate(route = ScreenRoute.WorkerRating.route) {
                             popUpTo(ScreenRoute.WorkerRating.route){
                                 inclusive = true
                             }
