@@ -238,9 +238,15 @@ fun JobDetailsWorkerScreen(
                         val jobApplicationModel = JobApplicationModel("test", "test", "test", "Pending")
                         jobViewModel.applyToJob(jobApplicationModel)
 
-                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
+//                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
+//
+//                            popUpTo(ScreenRoute.JobDetailsWorker.route){
+//                                inclusive = true
+//                            }
+//                        }
+                        navController.navigate(route = ScreenRoute.WorkerRating.route) {
 
-                            popUpTo(ScreenRoute.JobDetailsWorker.route){
+                            popUpTo(ScreenRoute.WorkerRating.route){
                                 inclusive = true
                             }
                         }
