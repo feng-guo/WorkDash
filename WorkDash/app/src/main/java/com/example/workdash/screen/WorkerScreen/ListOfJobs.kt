@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -30,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
@@ -70,7 +75,8 @@ fun ListOfJobs(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp),
+                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
+//                .verticalScroll(rememberScrollState()),
         ) {
             Card(
                 modifier = Modifier
@@ -82,16 +88,16 @@ fun ListOfJobs(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Processing Jobs: ",
-                        modifier = Modifier.padding(bottom = 16.dp),
+                        text = "Your Jobs: ",
+                        modifier = Modifier.padding(horizontal = 8.dp,vertical = 8.dp),
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.Bold
                     )
-                    LazyColumn(
+                    LazyRow(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         items(jobViewModel.getJobList()) { job ->
-                            JobCard(job = job, navController = navController)
+                            ProcessingJobCard(job = job, navController = navController)
                         }
                     }
                 }
@@ -108,7 +114,7 @@ fun ListOfJobs(
                 ) {
                     Text(
                         text = "New Jobs: ",
-                        modifier = Modifier.padding(bottom = 16.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp,vertical = 8.dp),
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.Bold
                         )
@@ -203,7 +209,7 @@ fun JobCard(job: JobModel, navController: NavController) {
                             color = Color.Black
                         )
                         Text(
-                            text = job.payPerHour.toString(),
+                            text = "\$${job.payPerHour.toString()} / Hour",
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -235,107 +241,49 @@ fun JobCard(job: JobModel, navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProcessingJobCard(job: JobModel, navController: NavController) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 8.dp),
-        elevation = 4.dp
-    ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(
-                        bottom = 8.dp,
-                        top = 16.dp,
-                        start = 16.dp,
-                    )
-                    .weight(10f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                //TODO get image from location
-//                AsyncImage(
-//                    model = job.location.imgUrl,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(100.dp)
-//                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Row() {
-                        Text(
-                            text = "Job Title: ",
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = job.jobName,
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
-                        )
-                    }
-                    Row() {
-                        Text(
-                            text = "Employer: ",
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Black
-                        )
-                        Text(
-                            //TODO get the employer name from the location and then business
-                            text = job.jobId,
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
-                        )
-                    }
-                    Row() {
-                        Text(
-                            text = "Hourly Wage: ",
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = job.payPerHour.toString(),
-                            style = MaterialTheme.typography.body2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = Color.Gray
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .background(
-                        color = Color.White,
-                    )
-                    .weight(1f),
-                onClick = {
+            .height(140.dp)
+            .width(140.dp)
+            .padding(bottom = 8.dp, end = 12.dp),
+        elevation = 4.dp,
+        onClick = {
                     navController.navigate(
-                        ScreenRoute.JobDetailsWorker.route
+                        route = ScreenRoute.InProcessWorker.passJobIdAndLocationId(job.jobId, job.locationId)
                     )
                 }
+    ) {
+
+        Column() {
+            Row(
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
             ) {
-                Icon(
-                    Icons.Default.ArrowForward,
-                    contentDescription = "Arrow"
+                Text(
+                    text = "Job ID: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black,
                 )
+                Text(
+                    text = job.jobName,
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+
             }
+            Spacer(modifier = Modifier.width(16.dp))
+            AsyncImage(
+                model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
+                contentDescription = null,
+                modifier = Modifier.size(100.dp)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+            )
         }
     }
 }

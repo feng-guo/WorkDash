@@ -2,10 +2,17 @@ package com.example.workdash.screen.WorkerScreen
 
 import android.widget.Toast
 import android.app.TimePickerDialog
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,13 +22,18 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
+import com.example.workdash.R
 import com.example.workdash.routes.ScreenRoute
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -30,6 +42,9 @@ import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
 import kotlin.math.roundToInt
 import com.example.workdash.models.WorkerProfileModel
+import com.google.firebase.storage.FirebaseStorage
+
+var imageUri by mutableStateOf<Uri?>(null)
 
 @Composable
 fun UserDetailsWorkerScreen(
@@ -65,6 +80,12 @@ fun UserDetailsWorkerScreen(
             toTime.value = "$mHour:$mMinute"
         }, mHour, mMinute, true
     )
+
+    val launcher = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri = uri
+    }
+
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
 
     LazyColumn(
@@ -74,6 +95,44 @@ fun UserDetailsWorkerScreen(
             .height(630.dp)
     ) {
         item {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(108.dp)
+                    .background(MaterialTheme.colors.background, shape = CircleShape)
+            ) {
+                if (imageUri != null) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = imageUri,
+                            builder = {
+                                transformations(CircleCropTransformation())
+                            }
+                        ),
+                        contentDescription = "Selected Image",
+                        modifier = Modifier
+                            .size(92.dp)
+                            .clip(CircleShape)
+                    )
+                }
+                else {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile_pic),
+                        contentDescription = "Pick Image",
+                        modifier = Modifier
+                            .size(92.dp)
+                            .align(Alignment.Center)
+                            .offset(y = 1.dp)
+                            .clickable {
+                                launcher.launch("image/*")
+                            }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -131,7 +190,7 @@ fun UserDetailsWorkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            Text(text = "Salary: $sliderPosition CAD", style = MaterialTheme.typography.h6)
+            Text(text = "Salary: $sliderPosition CAD/hours", style = MaterialTheme.typography.h6)
             Slider(
                 value = sliderPosition,
                 onValueChange = { sliderPosition = it.roundToInt().toFloat() },
@@ -140,7 +199,7 @@ fun UserDetailsWorkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            Text(text = "Working Days/hours", style = MaterialTheme.typography.h6)
+            Text(text = "Working Days", style = MaterialTheme.typography.h6)
             Box(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                 Row(
                     modifier = Modifier
@@ -149,7 +208,7 @@ fun UserDetailsWorkerScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     daysOfWeek.forEach { day ->
-                        if (DayOfWeekItem(day)) {
+                        if (dayOfWeekItem(day)) {
                             workDays.add(day)
                         }
                     }
@@ -158,12 +217,15 @@ fun UserDetailsWorkerScreen(
         }
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxSize().padding(4.dp)) {
+            Row(modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp)) {
                 Button(
                     onClick = { mTimePickerDialog1.show() },
-                    Modifier.padding(horizontal = 20.dp)
-                    .width(128.dp)
-                    .height(40.dp)) {
+                    Modifier
+                        .padding(horizontal = 20.dp)
+                        .width(128.dp)
+                        .height(40.dp)) {
                     if (fromTime.value == "")
                     {
                         Text(text = "From", color = Color.White)
@@ -176,7 +238,8 @@ fun UserDetailsWorkerScreen(
 
                 Button(
                     onClick = { mTimePickerDialog2.show() },
-                    Modifier.padding(horizontal = 20.dp)
+                    Modifier
+                        .padding(horizontal = 20.dp)
                         .width(128.dp)
                         .height(40.dp)) {
                     if (toTime.value == "")
@@ -226,6 +289,7 @@ fun UserDetailsWorkerScreen(
                 var uid = auth.currentUser!!.uid
                 var workerProfile = WorkerProfileModel(
                     uid = uid,
+                    profilePic = imageUri.toString(),
                     isWorker = true,
                     name = name,
                     email = email,
@@ -238,6 +302,10 @@ fun UserDetailsWorkerScreen(
                     endTime = toTime.value,
                 )
 
+                if(imageUri != null)
+                {
+                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(imageUri!!)
+                }
                 FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
             }
         }
@@ -246,12 +314,13 @@ fun UserDetailsWorkerScreen(
 
 
 @Composable
-fun DayOfWeekItem(day: String): Boolean {
+fun dayOfWeekItem(day: String): Boolean {
     var isSelected by remember { mutableStateOf(false) }
 
     Button(
         onClick = { isSelected = !isSelected },
-        modifier = Modifier.padding(horizontal = 2.dp)
+        modifier = Modifier
+            .padding(horizontal = 2.dp)
             .width(48.dp)
             .height(36.dp),
         shape = MaterialTheme.shapes.small,
@@ -277,47 +346,58 @@ fun SignUpButton(navController: NavController, email: String, password: String) 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Button(
             onClick = {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Signup successful, navigate to the desired screen
-                            navController.navigate(route = ScreenRoute.ListOfJobs.route) {
-                                popUpTo(ScreenRoute.ListOfJobs.route) {
-                                    inclusive = true
+                if(imageUri != null)
+                {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Signup successful, navigate to the desired screen
+                                navController.navigate(route = ScreenRoute.ListOfJobs.route) {
+                                    popUpTo(ScreenRoute.ListOfJobs.route) {
+                                        inclusive = true
+                                    }
                                 }
-                            }
-                        } else {
-                            // Signup failed, display an error message to the user
-                            val exception = task.exception
-                            when (exception) {
-                                is FirebaseAuthUserCollisionException -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Email already in use",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                            } else {
+                                // Signup failed, display an error message to the user
+                                val exception = task.exception
+                                when (exception) {
+                                    is FirebaseAuthUserCollisionException -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Email already in use",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                is FirebaseAuthException -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Signup failed: ${exception.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                    is FirebaseAuthException -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Signup failed: ${exception.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                else -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Signup failed",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    else -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Signup failed",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             }
                         }
-                    }
+                }
+                else {
+                    Toast.makeText(
+                        contextForToast,
+                        "Profile image cannot be empty",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
-            Modifier.padding(horizontal = 20.dp)
+            Modifier
+                .padding(horizontal = 20.dp)
                 .width(128.dp)
                 .height(40.dp)
         ) {
