@@ -88,7 +88,7 @@ fun WorkerRating(
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
         val query = database.child("userProfile").orderByChild("uid").equalTo(currentUserUid)
-        var is_this_a_worker: Boolean = true
+        //var is_this_a_worker: Boolean = true
         val satisfiedText = remember { mutableStateOf("") }
         // Read the data from the database
         query.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -97,13 +97,13 @@ fun WorkerRating(
                     // Access the value of isWorker from each matching employer profile
                     val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
                     if (isWorker == true) {
-                        is_this_a_worker = true
+
                         satisfiedText.value = "How satisfied are you with this job?"
 
 
                     }
                     else{
-                        is_this_a_worker= false
+
                         satisfiedText.value = "How satisfied were you with this employee?"
                     }
                 }

@@ -251,8 +251,10 @@ fun InProcessEmployerScreen(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobApplicationList()) { jobApplication ->
-                            WorkerCard(candidate = jobApplication)
+                        jobViewModel.getJobApplicationList().forEach { jobApplication ->
+                            item {
+                                WorkerCard(candidate = jobApplication)
+                            }
                         }
                     }
                 }
@@ -394,4 +396,3 @@ fun WorkerCard(candidate: JobApplicationModel) {
         }
     }
 }
-
