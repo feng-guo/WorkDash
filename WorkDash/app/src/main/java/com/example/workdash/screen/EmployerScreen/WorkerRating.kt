@@ -41,11 +41,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.workdash.models.CandidateModel
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.viewModels.CandidateViewModel
 //import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.models.WorkerProfileModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -57,7 +61,12 @@ fun WorkerRating(
 
     //jobs: List<Job>
 ) {
+
     var rating by mutableStateOf(0)
+    val contextForToast = LocalContext.current.applicationContext
+
+    var rating by remember {mutableStateOf(0)}
+
 
 
     //val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
@@ -69,29 +78,52 @@ fun WorkerRating(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val topstack = navController.currentBackStackEntry?.destination?.id
+        //val topstack = navController.currentBackStackEntry?.destination?.id
 
-        if(topstack == -1073570031) {
+        val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+        val query = database.child("userProfile").orderByChild("uid").equalTo(currentUserUid)
+        var is_this_a_worker: Boolean = true
+        val satisfiedText = remember { mutableStateOf("") }
+        // Read the data from the database
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    // Access the value of isWorker from each matching employer profile
+                    val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
+                    if (isWorker == true) {
+                        is_this_a_worker = true
+                        satisfiedText.value = "How satisfied are you with this job?"
+
+
+                    }
+                    else{
+                        is_this_a_worker= false
+                        satisfiedText.value = "How satisfied were you with this employee?"
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    contextForToast,
+                    "Database Error: $databaseError",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
+
             Text(
 
 
-                text = "How satisfied are you with this employee?",
+                text = satisfiedText.value,
                 style = MaterialTheme.typography.h1,
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center
             )
 
-        }
-        else{
-            Text(
 
 
-                text = "How satisfied were you with this job?",
-                style = MaterialTheme.typography.h1,
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center
-            )
-        }
         Row {
 //            var rating by mutableStateOf(0)
             for (i in 0..4) {
@@ -106,11 +138,22 @@ fun WorkerRating(
                         .clickable {
                             rating = i + 1
                             isHighlighted = !isHighlighted
-                            if (isHighlighted) {
-                                navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route){
 
-                                    popUpTo(ScreenRoute.CurrentJobPostsEmployer.route){
-                                        inclusive = true
+                            if (isHighlighted) {
+                                if(satisfiedText.value == "How satisfied were you with this employee?") {
+                                    navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+
+                                        popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                                else if(satisfiedText.value == "How satisfied are you with this job?") {
+                                    navController.navigate(route = ScreenRoute.ListOfJobs.route) {
+
+                                        popUpTo(ScreenRoute.ListOfJobs.route) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }

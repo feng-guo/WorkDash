@@ -18,6 +18,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,12 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.workdash.models.JobModel
-import com.example.workdash.viewModels.JobViewModel
-import kotlin.math.ceil
+import com.example.workdash.routes.JOB_ID_ARG
+import com.example.workdash.routes.LOCATION_ID_ARG
+import com.example.workdash.services.JobService
+import com.example.workdash.services.LocationService
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -44,12 +45,15 @@ fun AddPostEmployerScreen(
     var schedule by remember { mutableStateOf("") }
     var payPerHour by remember { mutableStateOf("") }
     var certificationsRequired by remember { mutableStateOf("") }
+    var totalPositionsRequired by remember { mutableStateOf("") }
 
-    val jobViewModel = JobViewModel()
+    val navBackStackEntry = navController.currentBackStackEntry
+    val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
 
     Scaffold(
         topBar = {
             TopAppBar(
+                backgroundColor = MaterialTheme.colorScheme.primary,
                 title = {
                     Text("Add Post")
                 },
@@ -82,27 +86,30 @@ fun AddPostEmployerScreen(
                     value = schedule,
                     onValueChange = { schedule = it },
                     label = { androidx.compose.material3.Text("Schedule") },
-                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = payPerHour,
                     onValueChange = { payPerHour = it },
-                    label = { androidx.compose.material3.Text("Pay") },
-                    visualTransformation = PasswordVisualTransformation()
+                    label = { androidx.compose.material3.Text("Pay") }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = certificationsRequired,
-                    onValueChange = { it ->  certificationsRequired = it},
+                    onValueChange = { certificationsRequired = it},
                     label = { androidx.compose.material3.Text("Requirements") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = totalPositionsRequired,
+                    onValueChange = { totalPositionsRequired = it},
+                    label = { androidx.compose.material3.Text("Positions Required") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-                    //TODO change this to implement actual data
-                    var jobModel = JobModel("3", ceil(Math.random()*100).toInt().toString(), jobName, "In Progress", schedule, 10, certificationsRequired, 2, 0)
-                    jobViewModel.addJob(jobModel)
+                    JobService.createJob(locationId, jobName, schedule, payPerHour.toLong(), certificationsRequired, totalPositionsRequired.toLong())
                 }) {
                     Text(text = "    Post    ")
                 }

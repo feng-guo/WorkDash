@@ -1,6 +1,5 @@
 package com.example.workdash
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -9,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.workdash.routes.BottomBarScreen
 import com.example.workdash.routes.IS_WORKER_ARG
+import com.example.workdash.routes.JOB_ID_ARG
+import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.screen.EmployerScreen.AddLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.AddPostEmployerScreen
@@ -16,16 +17,26 @@ import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.SignUpEmployerScreen
+import com.example.workdash.screen.EmployerScreen.WorkerRating
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
+import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
-import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
-import com.example.workdash.screen.EmployerScreen.WorkerRating
+import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 
+val IS_WORKER_NAV_ARG = navArgument(IS_WORKER_ARG) {
+    type = NavType.BoolType
+}
+val LOCATION_ID_NAV_ARG = navArgument(LOCATION_ID_ARG) {
+    type = NavType.StringType
+}
+val JOB_ID_NAV_ARG = navArgument(JOB_ID_ARG) {
+    type = NavType.StringType
+}
 @Composable
 fun BottomNavGraph(
     navController: NavHostController
@@ -36,11 +47,8 @@ fun BottomNavGraph(
     ){
         composable(
             route = ScreenRoute.Login.route,
-            arguments = listOf(navArgument(IS_WORKER_ARG) {
-                type = NavType.BoolType
-            })
+            arguments = listOf(IS_WORKER_NAV_ARG)
         ){
-            Log.d("Args", it.arguments?.getBoolean(IS_WORKER_ARG).toString())
             LoginScreen(navController = navController)
         }
         composable(
@@ -64,7 +72,8 @@ fun BottomNavGraph(
             CurrentJobPostsEmployerScreen(navController = navController)
         }
         composable(
-            route = ScreenRoute.JobDetailsEmployer.route
+            route = ScreenRoute.JobDetailsEmployer.route,
+            arguments = listOf(JOB_ID_NAV_ARG, LOCATION_ID_NAV_ARG)
         ){
             JobDetailsEmployerScreen(navController = navController)
         }
@@ -79,12 +88,14 @@ fun BottomNavGraph(
             AddLocationEmployerScreen(navController = navController)
         }
         composable(
-            route = ScreenRoute.AddPostEmployer.route
+            route = ScreenRoute.AddPostEmployer.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ){
             AddPostEmployerScreen(navController = navController)
         }
         composable(
-            route = ScreenRoute.JobDetailsWorker.route
+            route = ScreenRoute.JobDetailsWorker.route,
+            arguments = listOf(JOB_ID_NAV_ARG, LOCATION_ID_NAV_ARG)
         ) {
             JobDetailsWorkerScreen(navController = navController)
         }
@@ -92,6 +103,9 @@ fun BottomNavGraph(
             route = ScreenRoute.UserDetailsWorker.route
         ) {
             UserDetailsWorkerScreen(navController = navController)
+
+            //To try ID Authentication
+            //AuthenticateWorker()
         }
         composable(
             route = ScreenRoute.ListOfJobs.route

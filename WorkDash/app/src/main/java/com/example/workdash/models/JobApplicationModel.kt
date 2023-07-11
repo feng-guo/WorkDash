@@ -6,5 +6,7 @@ data class JobApplicationModel(
     var employeeId: String,
     var applicationStatus: String
 ) {
-    constructor() : this("", "", "", "") {}
+    constructor() : this("", "", "", "")
+
+    constructor(jobApplicationId: String, jobId: String, employeeId: String) : this(jobApplicationId, jobId, employeeId, "Pending")
 }
