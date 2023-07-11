@@ -42,6 +42,9 @@ import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
 import kotlin.math.roundToInt
 import com.example.workdash.models.WorkerProfileModel
+import com.google.firebase.storage.FirebaseStorage
+
+var imageUri by mutableStateOf<Uri?>(null)
 
 @Composable
 fun UserDetailsWorkerScreen(
@@ -77,9 +80,6 @@ fun UserDetailsWorkerScreen(
             toTime.value = "$mHour:$mMinute"
         }, mHour, mMinute, true
     )
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -302,6 +302,10 @@ fun UserDetailsWorkerScreen(
                     endTime = toTime.value,
                 )
 
+                if(imageUri != null)
+                {
+                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(imageUri!!)
+                }
                 FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
             }
         }
@@ -342,45 +346,55 @@ fun SignUpButton(navController: NavController, email: String, password: String) 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Button(
             onClick = {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Signup successful, navigate to the desired screen
-                            navController.navigate(route = ScreenRoute.ListOfJobs.route) {
-                                popUpTo(ScreenRoute.ListOfJobs.route) {
-                                    inclusive = true
+                if(imageUri != null)
+                {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Signup successful, navigate to the desired screen
+                                navController.navigate(route = ScreenRoute.ListOfJobs.route) {
+                                    popUpTo(ScreenRoute.ListOfJobs.route) {
+                                        inclusive = true
+                                    }
                                 }
-                            }
-                        } else {
-                            // Signup failed, display an error message to the user
-                            val exception = task.exception
-                            when (exception) {
-                                is FirebaseAuthUserCollisionException -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Email already in use",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                            } else {
+                                // Signup failed, display an error message to the user
+                                val exception = task.exception
+                                when (exception) {
+                                    is FirebaseAuthUserCollisionException -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Email already in use",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                is FirebaseAuthException -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Signup failed: ${exception.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                    is FirebaseAuthException -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Signup failed: ${exception.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                else -> {
-                                    Toast.makeText(
-                                        contextForToast,
-                                        "Signup failed",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    else -> {
+                                        Toast.makeText(
+                                            contextForToast,
+                                            "Signup failed",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             }
                         }
-                    }
+                }
+                else {
+                    Toast.makeText(
+                        contextForToast,
+                        "Profile image cannot be empty",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
             Modifier
                 .padding(horizontal = 20.dp)
