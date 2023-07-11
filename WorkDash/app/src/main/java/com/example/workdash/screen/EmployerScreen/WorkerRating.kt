@@ -83,7 +83,7 @@ fun WorkerRating(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //val topstack = navController.currentBackStackEntry?.destination?.id
+        
 
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
