@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -34,8 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.workdash.models.CandidateModel
-import com.example.workdash.viewModels.CandidateViewModel
+import com.example.workdash.models.JobApplicationModel
+import com.example.workdash.viewModels.JobViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -43,7 +42,7 @@ fun InProcessEmployerScreen(
     navController: NavController,
     //jobs: List<Job>
 ) {
-    val candidateViewModel = CandidateViewModel()
+    val jobViewModel = JobViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -252,8 +251,8 @@ fun InProcessEmployerScreen(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(candidateViewModel.getCandidateList()) { candidate ->
-                            WorkerCard(candidate = candidate)
+                        items(jobViewModel.getJobApplicationList()) { jobApplication ->
+                            WorkerCard(candidate = jobApplication)
                         }
                     }
                 }
@@ -266,7 +265,7 @@ fun InProcessEmployerScreen(
 }
 
 @Composable
-fun WorkerCard(candidate: CandidateModel) {
+fun WorkerCard(candidate: JobApplicationModel) {
     val contextForToast = LocalContext.current.applicationContext
 
     var enabled by remember {
