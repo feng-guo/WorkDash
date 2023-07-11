@@ -97,6 +97,12 @@ fun UserDetailsWorkerScreen(
         photoProfileUri = uri
     }
 
+    var resumeUri by remember { mutableStateOf<Uri?>(null) }
+    val launcherResume = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.GetContent()) { uri: Uri? ->
+        resumeUri = uri
+    }
+
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
 
     LazyColumn(
@@ -326,6 +332,25 @@ fun UserDetailsWorkerScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = { launcherResume.launch("application/pdf") },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .height(40.dp)
+            ) {
+                Text(text = "Upload Resume")
+            }
+
+            Text(
+                text = if (resumeUri != null) "Resume uploaded" else "No resume selected",
+                modifier = Modifier.padding(horizontal = 20.dp),
+                style = MaterialTheme.typography.caption
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             SignUpButton(
                 navController = navController,
                 email = email,
@@ -354,10 +379,14 @@ fun UserDetailsWorkerScreen(
                     selectedId = selectedId
                 )
 
-                if(photoProfileUri != null || photoIdUri != null)
+                if(photoProfileUri != null && photoIdUri != null)
                 {
                     FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
                     FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
+                }
+                if( resumeUri != null)
+                {
+                    FirebaseStorage.getInstance().reference.child("resume/$uid").child("resume.pdf").putFile(resumeUri!!)
                 }
                 FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
             }
