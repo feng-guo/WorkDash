@@ -320,7 +320,6 @@ fun UserDetailsWorkerScreen(
                                 .align(Alignment.Center)
                                 .padding(16.dp),
                             style = TextStyle(color = Color.Gray, fontWeight = FontWeight.Bold)
-
                         )
                     }
                 }
@@ -331,8 +330,10 @@ fun UserDetailsWorkerScreen(
                 navController = navController,
                 email = email,
                 password = password,
-                imageUri = photoProfileUri,
-                onImageUriChanged = { newImageUri -> photoProfileUri = newImageUri }
+                profileImageUri = photoProfileUri,
+                idImageUri = photoIdUri,
+                onProfileImageUriChanged = { newImageUri -> photoProfileUri = newImageUri },
+                onIdImageUriChanged = { newImageUri -> photoIdUri = newImageUri }
             )
 
             // if the signup is successful, save the users information in the database
@@ -395,8 +396,10 @@ fun SignUpButton(
     navController: NavController,
     email: String,
     password: String,
-    imageUri: Uri?,
-    onImageUriChanged: (Uri?) -> Unit
+    profileImageUri: Uri?,
+    idImageUri: Uri?,
+    onProfileImageUriChanged: (Uri?) -> Unit,
+    onIdImageUriChanged: (Uri?) -> Unit
 ) {
     val contextForToast = LocalContext.current.applicationContext
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
@@ -404,7 +407,7 @@ fun SignUpButton(
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Button(
             onClick = {
-                if(imageUri != null)
+                if(profileImageUri != null && idImageUri != null)
                 {
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
@@ -446,10 +449,19 @@ fun SignUpButton(
                             }
                         }
                 }
-                else {
+                else if(profileImageUri == null)
+                {
                     Toast.makeText(
                         contextForToast,
                         "Profile image cannot be empty",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else if(idImageUri == null)
+                {
+                    Toast.makeText(
+                        contextForToast,
+                        "ID cannot be empty",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -462,5 +474,6 @@ fun SignUpButton(
             Text(text = "Sign Up")
         }
     }
-    onImageUriChanged(imageUri)
+    onProfileImageUriChanged(profileImageUri)
+    onIdImageUriChanged(idImageUri)
 }
