@@ -11,5 +11,6 @@ data class WorkerProfileModel(
     val isVerified: Boolean,
     val workDays: List<String>,
     val startTime: String,
-    val endTime: String
+    val endTime: String,
+    val selectedId: String
 )

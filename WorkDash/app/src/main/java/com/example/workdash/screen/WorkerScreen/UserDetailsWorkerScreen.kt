@@ -3,6 +3,7 @@ package com.example.workdash.screen.WorkerScreen
 import android.widget.Toast
 import android.app.TimePickerDialog
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -44,8 +45,6 @@ import kotlin.math.roundToInt
 import com.example.workdash.models.WorkerProfileModel
 import com.google.firebase.storage.FirebaseStorage
 
-var imageUri by mutableStateOf<Uri?>(null)
-
 @Composable
 fun UserDetailsWorkerScreen(
     navController: NavController
@@ -60,7 +59,7 @@ fun UserDetailsWorkerScreen(
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
     val workDays = remember { mutableSetOf<String>() }
     val IDs = listOf("Passport", "Driver's Licence", "Health Card", "Employee ID")
-    val checkedIDs = remember { mutableStateListOf<String>() }
+    var selectedId by remember { mutableStateOf("") }
 
     val mContext = LocalContext.current
     val mCalendar = Calendar.getInstance()
@@ -81,6 +80,7 @@ fun UserDetailsWorkerScreen(
         }, mHour, mMinute, true
     )
 
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
@@ -259,18 +259,16 @@ fun UserDetailsWorkerScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 Column {
                     IDs.forEach { id ->
-                        val isChecked = checkedIDs.contains(id)
+                        val isChecked = selectedId == id
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(vertical = 2.dp)
                         ) {
-                            Checkbox(
-                                checked = isChecked,
-                                onCheckedChange = {
-                                    if (isChecked) {
-                                        checkedIDs.remove(id)
-                                    } else {
-                                        checkedIDs.add(id)
+                            RadioButton(
+                                selected = isChecked,
+                                onClick = {
+                                    if (!isChecked) {
+                                        selectedId = id
                                     }
                                 },
                                 modifier = Modifier.padding(vertical = 4.dp)
@@ -282,7 +280,13 @@ fun UserDetailsWorkerScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            SignUpButton(navController = navController, email = email, password = password)
+            SignUpButton(
+                navController = navController,
+                email = email,
+                password = password,
+                imageUri = imageUri,
+                onImageUriChanged = { newImageUri -> imageUri = newImageUri }
+            )
 
             // if the signup is successful, save the users information in the database
             if (auth.currentUser != null) {
@@ -299,10 +303,13 @@ fun UserDetailsWorkerScreen(
                     workDays = workDays.toList(),
                     startTime = fromTime.value,
                     endTime = toTime.value,
+                    selectedId = selectedId
                 )
 
+                Log.d("IMAGE ID", imageUri.toString())
                 if(imageUri != null)
                 {
+                    Log.d("UID", "I AM HERE 4")
                     FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(imageUri!!)
                 }
                 FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
@@ -338,7 +345,13 @@ fun dayOfWeekItem(day: String): Boolean {
 }
 
 @Composable
-fun SignUpButton(navController: NavController, email: String, password: String) {
+fun SignUpButton(
+    navController: NavController,
+    email: String,
+    password: String,
+    imageUri: Uri?,
+    onImageUriChanged: (Uri?) -> Unit
+) {
     val contextForToast = LocalContext.current.applicationContext
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
 
@@ -403,4 +416,5 @@ fun SignUpButton(navController: NavController, email: String, password: String) 
             Text(text = "Sign Up")
         }
     }
+    onImageUriChanged(imageUri)
 }
