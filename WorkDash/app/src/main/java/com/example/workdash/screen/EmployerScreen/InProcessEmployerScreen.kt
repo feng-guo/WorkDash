@@ -397,4 +397,3 @@ fun WorkerCard(candidate: JobApplicationModel) {
     }
 }
 
-
