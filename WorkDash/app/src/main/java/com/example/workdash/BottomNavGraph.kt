@@ -22,6 +22,7 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
+import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
@@ -97,6 +98,12 @@ fun BottomNavGraph(
             arguments = listOf(JOB_ID_NAV_ARG, LOCATION_ID_NAV_ARG)
         ) {
             JobDetailsWorkerScreen(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.InProcessWorker.route,
+            arguments = listOf(JOB_ID_NAV_ARG, LOCATION_ID_NAV_ARG)
+        ) {
+            InProcessWorkerScreen(navController = navController)
         }
         composable(
             route = ScreenRoute.UserDetailsWorker.route

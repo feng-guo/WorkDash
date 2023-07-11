@@ -3,6 +3,7 @@ package com.example.workdash.routes
 const val IS_WORKER_ARG = "isWorker"
 const val LOCATION_ID_ARG = "locationId"
 const val JOB_ID_ARG = "jobId"
+const val JOB_STATE_ARG = "jobState"
 sealed class ScreenRoute(val route: String){
     object Login: ScreenRoute(route = "login_screen/{$IS_WORKER_ARG}") {
         fun passIsWorker(isWorker: Boolean): String {
@@ -31,6 +32,11 @@ sealed class ScreenRoute(val route: String){
     object JobDetailsWorker: ScreenRoute(route = "job_details_worker_screen/{$JOB_ID_ARG}/{$LOCATION_ID_ARG}") {
         fun passJobIdAndLocationId(jobId: String, locationId: String): String {
             return "job_details_worker_screen/$jobId/$locationId"
+        }
+    }
+    object InProcessWorker: ScreenRoute(route = "in_process_worker_screen/{$JOB_ID_ARG}/{$LOCATION_ID_ARG}") {
+        fun passJobIdAndLocationId(jobId: String, locationId: String): String {
+            return "in_process_worker_screen/$jobId/$locationId"
         }
     }
     object UserDetailsWorker: ScreenRoute(route = "user_details_worker_screen")
