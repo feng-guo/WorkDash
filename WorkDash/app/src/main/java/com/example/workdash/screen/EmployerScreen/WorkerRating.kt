@@ -62,10 +62,15 @@ fun WorkerRating(
     //jobs: List<Job>
 ) {
 
+
    // var rating by mutableStateOf(0)
     val contextForToast = LocalContext.current.applicationContext
 
     var rating by remember {mutableStateOf(0)}
+
+
+
+
 
 
 

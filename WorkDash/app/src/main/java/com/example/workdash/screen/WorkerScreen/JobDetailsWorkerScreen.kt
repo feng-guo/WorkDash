@@ -15,7 +15,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.JOB_ID_ARG
@@ -261,25 +259,10 @@ fun JobDetailsWorkerScreen(
             ) {
                 Button(
                     onClick = {
-
-                        val jobApplicationModel = JobApplicationModel("test", "test", "test", "Pending")
-                        jobViewModel.applyToJob(jobApplicationModel)
-
-//                        navController.navigate(route = ScreenRoute.ListOfJobsApplied.route) {
-//
-//                            popUpTo(ScreenRoute.JobDetailsWorker.route){
-//                                inclusive = true
-//                            }
-//                        }
-                        navController.navigate(route = ScreenRoute.WorkerRating.route) {
-
-                            popUpTo(ScreenRoute.WorkerRating.route){
-
                         JobApplicationService.applyToJob(jobModel.jobId)
                         //TODO we can probably eventually get rid of this
                         navController.navigate(route = ScreenRoute.ListOfJobs.route) {
-                            popUpTo(ScreenRoute.JobDetailsWorker.route){
-
+                            popUpTo(ScreenRoute.WorkerRating.route){
                                 inclusive = true
                             }
                         }
