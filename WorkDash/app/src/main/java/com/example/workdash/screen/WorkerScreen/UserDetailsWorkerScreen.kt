@@ -8,15 +8,18 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
@@ -27,6 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -80,10 +85,16 @@ fun UserDetailsWorkerScreen(
         }, mHour, mMinute, true
     )
 
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val launcher = rememberLauncherForActivityResult(contract =
+    var photoIdUri by remember { mutableStateOf<Uri?>(null) }
+    val launcherID = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
+        photoIdUri = uri
+    }
+
+    var photoProfileUri by remember { mutableStateOf<Uri?>(null) }
+    val launcherProfile = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.GetContent()) { uri: Uri? ->
+        photoProfileUri = uri
     }
 
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
@@ -102,10 +113,10 @@ fun UserDetailsWorkerScreen(
                     .size(108.dp)
                     .background(MaterialTheme.colors.background, shape = CircleShape)
             ) {
-                if (imageUri != null) {
+                if (photoProfileUri != null) {
                     Image(
                         painter = rememberImagePainter(
-                            data = imageUri,
+                            data = photoProfileUri,
                             builder = {
                                 transformations(CircleCropTransformation())
                             }
@@ -125,7 +136,7 @@ fun UserDetailsWorkerScreen(
                             .align(Alignment.Center)
                             .offset(y = 1.dp)
                             .clickable {
-                                launcher.launch("image/*")
+                                launcherProfile.launch("image/*")
                             }
                     )
                 }
@@ -280,12 +291,48 @@ fun UserDetailsWorkerScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+            if(selectedId != "")
+            {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(172.dp)
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                        .clickable {
+                            launcherID.launch("image/*")
+                        }
+                ) {
+                    if (photoIdUri != null) {
+                        Image(
+                            painter = rememberImagePainter(
+                                data = photoIdUri,
+                            ),
+                            contentDescription = "Photo ID",
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    } else {
+                        Text(
+                            text = "Add $selectedId",
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(16.dp),
+                            style = TextStyle(color = Color.Gray, fontWeight = FontWeight.Bold)
+
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
             SignUpButton(
                 navController = navController,
                 email = email,
                 password = password,
-                imageUri = imageUri,
-                onImageUriChanged = { newImageUri -> imageUri = newImageUri }
+                imageUri = photoProfileUri,
+                onImageUriChanged = { newImageUri -> photoProfileUri = newImageUri }
             )
 
             // if the signup is successful, save the users information in the database
@@ -306,11 +353,10 @@ fun UserDetailsWorkerScreen(
                     selectedId = selectedId
                 )
 
-                Log.d("IMAGE ID", imageUri.toString())
-                if(imageUri != null)
+                if(photoProfileUri != null || photoIdUri != null)
                 {
-                    Log.d("UID", "I AM HERE 4")
-                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(imageUri!!)
+                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
+                    FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
                 }
                 FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
             }
