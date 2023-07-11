@@ -258,7 +258,7 @@ fun InProcessWorkerScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 when(jobState){
-                    "in process" ->
+                    "In Progress" ->
                         Button(
                                 onClick = {
 

@@ -34,16 +34,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
+import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
-import com.example.workdash.routes.ScreenRoute
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -248,7 +249,7 @@ fun JobDetailsEmployerScreen(
                     }
                 }
             }
-            if(jobModel.jobState == "In Process"){
+            if(jobModel.jobState == "In Progress"){
 
                 Card(
                     modifier = Modifier
@@ -277,7 +278,7 @@ fun JobDetailsEmployerScreen(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             items(jobViewModel.getJobApplicationList()) { candidate ->
-                                CandidateCard(jobApplicationModel = candidate, navController = navController)
+                                WorkerCard(jobApplicationModel = candidate, navController = navController)
                             }
                         }
                     }
@@ -285,47 +286,174 @@ fun JobDetailsEmployerScreen(
 
             }
 
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
-                    .clickable { /* Handle card click */ },
-                elevation = 4.dp
-            ){
-                Column(
+            else{
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                ) {
-                    Text(
-                        text = "Candidates: ",
+                        .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
+                        .clickable { /* Handle card click */ },
+                    elevation = 4.dp
+                ){
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
-                        style = MaterialTheme.typography.body1,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-                    LazyColumn(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            .padding(bottom = 8.dp)
                     ) {
-                        //TODO this should probably be queried based on the job id lol
-                        items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
-                            CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
+
+                        Text(
+                            text = "Candidates: ",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            style = MaterialTheme.typography.body1,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                        LazyColumn(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            //TODO this should probably be queried based on the job id lol
+                            items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
+                                CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
+                            }
                         }
                     }
-                }
 
+                }
             }
+
         }
 
 
     }
 }
 
+@Composable
+fun WorkerCard(jobApplicationModel: JobApplicationModel, navController: NavController) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+            .clickable { /* Handle card click */ },
+        elevation = 4.dp
+    ) {
+        Column() {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                AsyncImage(
+                    model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
+                    contentDescription = null,
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Worker ID: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "f",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Worker Name: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "f",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Phone Num: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "f",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Check In: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "f",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Check Out: ",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black
+                )
+                Text(
+                    text = "f",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
+        }
+    }
+}
 @Composable
 fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
