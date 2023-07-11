@@ -2,7 +2,6 @@ package com.example.workdash.models
 
 data class WorkerProfileModel(
     val uid: String,
-    val profilePic: String,
     val isWorker: Boolean,
     val name: String,
     val email: String,
@@ -12,5 +11,6 @@ data class WorkerProfileModel(
     val isVerified: Boolean,
     val workDays: List<String>,
     val startTime: String,
-    val endTime: String
+    val endTime: String,
+    val selectedId: String
 )
