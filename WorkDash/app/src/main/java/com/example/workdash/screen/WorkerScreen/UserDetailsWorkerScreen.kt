@@ -289,7 +289,6 @@ fun UserDetailsWorkerScreen(
                 var uid = auth.currentUser!!.uid
                 var workerProfile = WorkerProfileModel(
                     uid = uid,
-                    profilePic = imageUri.toString(),
                     isWorker = true,
                     name = name,
                     email = email,
