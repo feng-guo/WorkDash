@@ -98,13 +98,13 @@ fun WorkerRating(
                     val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
                     if (isWorker == true) {
 
-                        satisfiedText.value = "How satisfied are you with this job?"
+                        satisfiedText.value = "How satisfied were you with this job?"
 
 
                     }
                     else{
 
-                        satisfiedText.value = "How satisfied were you with this employee?"
+                        satisfiedText.value = "How satisfied are you with this employee?"
                     }
                 }
             }
@@ -145,7 +145,7 @@ fun WorkerRating(
                             isHighlighted = !isHighlighted
 
                             if (isHighlighted) {
-                                if(satisfiedText.value == "How satisfied were you with this employee?") {
+                                if(satisfiedText.value == "How satisfied are you with this employee?") {
                                     navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
 
                                         popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
@@ -153,7 +153,7 @@ fun WorkerRating(
                                         }
                                     }
                                 }
-                                else if(satisfiedText.value == "How satisfied are you with this job?") {
+                                else if(satisfiedText.value == "How satisfied were you with this job?") {
                                     navController.navigate(route = ScreenRoute.ListOfJobs.route) {
 
                                         popUpTo(ScreenRoute.ListOfJobs.route) {
