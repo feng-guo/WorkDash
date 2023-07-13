@@ -1,5 +1,8 @@
 package com.example.workdash.services
 
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.workdash.Constants.IdNames.JOB_ID_NAME
 import com.example.workdash.Constants.TableNames.JOB_TABLE_NAME
 import com.example.workdash.models.JobModel
@@ -30,5 +33,15 @@ object JobService {
             saveJob(job)
         }
         getJobFromId(jobId, lmd)
+    }
+
+    fun getJobList(callback: (jobModel: SnapshotStateList<JobModel>?) -> Unit) {
+        val jobModel = JobModel()
+//        Log.d("Please help me...", "job service...")
+//        val tmp = { jobs: MutableList<JobModel>? ->
+//            callback.invoke(jobs)
+//        }
+//        DatabaseService.readListOfObjectsFromDbTable(JOB_TABLE_NAME, jobModel, tmp)
+        DatabaseService.readListOfObjectsFromDbTable(JOB_TABLE_NAME, jobModel, callback)
     }
 }

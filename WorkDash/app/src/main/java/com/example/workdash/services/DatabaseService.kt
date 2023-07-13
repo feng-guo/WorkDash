@@ -1,5 +1,8 @@
 package com.example.workdash.services
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.workdash.models.AddressModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
@@ -99,6 +102,31 @@ object DatabaseService {
                 } else {
                     callback.invoke(null)
                 }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        entry.addListenerForSingleValueEvent(listener)
+    }
+    fun <T : Any> readListOfObjectsFromDbTable(tableName: String, returnObject: T, callback: (obj: SnapshotStateList<T>?) -> Unit) {
+        val entry = dbRef.child(tableName)
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    callback.invoke(null)
+                    return;
+                }
+                val list = mutableStateListOf<T>()
+                for (snapshot in dataSnapshot.children) {
+                    val obj = dataSnapshot.children.first().getValue(returnObject::class.java)
+                    if (obj != null) {
+                        list.add(obj)
+                    }
+                }
+                Log.d("Please help me...", "database......")
+                callback.invoke(list)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 //TODO Idk do something if it fails

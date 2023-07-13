@@ -1,8 +1,12 @@
 package com.example.workdash.viewModels
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
+import com.example.workdash.services.JobService
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -12,17 +16,29 @@ import com.google.firebase.database.ValueEventListener
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
     //val isFirstJob: Boolean = false //might delete later
-    val jobs = mutableListOf<JobModel>()
+    var jobList = mutableStateListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
 
     init {
+        val jobListCallback = { jobs: SnapshotStateList<JobModel>? ->
+            jobList = jobs?:jobList
+            var test = Log.d("Please help me...", "currentjobemployers help me callback...")
+            if (jobList.size != 0) {
+                test = Log.d("wo kms", jobList[0].jobName)
+            } else {
+                test = Log.d("wo kms", "WHY")
+            }
+        }
+        JobService.getJobList(jobListCallback)
+
+
         val dbRef = FirebaseDatabase.getInstance().reference
-        initJobPostListener(dbRef)
+//        initJobPostListener(dbRef)
         initJobApplicationListener(dbRef)
     }
 
     private fun initJobPostListener(dbRef: DatabaseReference) {
-        val jobList = dbRef.child("Jobs")
+        val jobs = dbRef.child("Jobs")
 
         val jobPostListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -41,7 +57,7 @@ class JobViewModel: ViewModel() {
                         totalPositionsRequired = jobObj["totalPositionsRequired"] as Long
                         totalPositionsFilled = jobObj["totalPositionsFilled"] as Long
                     }
-                    jobs.add(job)
+                    jobList.add(job)
                 }
 
             }
@@ -49,7 +65,7 @@ class JobViewModel: ViewModel() {
                 //TODO Idk do something if it fails
             }
         }
-        jobList.addValueEventListener(jobPostListener)
+        jobs.addValueEventListener(jobPostListener)
     }
 
     private fun initJobApplicationListener(dbRef: DatabaseReference) {
@@ -78,9 +94,9 @@ class JobViewModel: ViewModel() {
         jobApplicationList.addValueEventListener(jobApplicationListener)
     }
 
-    fun getJobList(): List<JobModel>{
-        return jobs
-    }
+//    fun getJobList(): MutableList<JobModel>{
+//        return jobList
+//    }
     fun deleteJobList(){
 
     }

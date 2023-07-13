@@ -1,6 +1,7 @@
 package com.example.workdash.screen.EmployerScreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -32,15 +34,16 @@ import androidx.navigation.NavController
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CurrentJobPostsEmployerScreen(
-    navController: NavController
+    navController: NavController,
+    jobViewModel: JobViewModel = JobViewModel()
 ) {
-    val jobViewModel = JobViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,7 +71,11 @@ fun CurrentJobPostsEmployerScreen(
             LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(jobViewModel.getJobList()) { job ->
+            itemsIndexed(items = jobViewModel.jobList
+//                key = { job ->
+//                job.jobId
+//            }
+            ) { _, job ->
                 JobCard(jobModel = job, navController = navController)
             }
         }
@@ -78,7 +85,8 @@ fun CurrentJobPostsEmployerScreen(
 @Composable
 fun JobCard(jobModel: JobModel, navController: NavController) {
     var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
+    val locationCallback = { location: LocationModel? ->
+        locationModel = location?: LocationModel() }
     LocationService.getLocationFromId(jobModel.locationId, locationCallback)
 
     Card(

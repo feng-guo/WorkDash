@@ -1,6 +1,7 @@
 package com.example.workdash.screen.WorkerScreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,8 +39,8 @@ import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
-import com.example.workdash.viewModels.JobViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -47,7 +48,12 @@ import com.example.workdash.viewModels.JobViewModel
 fun ListOfJobs(
     navController: NavController,
 ) {
-    val jobViewModel = JobViewModel()
+    var jobList = mutableListOf<JobModel>()
+    val jobListCallback = { jobs: MutableList<JobModel>? ->
+        jobList = jobs?:jobList
+    }
+    JobService.getJobList(jobListCallback)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -96,7 +102,7 @@ fun ListOfJobs(
                     LazyRow(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
+                        items(jobList) { job ->
                             ProcessingJobCard(job = job, navController = navController)
                         }
                     }
@@ -121,7 +127,7 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
+                        items(jobList) { job ->
                             JobCard(job = job, navController = navController)
                         }
                     }
