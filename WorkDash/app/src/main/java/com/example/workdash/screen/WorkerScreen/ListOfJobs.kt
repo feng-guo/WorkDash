@@ -40,6 +40,7 @@ import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -48,6 +49,8 @@ fun ListOfJobs(
     navController: NavController,
 ) {
     val jobViewModel = JobViewModel()
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+//    CheckInService.getMatchedJobByEmployeeId(currentUserUid)
     Scaffold(
         topBar = {
             TopAppBar(

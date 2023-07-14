@@ -23,6 +23,7 @@ object JobApplicationService {
         JobService.incrementTotalFilledPositions(jobApplication.jobId)
         jobApplication.applicationStatus = "Accepted"
         saveJobApplication(jobApplication)
+        CheckInService.createMatchedJobModel(jobApplication)
     }
 
     fun rejectApplication(jobApplication: JobApplicationModel) {
