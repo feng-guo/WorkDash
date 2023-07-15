@@ -50,7 +50,7 @@ fun ListOfJobs(
 ) {
     val jobViewModel = JobViewModel()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-//    CheckInService.getMatchedJobByEmployeeId(currentUserUid)
+//    CheckInService.getMatchedJobByEmployeeId(currentUserUid?:"")
     Scaffold(
         topBar = {
             TopAppBar(
