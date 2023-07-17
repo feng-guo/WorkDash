@@ -71,11 +71,8 @@ fun CurrentJobPostsEmployerScreen(
             LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            itemsIndexed(items = jobViewModel.jobList
-//                key = { job ->
-//                job.jobId
-//            }
-            ) { _, job ->
+            items(items = jobViewModel.jobList
+            ) { job ->
                 JobCard(jobModel = job, navController = navController)
             }
         }

@@ -16,20 +16,28 @@ import com.google.firebase.database.ValueEventListener
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
     //val isFirstJob: Boolean = false //might delete later
-    var jobList = mutableStateListOf<JobModel>()
+    var jobList = mutableListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
 
     init {
-        val jobListCallback = { jobs: SnapshotStateList<JobModel>? ->
+        val jobListCallback = { jobs: MutableList<JobModel>? ->
+            Log.d("Help", "HELP ME JOB LIST")
+            jobs?.get(0)?.let { Log.d("GG", it.jobName) }
             jobList = jobs?:jobList
-            var test = Log.d("Please help me...", "currentjobemployers help me callback...")
-            if (jobList.size != 0) {
-                test = Log.d("wo kms", jobList[0].jobName)
-            } else {
-                test = Log.d("wo kms", "WHY")
-            }
         }
         JobService.getJobList(jobListCallback)
+
+
+//        val jobListCallback = { jobs: SnapshotStateList<JobModel>? ->
+//            jobList = jobs?:jobList
+//            var test = Log.d("Please help me...", "currentjobemployers help me callback...")
+//            if (jobList.size != 0) {
+//                test = Log.d("wo kms", jobList[0].jobName)
+//            } else {
+//                test = Log.d("wo kms", "WHY")
+//            }
+//        }
+//        JobService.getJobList(jobListCallback)
 
 
         val dbRef = FirebaseDatabase.getInstance().reference

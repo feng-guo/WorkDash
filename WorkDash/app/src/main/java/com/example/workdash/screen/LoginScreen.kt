@@ -27,12 +27,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.workdash.routes.IS_WORKER_ARG
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.viewModels.CheckInViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -55,6 +55,10 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     val contextForToast = LocalContext.current.applicationContext
     val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
+
+    //test
+    val vm = CheckInViewModel()
+    var list = vm.currentMatchedJob
 
     Column(
         modifier = Modifier

@@ -1,7 +1,6 @@
 package com.example.workdash.screen.WorkerScreen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,8 +38,9 @@ import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
+import com.example.workdash.viewModels.JobViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -48,11 +48,10 @@ import com.example.workdash.services.LocationService
 fun ListOfJobs(
     navController: NavController,
 ) {
-    var jobList = mutableListOf<JobModel>()
-    val jobListCallback = { jobs: MutableList<JobModel>? ->
-        jobList = jobs?:jobList
-    }
-    JobService.getJobList(jobListCallback)
+
+
+    val jobViewModel = JobViewModel()
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
     Scaffold(
         topBar = {
@@ -102,7 +101,7 @@ fun ListOfJobs(
                     LazyRow(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobList) { job ->
+                        items(jobViewModel.jobList) { job ->
                             ProcessingJobCard(job = job, navController = navController)
                         }
                     }
@@ -127,7 +126,7 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobList) { job ->
+                        items(jobViewModel.jobList) { job ->
                             JobCard(job = job, navController = navController)
                         }
                     }
