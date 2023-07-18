@@ -565,11 +565,11 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                         Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
                         enabled = false
                         navController.navigate(
-                            ScreenRoute.WorkerRating.route
+                            ScreenRoute.Rating.route
                         )
 //                        {
 //
-//                            popUpTo(ScreenRoute.WorkerRating.route){
+//                            popUpTo(ScreenRoute.Rating.route){
 //                                inclusive = true
 //                            }
 //                        }

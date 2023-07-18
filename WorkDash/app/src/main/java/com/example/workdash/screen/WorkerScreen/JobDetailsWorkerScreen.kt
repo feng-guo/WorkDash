@@ -260,8 +260,8 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
-                        navController.navigate(route = ScreenRoute.WorkerRating.route) {
-                            popUpTo(ScreenRoute.WorkerRating.route){
+                        navController.navigate(route = ScreenRoute.Rating.route) {
+                            popUpTo(ScreenRoute.Rating.route){
                                 inclusive = true
                             }
                         }

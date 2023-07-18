@@ -17,7 +17,7 @@ import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.SignUpEmployerScreen
-import com.example.workdash.screen.EmployerScreen.WorkerRating
+import com.example.workdash.screen.Rating
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
@@ -130,9 +130,9 @@ fun BottomNavGraph(
             SignUpEmployerScreen(navController = navController)
         }
         composable(
-            route = ScreenRoute.WorkerRating.route
+            route = ScreenRoute.Rating.route
         ) {
-            WorkerRating(navController = navController)
+            Rating(navController = navController)
         }
     }
 }

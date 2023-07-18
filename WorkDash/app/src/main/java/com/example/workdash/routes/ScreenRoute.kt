@@ -43,7 +43,7 @@ sealed class ScreenRoute(val route: String){
     object ListOfJobs: ScreenRoute(route = "list_of_jobs")
     object ListOfJobsApplied: ScreenRoute(route = "list_of_jobs_applied")
 
-    object WorkerRating: ScreenRoute(route = "worker_rating")
+    object Rating: ScreenRoute(route = "rating")
 
 
 }
