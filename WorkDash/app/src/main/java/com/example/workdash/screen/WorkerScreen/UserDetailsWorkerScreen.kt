@@ -2,6 +2,9 @@ package com.example.workdash.screen.WorkerScreen
 
 import android.widget.Toast
 import android.app.TimePickerDialog
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -35,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -49,6 +54,35 @@ import java.util.Calendar
 import kotlin.math.roundToInt
 import com.example.workdash.models.WorkerProfileModel
 import com.google.firebase.storage.FirebaseStorage
+import org.opencv.android.OpenCVLoader
+import org.opencv.android.Utils
+import org.opencv.core.Core
+import org.opencv.core.CvType
+import org.opencv.core.Mat
+import org.opencv.core.MatOfRect
+import org.opencv.core.Rect
+import org.opencv.core.Size
+import org.opencv.imgproc.Imgproc
+import org.opencv.objdetect.CascadeClassifier
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import org.opencv.core.CvType.CV_32F
+import java.io.InputStream
 
 @Composable
 fun UserDetailsWorkerScreen(
@@ -332,6 +366,14 @@ fun UserDetailsWorkerScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+            AuthenticateWorker(
+                profileImageUri = photoProfileUri,
+                idImageUri = photoIdUri,
+                onProfileImageUriChanged = { newImageUri -> photoProfileUri = newImageUri },
+                onIdImageUriChanged = { newImageUri -> photoIdUri = newImageUri }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = { launcherResume.launch("application/pdf") },
@@ -505,4 +547,195 @@ fun SignUpButton(
     }
     onProfileImageUriChanged(profileImageUri)
     onIdImageUriChanged(idImageUri)
+}
+
+@Composable
+fun AuthenticateWorker(
+    profileImageUri: Uri?,
+    idImageUri: Uri?,
+    onProfileImageUriChanged: (Uri?) -> Unit,
+    onIdImageUriChanged: (Uri?) -> Unit
+) {
+    if(profileImageUri != null && idImageUri != null)
+    {
+        val context = LocalContext.current
+        OpenCVLoader.initDebug()
+        val imageResourceId: Uri? = idImageUri
+        val anotherImageResourceId: Uri? = profileImageUri
+        if (imageResourceId != null && anotherImageResourceId != null) {
+            val imageID = loadImageFromUri(context, imageResourceId)
+            val imageProfile = loadImageFromUri(context, anotherImageResourceId)
+
+            val grayImageID = convertToGray(imageID)
+            val cascadeClassifier = loadFaceCascadeClassifier(context)
+            val facesID = detectFaces(grayImageID, cascadeClassifier)
+
+            if (facesID.isNotEmpty()) {
+                val bestFaceRectID = chooseBestFace(facesID)
+
+                val faceImageID = Mat(imageID, bestFaceRectID)
+                val resizedFaceImageID = resizeImage(faceImageID, Size(100.0, 100.0))
+
+                val grayImageProfile = convertToGray(imageProfile)
+                val facesProfile = detectFaces(grayImageProfile, cascadeClassifier)
+                val bestFaceRectProfile = chooseBestFace(facesProfile)
+                val faceImageProfile = Mat(imageProfile, bestFaceRectProfile)
+                val resizedFaceImageProfile = resizeImage(faceImageProfile, Size(100.0, 100.0))
+
+                val accuracy = calculateFaceMatchAccuracy(resizedFaceImageID, resizedFaceImageProfile)
+                println("Face Match Accuracy: $accuracy%")
+
+                val resizedFaceBitmap = Bitmap.createBitmap(
+                    resizedFaceImageID.cols(),
+                    resizedFaceImageID.rows(),
+                    Bitmap.Config.ARGB_8888
+                )
+                Utils.matToBitmap(resizedFaceImageID, resizedFaceBitmap)
+
+                val grayAnotherBitmap = Bitmap.createBitmap(
+                    resizedFaceImageProfile.cols(),
+                    resizedFaceImageProfile.rows(),
+                    Bitmap.Config.ARGB_8888
+                )
+                Utils.matToBitmap(resizedFaceImageProfile, grayAnotherBitmap)
+
+                val resizedFaceState = remember { mutableStateOf(resizedFaceBitmap) }
+                val grayAnotherState = remember { mutableStateOf(grayAnotherBitmap) }
+
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .fillMaxWidth()
+                        .height(250.dp)
+                ) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(6.dp)
+                        ) {
+                            Row(Modifier.fillMaxWidth()) {
+                                Image(
+                                    bitmap = resizedFaceState.value.asImageBitmap(),
+                                    contentDescription = "Gray Another Image",
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .weight(1f)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Image(
+                                    bitmap = grayAnotherState.value.asImageBitmap(),
+                                    contentDescription = "Resized Face Image",
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .weight(1f)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Face Match Accuracy: $accuracy%",
+                                style = MaterialTheme.typography.caption,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+
+            } else {
+                println("No face detected in the image.")
+            }
+        }
+    }
+
+
+    onProfileImageUriChanged(profileImageUri)
+    onIdImageUriChanged(idImageUri)
+}
+
+private fun loadImageFromUri(context: Context, imageUri: Uri): Mat {
+    val inputStream: InputStream? = context.contentResolver.openInputStream(imageUri)
+    val imageBitmap = BitmapFactory.decodeStream(inputStream)
+    val imageMat = Mat()
+    Utils.bitmapToMat(imageBitmap, imageMat)
+    return imageMat
+}
+
+private fun chooseBestFace(faces: List<Rect>): Rect {
+    return faces.maxByOrNull { it.width * it.height } ?: faces.first()
+}
+
+private fun convertToGray(image: Mat): Mat {
+    if (image.channels() > 1) {
+        val grayImage = Mat()
+        Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY)
+        return grayImage
+    }
+    return image
+}
+
+private fun loadImageFromResource(context: Context, resourceId: Int): Mat {
+    val imageBitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+    val imageMat = Mat()
+    Utils.bitmapToMat(imageBitmap, imageMat)
+    return imageMat
+}
+
+private fun loadFaceCascadeClassifier(context: Context): CascadeClassifier {
+    val cascadeClassifier = CascadeClassifier()
+    val cascadeClassifierFile = File(context.cacheDir, "haarcascade_frontalface_default.xml")
+
+    if (!cascadeClassifierFile.exists()) {
+        try {
+            val inputStream = context.resources.openRawResource(R.raw.haarcascade_frontalface_default)
+            val outputStream = FileOutputStream(cascadeClassifierFile)
+
+            val buffer = ByteArray(inputStream.available())
+            inputStream.read(buffer)
+
+            outputStream.write(buffer)
+            outputStream.close()
+            inputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    cascadeClassifier.load(cascadeClassifierFile.absolutePath)
+
+    return cascadeClassifier
+}
+
+private fun detectFaces(image: Mat, cascadeClassifier: CascadeClassifier): List<Rect> {
+    val grayImage = convertToGray(image)
+
+    val faces = MatOfRect()
+    cascadeClassifier.detectMultiScale(grayImage, faces)
+
+    return faces.toList()
+}
+
+private fun resizeImage(image: Mat, newSize: Size): Mat {
+    val resizedImage = Mat()
+    Imgproc.resize(image, resizedImage, newSize)
+    return resizedImage
+}
+
+private fun calculateFaceMatchAccuracy(image1: Mat, image2: Mat): Double {
+    val size = Size(100.0, 100.0)
+    val resizedImage1 = resizeImage(image1, size)
+    val resizedImage2 = resizeImage(image2, size)
+
+    val grayImage1 = convertToGray(resizedImage1)
+    val grayImage2 = convertToGray(resizedImage2)
+
+    val floatImage1 = Mat()
+    grayImage1.convertTo(floatImage1, CvType.CV_32F)
+    val floatImage2 = Mat()
+    grayImage2.convertTo(floatImage2, CvType.CV_32F)
+
+    val diff = Mat()
+    Core.subtract(floatImage1, floatImage2, diff)
+    val norm = Core.norm(diff)
+
+    return (1.0 - (norm / (size.width * size.height))) * 100.0
 }
