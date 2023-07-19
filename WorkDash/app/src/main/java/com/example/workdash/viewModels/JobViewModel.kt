@@ -3,29 +3,42 @@ package com.example.workdash.viewModels
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.workdash.Constants
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
+import com.example.workdash.services.DatabaseService
 import com.example.workdash.services.JobService
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.launch
 
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
     //val isFirstJob: Boolean = false //might delete later
-    var jobList = mutableListOf<JobModel>()
+//    var jobList = mutableListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
 
+    private val _jobList = MutableLiveData<List<JobModel>>()
+    val jobList: LiveData<List<JobModel>> = _jobList
+
     init {
-        val jobListCallback = { jobs: MutableList<JobModel>? ->
-            Log.d("Help", "HELP ME JOB LIST")
-            jobs?.get(0)?.let { Log.d("GG", it.jobName) }
-            jobList = jobs?:jobList
+        viewModelScope.launch {
+            val jobModel = JobModel()
+            _jobList.value = DatabaseService.readListOfObjectsFromDbTable(Constants.TableNames.JOB_TABLE_NAME, jobModel)
         }
-        JobService.getJobList(jobListCallback)
+//        val jobListCallback = { jobs: MutableList<JobModel>? ->
+//            Log.d("Help", "HELP ME JOB LIST")
+//            jobs?.get(0)?.let { Log.d("GG", it.jobName) }
+//            jobList = jobs?:jobList
+//        }
+//        JobService.getJobList(jobListCallback)
 
 
 //        val jobListCallback = { jobs: SnapshotStateList<JobModel>? ->
@@ -102,9 +115,11 @@ class JobViewModel: ViewModel() {
         jobApplicationList.addValueEventListener(jobApplicationListener)
     }
 
-//    fun getJobList(): MutableList<JobModel>{
-//        return jobList
-//    }
+    fun getJobList(): LiveData<List<JobModel>> {
+
+
+        return jobList
+    }
     fun deleteJobList(){
 
     }

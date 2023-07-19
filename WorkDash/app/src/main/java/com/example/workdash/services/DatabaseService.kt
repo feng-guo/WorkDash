@@ -10,9 +10,42 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 object DatabaseService {
     private val dbRef = FirebaseDatabase.getInstance().reference
+
+    fun <T : Any> readListOfObjectsFromDbTable(tableName: String, returnObject: T): Flow<List<T>> {
+    return callbackFlow {
+        val entry = dbRef.child(tableName)
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    Log.e("L", "Snapshot doesn't exist lol")
+                    return
+                }
+                val list = mutableStateListOf<T>()
+                for (snapshot in dataSnapshot.children) {
+                    val obj = dataSnapshot.children.first().getValue(returnObject::class.java)
+                    if (obj != null) {
+                        list.add(obj)
+                    }
+                }
+                trySend(list).isSuccess
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        entry.addListenerForSingleValueEvent(listener)
+        awaitClose {
+            Log.d("closing list ig", "Cancelling listener")
+            entry.removeEventListener(listener)
+        }
+    }
+}
 
     fun writeToDbTable(tableName: String, key: String, value: Any) {
         dbRef.child(tableName).child(key).setValue(value)

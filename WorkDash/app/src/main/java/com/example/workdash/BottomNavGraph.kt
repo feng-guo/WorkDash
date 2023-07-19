@@ -26,6 +26,7 @@ import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
+import com.example.workdash.screen.WorkerScreen.ListOfJobsActivity
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
 import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 
@@ -117,7 +118,9 @@ fun BottomNavGraph(
         composable(
             route = ScreenRoute.ListOfJobs.route
         ) {
-            ListOfJobs(navController = navController)
+            val listofJobsActivity = ListOfJobsActivity()
+            listofJobsActivity.ListOfJobs(navController = navController)
+//            ListOfJobs(navController = navController)
         }
         composable(
             route = ScreenRoute.ListOfJobsApplied.route
