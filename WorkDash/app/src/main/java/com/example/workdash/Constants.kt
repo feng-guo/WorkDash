@@ -5,8 +5,10 @@ object Constants {
         const val JOB_TABLE_NAME = "Jobs"
         const val JOB_APPLICATION_TABLE_NAME = "JobApplications"
         const val LOCATION_TABLE_NAME = "Locations"
+        const val COORDINATE_TABLE_NAME = "Coordinates"
         const val ID_TABLE_NAME = "IDs"
         const val MATCHED_JOB_NAME = "matchedJob"
+        const val API_KEY_NAME = "ApiKeys"
     }
 
     object IdNames {

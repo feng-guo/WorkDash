@@ -65,6 +65,29 @@ object DatabaseService {
         entry.addListenerForSingleValueEvent(listener)
     }
 
+    fun readKeyFromTable(tableName: String, id: String, callback: (obj: String) -> Unit) {
+        val entry = dbRef.child(tableName)
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val obj = dataSnapshot.child(id).getValue(String::class.java)
+                    if (obj != null) {
+                        callback.invoke(obj)
+                    } else {
+                        callback.invoke("")
+                    }
+                } else {
+                    callback.invoke("")
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        entry.addListenerForSingleValueEvent(listener)
+    }
+
     fun readIdValueFromIdTable(tableName: String, id: String, callback: (obj: Long) -> Unit) {
         val entry = dbRef.child(tableName)
 
