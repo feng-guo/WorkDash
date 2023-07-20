@@ -27,6 +27,7 @@ import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
+import com.example.workdash.screen.WorkerScreen.MapOfJobs
 import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 
 val IS_WORKER_NAV_ARG = navArgument(IS_WORKER_ARG) {
@@ -133,6 +134,11 @@ fun BottomNavGraph(
             route = ScreenRoute.Rating.route
         ) {
             Rating(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.MapOfJobs.route
+        ) {
+            MapOfJobs(navController = navController)
         }
     }
 }
