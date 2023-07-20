@@ -674,13 +674,6 @@ private fun convertToGray(image: Mat): Mat {
     return image
 }
 
-private fun loadImageFromResource(context: Context, resourceId: Int): Mat {
-    val imageBitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-    val imageMat = Mat()
-    Utils.bitmapToMat(imageBitmap, imageMat)
-    return imageMat
-}
-
 private fun loadFaceCascadeClassifier(context: Context): CascadeClassifier {
     val cascadeClassifier = CascadeClassifier()
     val cascadeClassifierFile = File(context.cacheDir, "haarcascade_frontalface_default.xml")
