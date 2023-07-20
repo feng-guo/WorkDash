@@ -1,5 +1,7 @@
 package com.example.workdash.services
 
+import com.example.workdash.services.DatabaseService.readCurrentUserId
+
 object UserService {
 
     //Fetch the business ID based on the logged in user
@@ -22,8 +24,7 @@ object UserService {
 //                        }
 //                    })
 
-    //TODO
     fun getCurrentUserId(): String {
-        return ""
+        return readCurrentUserId()
     }
 }

@@ -3,6 +3,7 @@ package com.example.workdash.services
 import com.example.workdash.models.AddressModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -13,6 +14,15 @@ object DatabaseService {
 
     fun writeToDbTable(tableName: String, key: String, value: Any) {
         dbRef.child(tableName).child(key).setValue(value)
+    }
+
+    fun readCurrentUserId(): String {
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserUid != null) {
+            return currentUserUid
+        } else {
+            throw NullPointerException("Current user UID is null.")
+        }
     }
 
 //    fun <T> readListFromDbTable(tableName: String, list: List<T>): List<T> {

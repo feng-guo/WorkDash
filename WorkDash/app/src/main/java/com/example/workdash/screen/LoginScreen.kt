@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.workdash.routes.IS_WORKER_ARG
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.UserService.getCurrentUserId
 import com.example.workdash.viewModels.CheckInViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -104,7 +105,7 @@ fun LoginScreen(
                             if (task.isSuccessful) {
                                 // Login successful, read from the user's data
                                 val database: DatabaseReference = FirebaseDatabase.getInstance().reference
-                                val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+                                val currentUserUid = getCurrentUserId()
                                 val query = database.child("userProfile").orderByChild("uid").equalTo(currentUserUid)
 
                                 // Read the data from the database
