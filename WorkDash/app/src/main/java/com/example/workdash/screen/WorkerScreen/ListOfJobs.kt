@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,6 +71,11 @@ fun ListOfJobs(
                         navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
                     }) {
                         Icon(Icons.Default.Add, contentDescription = "Add")
+                    }
+                    IconButton(onClick = {
+                        navController.navigate(ScreenRoute.MapOfJobs.route)
+                    }) {
+                        Icon(Icons.Default.Map, contentDescription = "Map")
                     }
                 }
             )

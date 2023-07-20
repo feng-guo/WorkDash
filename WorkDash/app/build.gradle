@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -81,6 +82,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.1.0'
 
     implementation 'org.tensorflow:tensorflow-lite:2.5.0'
+
+    implementation 'com.google.maps.android:maps-compose:2.11.4'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     //nev import
     def nav_version = "2.5.3"
