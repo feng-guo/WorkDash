@@ -1,19 +1,15 @@
 package com.example.workdash.screen
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-//import androidx.compose.foundation.text.KeyboardType
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-//import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -37,21 +33,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-//import java.time.format.TextStyle
 
 @OptIn(ExperimentalComposeUiApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Report(navController: NavController) {
 
     val contextForToast = LocalContext.current.applicationContext
-
-  //  var rating by remember { mutableStateOf(0) }
     var typedText by remember { mutableStateOf(TextFieldValue()) }
-
 
     Column(
         modifier = Modifier.fillMaxHeight().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Do you have any complaints regarding this job?",
@@ -62,11 +54,11 @@ fun Report(navController: NavController) {
         )
 
         // The box to type something
-        BoxWithConstraints(
+        Box(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(200.dp)
-                .padding(8.dp),
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(1.dp, Color.Black), // Add a black border around the box
             contentAlignment = Alignment.Center
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -85,9 +77,11 @@ fun Report(navController: NavController) {
                         keyboardController?.hide()
                     }
                 ),
-                textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black)
+                textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
+                modifier = Modifier
+                    .fillMaxWidth() // Allow the BasicTextField to take full width within the Box
+                    .padding(8.dp) // Add some padding inside the Box
             )
-
         }
     }
 }

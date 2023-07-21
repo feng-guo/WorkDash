@@ -51,6 +51,11 @@ fun HomeScreen(
                             inclusive = true
                         }
                     }
+//                    navController.navigate(route = ScreenRoute.Report.route) {
+//                        popUpTo(ScreenRoute.Report.route){
+//                            inclusive = true
+//                        }
+//                    }
                 }
                 else{
                     navController.navigate(ScreenRoute.ListOfJobs.route){
