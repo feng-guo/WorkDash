@@ -1,5 +1,7 @@
 package com.example.workdash
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -22,6 +24,7 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
+import com.example.workdash.screen.Report
 import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
@@ -39,6 +42,7 @@ val LOCATION_ID_NAV_ARG = navArgument(LOCATION_ID_ARG) {
 val JOB_ID_NAV_ARG = navArgument(JOB_ID_ARG) {
     type = NavType.StringType
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomNavGraph(
     navController: NavHostController
@@ -139,6 +143,11 @@ fun BottomNavGraph(
             route = ScreenRoute.MapOfJobs.route
         ) {
             MapOfJobs(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.Report.route
+        ) {
+            Report(navController = navController)
         }
     }
 }

@@ -46,4 +46,6 @@ sealed class ScreenRoute(val route: String){
     object Rating: ScreenRoute(route = "rating")
 
     object MapOfJobs: ScreenRoute(route = "map_of_jobs")
+
+    object Report: ScreenRoute(route = "report")
 }
