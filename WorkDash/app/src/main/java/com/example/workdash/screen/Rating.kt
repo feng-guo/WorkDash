@@ -47,11 +47,11 @@ fun Rating(
 
 
 
-    //jobs: List<Job>
+
 ) {
 
 
-    // var rating by mutableStateOf(0)
+
     val contextForToast = LocalContext.current.applicationContext
 
     var rating by remember {mutableStateOf(0)}
@@ -62,7 +62,7 @@ fun Rating(
 
 
 
-    //val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
+
     Column(
 
         modifier = Modifier
@@ -76,7 +76,7 @@ fun Rating(
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
         val query = database.child("userProfile").orderByChild("uid").equalTo(currentUserUid)
-        //var is_this_a_worker: Boolean = true
+
         val satisfiedText = remember { mutableStateOf("") }
         // Read the data from the database
         query.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -118,13 +118,13 @@ fun Rating(
 
 
         Row {
-//            var rating by mutableStateOf(0)
+
             for (i in 0..4) {
                 var isHighlighted by remember { mutableStateOf(false) }
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    //tint = if (i < rating) Color.Yellow else Color.Gray,
+
                     tint = if (isHighlighted) Color.Yellow else Color.Gray,
                     modifier = Modifier
                         .size(40.dp)

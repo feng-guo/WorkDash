@@ -51,7 +51,7 @@ fun ListOfJobs(
 ) {
     val jobViewModel = JobViewModel()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-//    CheckInService.getMatchedJobByEmployeeId(currentUserUid?:"")
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -85,7 +85,7 @@ fun ListOfJobs(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 60.dp)
-//                .verticalScroll(rememberScrollState()),
+
         ) {
             Card(
                 modifier = Modifier

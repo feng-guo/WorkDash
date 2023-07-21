@@ -167,35 +167,7 @@ fun JobCard2(job: JobModel, navController: NavController) {
                     }
                 }
             }
-//            Spacer(modifier = Modifier.weight(1f))
-//            IconButton(
-//                modifier = Modifier
-//                    .fillMaxHeight()
-//                    .background(
-//                        color = Color.White,
-//                    )
-//                    .weight(1f),
-//                onClick = {
-//                    navController.navigate(
-//                        ScreenRoute.JobDetailsWorker.route
-//                    )
-//                }
-//            ) {
-////                Icon(
-////                    Icons.Default.ArrowForward,
-////                    contentDescription = "Arrow"
-////                )
-////                Box(
-////                    modifier = Modifier.fillMaxSize(),
-////                    contentAlignment = Alignment.Center
-////                ) {
-////                    Text(
-////                        text = "Applied",
-////                        modifier = Modifier.padding(horizontal = 8.dp),
-////                        color = Color.Black
-////                    )
-////                }
-//            }
+
 
         }
     }

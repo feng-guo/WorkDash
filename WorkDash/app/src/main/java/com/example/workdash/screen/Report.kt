@@ -1,14 +1,11 @@
 package com.example.workdash.screen
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -33,11 +30,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.example.workdash.routes.ScreenRoute
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Report(navController: NavController) {
-
     val contextForToast = LocalContext.current.applicationContext
     var typedText by remember { mutableStateOf(TextFieldValue()) }
 
@@ -53,12 +50,12 @@ fun Report(navController: NavController) {
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        // The box to type something
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .border(1.dp, Color.Black), // Add a black border around the box
+                .border(1.dp, Color.Black),
             contentAlignment = Alignment.Center
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -73,15 +70,50 @@ fun Report(navController: NavController) {
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        // Handle text submission here, if needed
+
                         keyboardController?.hide()
                     }
                 ),
                 textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
                 modifier = Modifier
-                    .fillMaxWidth() // Allow the BasicTextField to take full width within the Box
-                    .padding(8.dp) // Add some padding inside the Box
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .padding(8.dp)
             )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = {
+                    navController.navigate(route = ScreenRoute.Rating.route) {
+
+                        popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            ) {
+                Text(text = "Report")
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate(route = ScreenRoute.Rating.route) {
+
+                        popUpTo(ScreenRoute.Rating.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            ) {
+                Text(text = "Skip")
+            }
         }
     }
 }
