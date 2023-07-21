@@ -441,77 +441,94 @@ fun AuthenticateEmployer(
 
                 val grayImageProfile = convertToGray(imageProfile)
                 val facesProfile = detectFaces(grayImageProfile, cascadeClassifier)
-                val bestFaceRectProfile = chooseBestFace(facesProfile)
-                val faceImageProfile = Mat(imageProfile, bestFaceRectProfile)
-                val resizedFaceImageProfile = resizeImage(faceImageProfile, Size(100.0, 100.0))
+                if(facesProfile.isNotEmpty()) {
+                    val bestFaceRectProfile = chooseBestFace(facesProfile)
+                    val faceImageProfile = Mat(imageProfile, bestFaceRectProfile)
+                    val resizedFaceImageProfile = resizeImage(faceImageProfile, Size(100.0, 100.0))
 
-                val accuracy = calculateFaceMatchAccuracy(resizedFaceImageID, resizedFaceImageProfile)
-                println("Face Match Accuracy: $accuracy%")
+                    val accuracy =
+                        calculateFaceMatchAccuracy(resizedFaceImageID, resizedFaceImageProfile)
+                    println("Face Match Accuracy: $accuracy%")
 
-                val resizedFaceBitmap = Bitmap.createBitmap(
-                    resizedFaceImageID.cols(),
-                    resizedFaceImageID.rows(),
-                    Bitmap.Config.ARGB_8888
-                )
-                Utils.matToBitmap(resizedFaceImageID, resizedFaceBitmap)
+                    val resizedFaceBitmap = Bitmap.createBitmap(
+                        resizedFaceImageID.cols(),
+                        resizedFaceImageID.rows(),
+                        Bitmap.Config.ARGB_8888
+                    )
+                    Utils.matToBitmap(resizedFaceImageID, resizedFaceBitmap)
 
-                val grayAnotherBitmap = Bitmap.createBitmap(
-                    resizedFaceImageProfile.cols(),
-                    resizedFaceImageProfile.rows(),
-                    Bitmap.Config.ARGB_8888
-                )
-                Utils.matToBitmap(resizedFaceImageProfile, grayAnotherBitmap)
+                    val grayAnotherBitmap = Bitmap.createBitmap(
+                        resizedFaceImageProfile.cols(),
+                        resizedFaceImageProfile.rows(),
+                        Bitmap.Config.ARGB_8888
+                    )
+                    Utils.matToBitmap(resizedFaceImageProfile, grayAnotherBitmap)
 
-                val resizedFaceState = remember { mutableStateOf(resizedFaceBitmap) }
-                val grayAnotherState = remember { mutableStateOf(grayAnotherBitmap) }
+                    val resizedFaceState = remember { mutableStateOf(resizedFaceBitmap) }
+                    val grayAnotherState = remember { mutableStateOf(grayAnotherBitmap) }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .fillMaxWidth()
-                        .height(250.dp)
-                ) {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(6.dp)
-                        ) {
-                            Row(Modifier.fillMaxWidth()) {
-                                Image(
-                                    bitmap = resizedFaceState.value.asImageBitmap(),
-                                    contentDescription = "Gray Another Image",
-                                    modifier = Modifier
-                                        .height(200.dp)
-                                        .weight(1f)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Image(
-                                    bitmap = grayAnotherState.value.asImageBitmap(),
-                                    contentDescription = "Resized Face Image",
-                                    modifier = Modifier
-                                        .height(200.dp)
-                                        .weight(1f)
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .fillMaxWidth()
+                            .height(250.dp)
+                    ) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(6.dp)
+                            ) {
+                                Row(Modifier.fillMaxWidth()) {
+                                    Image(
+                                        bitmap = resizedFaceState.value.asImageBitmap(),
+                                        contentDescription = "Gray Another Image",
+                                        modifier = Modifier
+                                            .height(200.dp)
+                                            .weight(1f)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Image(
+                                        bitmap = grayAnotherState.value.asImageBitmap(),
+                                        contentDescription = "Resized Face Image",
+                                        modifier = Modifier
+                                            .height(200.dp)
+                                            .weight(1f)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = "Face Match Accuracy: $accuracy%",
+                                    style = MaterialTheme.typography.caption,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
                                 )
                             }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = "Face Match Accuracy: $accuracy%",
-                                style = MaterialTheme.typography.caption,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
                         }
                     }
                 }
+                else
+                {
+                    Text(
+                        text = "No face detected in the image.",
+                        style = MaterialTheme.typography.caption,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
             } else {
-                println("No face detected in the image.")
+                Text(
+                    text = "No face detected in the image.",
+                    style = MaterialTheme.typography.caption,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
-
-
     onProfileImageUriChanged(profileImageUri)
     onIdImageUriChanged(idImageUri)
 }
@@ -593,5 +610,5 @@ private fun calculateFaceMatchAccuracy(image1: Mat, image2: Mat): Double {
     Core.subtract(floatImage1, floatImage2, diff)
     val norm = Core.norm(diff)
 
-    return (1.0 - (norm / (size.width * size.height))) * 100.0
+    return (1.0 - (norm / (size.width * size.height))) * 200.0
 }
