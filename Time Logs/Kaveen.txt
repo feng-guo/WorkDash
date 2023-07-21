@@ -1,0 +1,28 @@
+Time log for Kaveen Makumbura
+
+Student ID: 20774468
+WaterlooId: kcmakumb
+
+Date                   Task                 		Time 
+May 26                 UI Design            		03:00
+May 29                 Figma Design         		01:45
+Jun 01                 D1                  		02:00
+Jun 10                 UI Navigation        		02:30
+Jun 14                 D2                   		01:00
+Jun 16             Android Studio Tutorials      	03:00
+Jun 17             Android Studio setup          	05:00
+Jun 25                 D3     		    		01:00
+Jun 27             Employee job list       	    	02:30
+Jun 27   Employee job list after "apply" is pressed     02:30
+Jul 09                 Rating System      		06:00
+Jul 10   Rating System(further development)             03:00
+Jul 11                 D4                   		03:00
+Jul 11                 Edited Rating System             00:30
+Jul 18    Changed rating system directory      		01:00
+Jul 18                 D5                   		01:00
+Jul 21                 Report page       		03:30
+Jul 22                 D6(Final pres)       		01:00 (will update when more work is put into this)
+Jul 26                 D6(Arch + doc)       		
+Jul 28                 D7(Final report)     		
+
+
