@@ -18,6 +18,7 @@ import com.example.workdash.screen.EmployerScreen.AddPostEmployerScreen
 import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
+import com.example.workdash.screen.EmployerScreen.Payment
 import com.example.workdash.screen.EmployerScreen.SignUpEmployerScreen
 import com.example.workdash.screen.Rating
 import com.example.workdash.screen.HomeScreen
@@ -115,9 +116,7 @@ fun BottomNavGraph(
             route = ScreenRoute.UserDetailsWorker.route
         ) {
             UserDetailsWorkerScreen(navController = navController)
-
-            //To try ID Authentication
-            //AuthenticateWorker()
+            //Payment()
         }
         composable(
             route = ScreenRoute.ListOfJobs.route
