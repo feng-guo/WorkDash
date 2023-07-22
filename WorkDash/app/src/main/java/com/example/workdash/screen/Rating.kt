@@ -131,7 +131,7 @@ fun Rating(
                         .clickable {
                             rating = i + 1
                             isHighlighted = !isHighlighted
-
+                            //TODO update rating?
                             if (isHighlighted) {
                                 if(satisfiedText.value == "How satisfied are you with this employee?") {
                                     navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {

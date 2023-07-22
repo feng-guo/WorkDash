@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.workdash.routes.BottomBarScreen
 import com.example.workdash.routes.IS_WORKER_ARG
+import com.example.workdash.routes.JOB_APPLICATION_ID_ARG
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
@@ -42,6 +43,9 @@ val LOCATION_ID_NAV_ARG = navArgument(LOCATION_ID_ARG) {
     type = NavType.StringType
 }
 val JOB_ID_NAV_ARG = navArgument(JOB_ID_ARG) {
+    type = NavType.StringType
+}
+val JOB_APPLICATION_ID_NAV_ARG = navArgument(JOB_APPLICATION_ID_ARG) {
     type = NavType.StringType
 }
 @RequiresApi(Build.VERSION_CODES.O)
@@ -145,12 +149,14 @@ fun BottomNavGraph(
             MapOfJobs(navController = navController)
         }
         composable(
-            route = ScreenRoute.ReportWorker.route
+            route = ScreenRoute.ReportWorker.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ) {
             ReportWorker(navController = navController)
         }
         composable(
-            route = ScreenRoute.ReportEmployer.route
+            route = ScreenRoute.ReportEmployer.route,
+            arguments = listOf(JOB_APPLICATION_ID_NAV_ARG)
         ) {
             ReportEmployer(navController = navController)
         }

@@ -30,13 +30,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.example.workdash.routes.JOB_APPLICATION_ID_ARG
+import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.ReportService
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReportEmployer(navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
     var typedText by remember { mutableStateOf(TextFieldValue()) }
+
+    val navBackStackEntry = navController.currentBackStackEntry
+    val jobApplicationId = navBackStackEntry?.arguments?.getString(JOB_APPLICATION_ID_ARG) ?: ""
 
     Column(
         modifier = Modifier.fillMaxHeight().padding(16.dp),
@@ -91,6 +97,7 @@ fun ReportEmployer(navController: NavController) {
         ) {
             Button(
                 onClick = {
+                    ReportService.createReport(jobApplicationId, typedText.toString(), true)
                     navController.navigate(route = ScreenRoute.Rating.route) {
 
                         popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {

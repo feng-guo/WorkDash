@@ -41,7 +41,7 @@ object LocationService {
     private fun getGMapsApiKey(callback: (obj: String) -> Unit) {
         DatabaseService.readKeyFromTable(API_KEY_NAME, "maps", callback)
     }
-    fun verifyLocation(locationModel: LocationModel) {
+    private fun verifyLocation(locationModel: LocationModel) {
         val addressModel = locationModel.address
         val address = addressModel.address + addressModel.city + addressModel.province
         address.replace(" ", "%20")
@@ -60,7 +60,7 @@ object LocationService {
         DatabaseService.writeToDbTable(COORDINATE_TABLE_NAME, coordinateModel.locationId, coordinateModel)
     }
 
-    fun sendRequest(request: String, locationId: String): CoordinateModel {
+    private fun sendRequest(request: String, locationId: String): CoordinateModel {
         val threadPolicy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(threadPolicy)
         val url = URL(request)

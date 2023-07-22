@@ -3,14 +3,12 @@ package com.example.workdash.services
 import com.example.workdash.Constants.TableNames.ID_TABLE_NAME
 
 
-const val locationId = "locationId"
-const val jobId = "jobId"
-const val jobApplicationId = "jobApplicationId"
-object IdGeneratorService {
 
-//    fun generateBusinessId(): String {
-//        return ""
-//    }
+object IdGeneratorService {
+    private const val locationId = "locationId"
+    private const val jobId = "jobId"
+    private const val jobApplicationId = "jobApplicationId"
+    private const val reportId = "reportId"
 
     private fun retrieveId(id: String, callback: (obj: Long) -> Unit) {
         DatabaseService.readIdValueFromIdTable(ID_TABLE_NAME, id, callback)
@@ -19,8 +17,6 @@ object IdGeneratorService {
     private fun updateId(id: String, value: Long) {
         DatabaseService.writeToDbTable(ID_TABLE_NAME, id, value)
     }
-
-    //TODO note these arent atomic so... I'll figure it out later
 
     private fun generateId(idName: String, callback: (obj: Long) -> Unit) {
         var id: Long
@@ -42,5 +38,9 @@ object IdGeneratorService {
 
     fun generateJobApplicationId(callback: (obj: Long) -> Unit) {
         generateId(jobApplicationId, callback)
+    }
+
+    fun generateReportId(callback: (obj: Long) -> Unit) {
+        generateId(reportId, callback)
     }
 }

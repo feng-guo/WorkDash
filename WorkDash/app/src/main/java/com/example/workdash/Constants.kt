@@ -9,6 +9,7 @@ object Constants {
         const val ID_TABLE_NAME = "IDs"
         const val MATCHED_JOB_NAME = "matchedJob"
         const val API_KEY_NAME = "ApiKeys"
+        const val REPORT_TABLE_NAME = "Reports"
     }
 
     object IdNames {

@@ -31,4 +31,10 @@ object JobApplicationService {
         saveJobApplication(jobApplication)
     }
 
+    fun getJobApplicationFromId(jobApplicationId: String, callback: (jobApplication: JobApplicationModel?) -> Unit) {
+        val jobApplicationModel = JobApplicationModel()
+        DatabaseService.readSingleObjectFromDbTableWithId(
+            Constants.TableNames.JOB_APPLICATION_TABLE_NAME,
+            Constants.IdNames.JOB_APPLICATION_ID_NAME, jobApplicationId, jobApplicationModel, callback)
+    }
 }
