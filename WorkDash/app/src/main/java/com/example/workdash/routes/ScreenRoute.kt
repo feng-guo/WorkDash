@@ -50,4 +50,8 @@ sealed class ScreenRoute(val route: String){
     object ReportWorker: ScreenRoute(route = "report_worker")
 
     object ReportEmployer: ScreenRoute(route = "report_employer")
+
+    object Quiz: ScreenRoute(route = "quiz")
+
+    object Report: ScreenRoute(route = "report")
 }

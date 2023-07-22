@@ -1,5 +1,6 @@
-package com.example.workdash.screen.EmployerScreen
+package com.example.workdash.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -31,10 +32,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ReportEmployer(navController: NavController) {
+fun Report(navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
     var typedText by remember { mutableStateOf(TextFieldValue()) }
 
@@ -42,12 +49,54 @@ fun ReportEmployer(navController: NavController) {
         modifier = Modifier.fillMaxHeight().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+//        Text(
+//            text = "Do you have any complaints regarding this job?",
+//            style = MaterialTheme.typography.h1,
+//            fontSize = 24.sp,
+//            textAlign = TextAlign.Center,
+//            modifier = Modifier.padding(vertical = 16.dp)
+//        )
+
+        val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+        val query = database.child("userProfile").orderByChild("uid").equalTo(currentUserUid)
+
+        val satisfiedText = remember { mutableStateOf("") }
+        // Read the data from the database
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    // Access the value of isWorker from each matching employer profile
+                    val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
+                    if (isWorker == true) {
+
+                        satisfiedText.value = "Do you have any complaints regarding this job?"
+
+
+                    }
+                    else{
+
+                        satisfiedText.value = "Do you have any complaints regarding this employee?"
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    contextForToast,
+                    "Database Error: $databaseError",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
+
         Text(
-            text = "Do you have any complaints regarding this employee?",
+
+
+            text = satisfiedText.value,
             style = MaterialTheme.typography.h1,
             fontSize = 24.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(vertical = 16.dp)
+            textAlign = TextAlign.Center
         )
 
 
@@ -93,7 +142,7 @@ fun ReportEmployer(navController: NavController) {
                 onClick = {
                     navController.navigate(route = ScreenRoute.Rating.route) {
 
-                        popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                        popUpTo(ScreenRoute.Rating.route) {
                             inclusive = true
                         }
                     }
