@@ -2,7 +2,6 @@ package com.example.workdash.services
 
 import com.example.workdash.Constants
 import com.example.workdash.models.JobApplicationModel
-import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.models.ReportModel
 
@@ -26,7 +25,7 @@ object ReportService {
         }
     }
 
-    fun createReport(fromUserId: String, toUserId: String, description: String) {
+    private fun createReport(fromUserId: String, toUserId: String, description: String) {
         var reportId: String
         val lmd = { retrievedId : Long ->
             reportId = retrievedId.toString()

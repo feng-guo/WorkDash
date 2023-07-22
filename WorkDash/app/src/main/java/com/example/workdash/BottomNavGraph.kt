@@ -1,5 +1,6 @@
 package com.example.workdash
 
+//import com.example.workdash.screen.JobDetailsWorkerScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -11,7 +12,6 @@ import androidx.navigation.navArgument
 import com.example.workdash.routes.BottomBarScreen
 import com.example.workdash.routes.ID_ARG
 import com.example.workdash.routes.IS_WORKER_ARG
-import com.example.workdash.routes.JOB_APPLICATION_ID_ARG
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
@@ -20,22 +20,19 @@ import com.example.workdash.screen.EmployerScreen.AddPostEmployerScreen
 import com.example.workdash.screen.EmployerScreen.ChooseLocationEmployerScreen
 import com.example.workdash.screen.EmployerScreen.CurrentJobPostsEmployerScreen
 import com.example.workdash.screen.EmployerScreen.JobDetailsEmployerScreen
-import com.example.workdash.screen.EmployerScreen.Payment
 import com.example.workdash.screen.EmployerScreen.SignUpEmployerScreen
-import com.example.workdash.screen.Rating
 import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
+import com.example.workdash.screen.Rating
+import com.example.workdash.screen.Report
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
-import com.example.workdash.screen.Report
-//import com.example.workdash.screen.JobDetailsWorkerScreen
-import com.example.workdash.screen.WorkerScreen.Quiz
 import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
-import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
 import com.example.workdash.screen.WorkerScreen.ListOfJobs
 import com.example.workdash.screen.WorkerScreen.ListOfJobsApplied
 import com.example.workdash.screen.WorkerScreen.MapOfJobs
+import com.example.workdash.screen.WorkerScreen.Quiz
 import com.example.workdash.screen.WorkerScreen.UserDetailsWorkerScreen
 
 val IS_WORKER_NAV_ARG = navArgument(IS_WORKER_ARG) {
@@ -150,8 +147,6 @@ fun BottomNavGraph(
         ) {
             MapOfJobs(navController = navController)
         }
-
-
         composable(
             route = ScreenRoute.Quiz.route
         ) {
