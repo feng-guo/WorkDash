@@ -4,7 +4,7 @@ const val IS_WORKER_ARG = "isWorker"
 const val LOCATION_ID_ARG = "locationId"
 const val JOB_ID_ARG = "jobId"
 const val JOB_STATE_ARG = "jobState"
-const val JOB_APPLICATION_ID_ARG = "jobApplication"
+const val ID_ARG = "id"
 sealed class ScreenRoute(val route: String){
     object Login: ScreenRoute(route = "login_screen/{$IS_WORKER_ARG}") {
         fun passIsWorker(isWorker: Boolean): String {
@@ -47,16 +47,11 @@ sealed class ScreenRoute(val route: String){
     object Rating: ScreenRoute(route = "rating")
 
     object MapOfJobs: ScreenRoute(route = "map_of_jobs")
+    object Quiz: ScreenRoute(route = "quiz")
 
-    object ReportWorker: ScreenRoute(route = "report_worker/{$LOCATION_ID_ARG}") {
-        fun passLocationId(locationId: String): String {
-            return "report_worker/$locationId"
-        }
+    object Report: ScreenRoute(route = "report/{$ID_ARG}") {
+    fun passId(id: String): String {
+        return "report_employer/$id"
     }
-
-    object ReportEmployer: ScreenRoute(route = "report_employer/{$JOB_APPLICATION_ID_ARG}") {
-        fun passJobApplicationId(jobApplicationId: String): String {
-            return "report_employer/$jobApplicationId"
-        }
-    }
+}
 }

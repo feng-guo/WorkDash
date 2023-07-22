@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.workdash.routes.BottomBarScreen
+import com.example.workdash.routes.ID_ARG
 import com.example.workdash.routes.IS_WORKER_ARG
 import com.example.workdash.routes.JOB_APPLICATION_ID_ARG
 import com.example.workdash.routes.JOB_ID_ARG
@@ -26,8 +27,9 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
-import com.example.workdash.screen.WorkerScreen.ReportWorker
-import com.example.workdash.screen.EmployerScreen.ReportEmployer
+import com.example.workdash.screen.Report
+//import com.example.workdash.screen.JobDetailsWorkerScreen
+import com.example.workdash.screen.WorkerScreen.Quiz
 import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
@@ -45,7 +47,7 @@ val LOCATION_ID_NAV_ARG = navArgument(LOCATION_ID_ARG) {
 val JOB_ID_NAV_ARG = navArgument(JOB_ID_ARG) {
     type = NavType.StringType
 }
-val JOB_APPLICATION_ID_NAV_ARG = navArgument(JOB_APPLICATION_ID_ARG) {
+val ID_NAV_ARG = navArgument(ID_ARG) {
     type = NavType.StringType
 }
 @RequiresApi(Build.VERSION_CODES.O)
@@ -148,17 +150,18 @@ fun BottomNavGraph(
         ) {
             MapOfJobs(navController = navController)
         }
+
+
         composable(
-            route = ScreenRoute.ReportWorker.route,
-            arguments = listOf(LOCATION_ID_NAV_ARG)
+            route = ScreenRoute.Quiz.route
         ) {
-            ReportWorker(navController = navController)
+            Quiz(navController = navController)
         }
         composable(
-            route = ScreenRoute.ReportEmployer.route,
-            arguments = listOf(JOB_APPLICATION_ID_NAV_ARG)
+            route = ScreenRoute.Report.route,
+            arguments = listOf(ID_NAV_ARG)
         ) {
-            ReportEmployer(navController = navController)
+            Report(navController = navController)
         }
     }
 }

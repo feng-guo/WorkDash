@@ -565,7 +565,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                         Toast.makeText(contextForToast, "Accepted", Toast.LENGTH_SHORT).show()
                         enabled = false
                         navController.navigate(
-                            ScreenRoute.ReportEmployer.passJobApplicationId(jobApplicationModel.jobApplicationId)
+                            ScreenRoute.Report.passId(jobApplicationModel.jobApplicationId)
                         )
 //                        {
 //
