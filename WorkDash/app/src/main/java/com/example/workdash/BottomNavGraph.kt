@@ -138,7 +138,8 @@ fun BottomNavGraph(
             SignUpEmployerScreen(navController = navController)
         }
         composable(
-            route = ScreenRoute.Rating.route
+            route = ScreenRoute.Rating.route,
+            arguments = listOf(ID_NAV_ARG)
         ) {
             Rating(navController = navController)
         }

@@ -145,8 +145,8 @@ fun Report(navController: NavController) {
                     ReportService.createReport(id, typedText.toString(),
                         satisfiedText.toString() == "Do you have any complaints regarding this employee?"
                     )
-                    navController.navigate(route = ScreenRoute.Rating.route) {
-                        popUpTo(ScreenRoute.Rating.route) {
+                    navController.navigate(route = ScreenRoute.Rating.passId(id)) {
+                        popUpTo(ScreenRoute.Rating.passId(id)) {
                             inclusive = true
                         }
                     }
@@ -157,9 +157,8 @@ fun Report(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(route = ScreenRoute.Rating.route) {
-
-                        popUpTo(ScreenRoute.Rating.route) {
+                    navController.navigate(route = ScreenRoute.Rating.passId(id)) {
+                        popUpTo(ScreenRoute.Rating.passId(id)) {
                             inclusive = true
                         }
                     }

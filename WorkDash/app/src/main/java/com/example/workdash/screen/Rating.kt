@@ -30,7 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.workdash.routes.ID_ARG
 import com.example.workdash.routes.ScreenRoute
+import com.example.workdash.services.RatingService
 //import com.example.workdash.models.EmployerProfileModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -56,7 +58,8 @@ fun Rating(
 
     var rating by remember {mutableStateOf(0)}
 
-
+    val navBackStackEntry = navController.currentBackStackEntry
+    val id = navBackStackEntry?.arguments?.getString(ID_ARG) ?: ""
 
 
 
@@ -133,6 +136,9 @@ fun Rating(
                             isHighlighted = !isHighlighted
                             //TODO update rating?
                             if (isHighlighted) {
+                                if (currentUserUid != null) {
+                                    RatingService.updateRating(currentUserUid, rating.toLong())
+                                }
                                 if(satisfiedText.value == "How satisfied are you with this employee?") {
                                     navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
 

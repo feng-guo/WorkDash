@@ -10,12 +10,14 @@ object Constants {
         const val MATCHED_JOB_NAME = "matchedJob"
         const val API_KEY_NAME = "ApiKeys"
         const val REPORT_TABLE_NAME = "Reports"
+        const val RATING_TABLE_NAME = "Ratings"
     }
 
     object IdNames {
         const val JOB_ID_NAME = "jobId"
         const val JOB_APPLICATION_ID_NAME = "jobApplicationId"
         const val LOCATION_ID_NAME = "locationId"
+        const val USER_ID_NAME = "userId"
     }
     object MatchedJob {
         const val JOB_ID = "jobId"
