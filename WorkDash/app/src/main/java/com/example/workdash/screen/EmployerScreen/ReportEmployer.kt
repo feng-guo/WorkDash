@@ -1,4 +1,4 @@
-package com.example.workdash.screen
+package com.example.workdash.screen.EmployerScreen
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -34,7 +34,7 @@ import com.example.workdash.routes.ScreenRoute
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Report(navController: NavController) {
+fun ReportEmployer(navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
     var typedText by remember { mutableStateOf(TextFieldValue()) }
 
@@ -43,7 +43,7 @@ fun Report(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Do you have any complaints regarding this job?",
+            text = "Do you have any complaints regarding this employee?",
             style = MaterialTheme.typography.h1,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,

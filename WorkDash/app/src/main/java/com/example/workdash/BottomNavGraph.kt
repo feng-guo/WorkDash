@@ -25,7 +25,8 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
-import com.example.workdash.screen.Report
+import com.example.workdash.screen.WorkerScreen.ReportWorker
+import com.example.workdash.screen.EmployerScreen.ReportEmployer
 import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
@@ -144,9 +145,14 @@ fun BottomNavGraph(
             MapOfJobs(navController = navController)
         }
         composable(
-            route = ScreenRoute.Report.route
+            route = ScreenRoute.ReportWorker.route
         ) {
-            Report(navController = navController)
+            ReportWorker(navController = navController)
+        }
+        composable(
+            route = ScreenRoute.ReportEmployer.route
+        ) {
+            ReportEmployer(navController = navController)
         }
     }
 }
