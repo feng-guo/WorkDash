@@ -51,13 +51,7 @@ fun Report(navController: NavController) {
         modifier = Modifier.fillMaxHeight().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Text(
-//            text = "Do you have any complaints regarding this job?",
-//            style = MaterialTheme.typography.h1,
-//            fontSize = 24.sp,
-//            textAlign = TextAlign.Center,
-//            modifier = Modifier.padding(vertical = 16.dp)
-//        )
+
 
         val database: DatabaseReference = FirebaseDatabase.getInstance().reference
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -68,7 +62,7 @@ fun Report(navController: NavController) {
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
-                    // Access the value of isWorker from each matching employer profile
+
                     val isWorker = snapshot.child("worker").getValue(Boolean::class.java)
                     if (isWorker == true) {
 

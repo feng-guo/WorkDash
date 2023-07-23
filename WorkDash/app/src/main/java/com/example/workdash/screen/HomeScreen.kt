@@ -64,6 +64,13 @@ fun HomeScreen(
                         }
                     }
                 }
+//                else {
+//                    navController.navigate(ScreenRoute.Quiz.route) {
+//                        popUpTo(ScreenRoute.Quiz.route) {
+//                            inclusive = true
+//                        }
+//                    }
+//                }
 
             },
             Modifier.width(280.dp)
@@ -92,6 +99,7 @@ fun HomeScreen(
                         }
                     }
                 }
+
 
             },
             Modifier.width(280.dp)
