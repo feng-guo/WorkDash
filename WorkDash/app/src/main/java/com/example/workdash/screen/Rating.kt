@@ -154,6 +154,12 @@ fun Rating(
                                             inclusive = true
                                         }
                                     }
+//                                    navController.navigate(route = ScreenRoute.Quiz.route) {
+//
+//                                        popUpTo(ScreenRoute.Quiz.route) {
+//                                            inclusive = true
+//                                        }
+//                                    }
                                 }
                             }
                         }
