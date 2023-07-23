@@ -52,7 +52,7 @@ sealed class ScreenRoute(val route: String){
     object Quiz: ScreenRoute(route = "quiz")
     object Report: ScreenRoute(route = "report/{$ID_ARG}") {
         fun passId(id: String): String {
-            return "report_employer/$id"
+            return "report/$id"
         }
     }
 }
