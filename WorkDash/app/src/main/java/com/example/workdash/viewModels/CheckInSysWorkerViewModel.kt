@@ -22,15 +22,16 @@ class CheckInSysWorkerViewModel : ViewModel(){
     fun checkIn(jobId: String, currentUserId: String){
         val currentTimeMillis = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        CheckInService.updateCheckInStateAndTime(jobId,currentUserId, "True", dateFormat.format(Date(currentTimeMillis)))
+        CheckInService.updateCheckInStateAndTime(jobId,currentUserId, "true", dateFormat.format(Date(currentTimeMillis)))
         checkInButtonColor = Color.Gray
         checkOutButtonColor = Color.Green
     }
     fun checkOut(jobId: String, currentUserId: String){
         val currentTimeMillis = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        CheckInService.updateCheckOutStateAndTime(jobId,currentUserId, "True", dateFormat.format(Date(currentTimeMillis)))
+        CheckInService.updateCheckOutStateAndTime(jobId,currentUserId, "true", dateFormat.format(Date(currentTimeMillis)))
         checkOutButtonColor = Color.Gray
+        CheckInService.updateJobState(jobId, "Finished")
     }
 
     fun GetJobDetailsByJobIdAndEmployeeId(jobId:String, employeeId: String) : matchedJobModel?{

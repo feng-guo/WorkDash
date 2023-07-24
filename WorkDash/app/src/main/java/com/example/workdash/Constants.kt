@@ -26,6 +26,7 @@ object Constants {
         const val CHECK_OUT_STATE = "checkOutState"
         const val CHECK_IN_TIME = "checkInTime"
         const val CHECK_OUT_TIME = "checkOutTime"
+        const val JOB_EMPLOYEE = "jobId_employeeId"
     }
 
 }

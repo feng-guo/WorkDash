@@ -9,7 +9,7 @@ data class matchedJobModel(
     var checkOutTime: String,
     var jobId_employeeId: String
 ) {
-    constructor() : this("", "", "False", "False", "", "", "")
+    constructor() : this("", "", "false", "false", "", "", "")
 
 //    constructor(jobId: String, businessId: String, workerId: String, employeeId: String) : this(jobId, businessId, workerId, employeeId)
 
