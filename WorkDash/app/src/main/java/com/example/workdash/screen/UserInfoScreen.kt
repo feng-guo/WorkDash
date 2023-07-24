@@ -14,11 +14,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.workdash.models.JobModel
@@ -39,39 +43,63 @@ fun UserInfo(
 ) {
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
+    val userViewModel: UserViewModel = viewModel()
+    val userList = remember { mutableStateListOf<WorkerProfileModel>() }
+
+    val isDataFetched = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         if (currentUser != null) {
-
-            val userViewModel = UserViewModel()
-
-            LazyColumn(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                items(userViewModel.getUserList()) { user ->
-                    Text("Hello ${user.name}")
-                }
+            if (userList.isEmpty()) {
+                // Fetch data if the userList is empty
+                userList.addAll(userViewModel.getUserList())
             }
 
-            // User is signed in, you can access their information
-            Text("Hello ${currentUser.email}")
-            Button(
-                onClick = {
-                    auth.signOut()
-                    navController.navigate(route = ScreenRoute.Home.route) { // NOTE: change this routing to general postings
-                        popUpTo(ScreenRoute.Home.route) {
-                            inclusive = true
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (userList.isEmpty()) {
+                    var p = 10
+                    // Show a loading indicator or placeholder while data is being fetched
+                } else {
+                    // Data is available, show the content
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        items(userList) { user ->
+                            Text("Hello ${user.name}")
                         }
                     }
-                },
-                Modifier.padding(top = 100.dp)
-                    .width(128.dp)
-                    .height(40.dp)
-            ) {
-                Text("Log Out")
+                }
+
+                // User is signed in, you can access their information
+                Text("Hello ${currentUser.email}")
+                Button(
+                    onClick = {
+                        auth.signOut()
+                        navController.navigate(route = ScreenRoute.Home.route) { // NOTE: change this routing to general postings
+                            popUpTo(ScreenRoute.Home.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    Modifier.padding(top = 100.dp)
+                        .width(128.dp)
+                        .height(40.dp)
+                ) {
+                    Text("Log Out")
+                }
+//            LazyColumn(
+//                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+//            ) {
+//                items(userViewModel.getUserList()) { user ->
+//                    Text("Hello ${user.name}")
+//                }
+//            }
             }
             // You can perform further actions with the user's information
         } else {
