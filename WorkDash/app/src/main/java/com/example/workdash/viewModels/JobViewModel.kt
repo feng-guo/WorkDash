@@ -103,6 +103,16 @@ class JobViewModel: ViewModel() {
         return jobApplications
     }
 
+    fun getJobApplicationListForJob(jobId: String): List<JobApplicationModel> {
+        val result = mutableListOf<JobApplicationModel>()
+        jobApplications.forEach{ jobApplicationModel ->
+            if (jobApplicationModel.jobId == jobId){
+                result.add(jobApplicationModel)
+            }
+        }
+        return result
+    }
+
     fun getMatchedJobList(): MutableList<JobModel>{
         if(matchedJobs.isEmpty()){
             println("empty matched job list!!!")

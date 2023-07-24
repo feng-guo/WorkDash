@@ -54,4 +54,13 @@ class UserViewModel: ViewModel() {
     fun getUserList(): List<WorkerProfileModel>{
         return users
     }
+
+    fun getUser(userId: String): WorkerProfileModel {
+        users.forEach { user ->
+            if (user.selectedId == userId) {
+                return user
+            }
+        }
+        return WorkerProfileModel()
+    }
 }

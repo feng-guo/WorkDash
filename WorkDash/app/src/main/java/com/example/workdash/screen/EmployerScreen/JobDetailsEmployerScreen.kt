@@ -38,6 +38,7 @@ import coil.compose.AsyncImage
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
+import com.example.workdash.models.WorkerProfileModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
@@ -45,6 +46,7 @@ import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.UserViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -277,7 +279,7 @@ fun JobDetailsEmployerScreen(
                         LazyColumn(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
-                            items(jobViewModel.getJobApplicationList()) { candidate ->
+                            items(jobViewModel.getJobApplicationListForJob(jobId)) { candidate ->
                                 WorkerCard(jobApplicationModel = candidate, navController = navController)
                             }
                         }
@@ -314,8 +316,7 @@ fun JobDetailsEmployerScreen(
                         LazyColumn(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
-                            //TODO this should probably be queried based on the job id lol
-                            items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
+                            items(jobViewModel.getJobApplicationListForJob(jobId)) { jobApplicationModel ->
                                 CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
                             }
                         }
@@ -464,6 +465,8 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
 
     //TODO have to load up actual information based on the user of the application :)
 
+    val workerProfileModel = UserViewModel().getUser(jobApplicationModel.employeeId)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -525,7 +528,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "user certifs",
+                    text = "Passed Quiz",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
