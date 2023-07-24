@@ -130,7 +130,7 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
+                        items(jobViewModel.getJobListWithFilter(currentUserUid!!)) { job ->
                             JobCard(job = job, navController = navController)
                         }
                     }

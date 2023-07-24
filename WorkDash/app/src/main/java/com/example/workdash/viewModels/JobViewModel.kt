@@ -121,5 +121,16 @@ class JobViewModel: ViewModel() {
         return matchedJobs
     }
 
+    fun getJobListWithFilter(userId: String): MutableList<JobModel> {
+        val user = UserViewModel().getUser(userId)
+        val result = mutableListOf<JobModel>()
+        jobs.forEach{ jobModel ->
+            if (jobModel.payPerHour >= user.salary) {
+                result.add(jobModel)
+            }
+        }
+        return result
+    }
+
 }
 
