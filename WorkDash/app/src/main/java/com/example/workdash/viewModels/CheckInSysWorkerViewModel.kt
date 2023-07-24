@@ -35,7 +35,6 @@ class CheckInSysWorkerViewModel : ViewModel(){
     }
 
     fun GetJobDetailsByJobIdAndEmployeeId(jobId:String, employeeId: String) : matchedJobModel?{
-        println("GetJobDetailsByJobIdAndEmployeeId been called")
         var res: matchedJobModel? = null
         viewModelScope.launch {
                 val jobDetails = CheckInService.getJobDetailsByJobIdAndEmployeeId(jobId, employeeId)
@@ -51,15 +50,8 @@ class CheckInSysWorkerViewModel : ViewModel(){
                 }
 
 
-            if (jobDetails != null) {
-                // Process the matched job details
-                println("Job ID: ${jobDetails.jobId}, CheckInState: ${jobDetails.checkInState}")
-            } else {
-                // No matched job found
-                println("No matched job found for the provided IDs.")
-            }
+
         }
-        println("final res is : " + res == null + " state : "+ res?.checkInState)
 
         return res
     }

@@ -104,9 +104,6 @@ class JobViewModel: ViewModel() {
     }
 
     fun getMatchedJobList(): MutableList<JobModel>{
-        if(matchedJobs.isEmpty()){
-            println("empty matched job list!!!")
-        }
 
         return matchedJobs
     }

@@ -11,8 +11,23 @@ object Constants {
         const val API_KEY_NAME = "ApiKeys"
         const val REPORT_TABLE_NAME = "Reports"
         const val RATING_TABLE_NAME = "Ratings"
+        const val USER_PROFILE = "userProfile"
     }
 
+    object UserProfile {
+        const val UID = "uid"
+        const val IS_WORKER = "isWorker"
+        const val NAME= "name"
+        const val EMAIL= "EMAIL"
+        const val PHONE= "phone"
+        const val ADDRESS= "address"
+        const val SALARY= "salary"
+        const val IS_VERIFIED= "isVerified"
+        const val WORK_DAYS= "workDays"
+        const val START_TIME = "startTime"
+        const val END_TIME= "endTime"
+        const val SELECTED_ID= "selectedId"
+    }
     object IdNames {
         const val JOB_ID_NAME = "jobId"
         const val JOB_APPLICATION_ID_NAME = "jobApplicationId"

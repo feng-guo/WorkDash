@@ -2,6 +2,8 @@ package com.example.workdash.services
 
 import android.util.Log
 import com.example.workdash.Constants
+import com.example.workdash.models.CurrentEmployeeModel
+import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.matchedJobModel
@@ -128,7 +130,6 @@ object CheckInService {
                 val matchedJobs = mutableListOf<matchedJobModel>()
                 for (snapshot in dataSnapshot.children) {
                     val job = snapshot.getValue(matchedJobModel::class.java)
-                    //println("get job ID: " + job?.jobId.toString())
                     job?.let { matchedJobs.add(it) }
                 }
                 onSuccess(matchedJobs)
@@ -177,17 +178,13 @@ object CheckInService {
         val reference = dbInt.getReference("matchedJob")
 
         val query = reference.orderByChild("jobId_employeeId").equalTo(jobId + "_"+ employeeId)
-        println("data we sent is: " + jobId + "_"+ employeeId)
-//        val query1 = reference.orderByChild("jobId").equalTo(jobId);
-//        val query2 = query1.orderByChild("employeeId").equalTo(employeeId)
-        println("query: " + query.toString())
+
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var matchedJob: matchedJobModel? = null
                 for (snapshot in dataSnapshot.children) {
                     val job = snapshot.getValue(matchedJobModel::class.java)
                     if (job?.jobId == jobId && job.employeeId == employeeId) {
-                        println("two id checking get jobid: " +jobId)
                         matchedJob = job
                         break
                     }
@@ -286,5 +283,194 @@ object CheckInService {
             Constants.MatchedJob.JOB_EMPLOYEE, jobId_employeeId, matchedJobModel, callback)
     }
 
+    private fun findUserByEmployeeId(
+        employeeId: String,
+        onSuccess: (EmployerProfileModel?) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val reference = dbInt.getReference("userProfile")
+
+        val query = reference.orderByChild("uid").equalTo(employeeId)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var user: EmployerProfileModel? = null
+                for (snapshot in dataSnapshot.children) {
+                    val getuser = snapshot.getValue(EmployerProfileModel::class.java)
+                    if (getuser?.uid == employeeId) {
+                        user = getuser
+                        break
+                    }
+                }
+                onSuccess(user)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError("Failed to find matched job: ${error.message}")
+            }
+        })
+    }
+
+
+//    fun getUserByEmployeeId(employeeId: String): EmployerProfileModel?{
+//        var res: EmployerProfileModel? = null
+//        findUserByEmployeeId(employeeId,
+//            onSuccess = { employee ->
+//                // Process the matched job data
+//                if(employee != null){
+//                    res = EmployerProfileModel().apply {
+//                        this.uid = employee.uid
+//                        this.isWorker= employee.isWorker
+//                        this.name = employee.name
+//                        this.email = employee.email
+//                        this.phone = employee.phone
+//                        this.address = employee.address
+//                        this.salary= employee.salary
+//                        this.isVerified= employee.isVerified
+//                        this.workDays= employee.workDays
+//                        this.startTime = employee.startTime
+//                        this.endTime = employee.endTime
+//                        this.selectedId= employee.selectedId
+//
+//                    }
+//                }
+//
+//            },
+//            onError = { errorMessage ->
+//                // Handle the error
+//                Log.e("GET MATCHED JOB ERROR", errorMessage)
+//            }
+//        )
+//
+//
+//        return res
+//
+//    }
+
+    fun getUserByEmployeeId(employeeId: String, callback: (employerProfile: EmployerProfileModel?) -> Unit) {
+        println("inside getUserByEmployeeId with employeeId: $employeeId")
+        val employerProfileModel = EmployerProfileModel()
+        DatabaseService.readSingleObjectFromDbTableWithId(
+            Constants.TableNames.USER_PROFILE,
+            Constants.UserProfile.UID, employeeId, employerProfileModel, callback)
+    }
+
+
+    private fun getmatchedJobByJobId(jobId: String?, onSuccess: (List<matchedJobModel>) -> Unit, onError: (String) -> Unit) {
+        val reference = dbInt.getReference("matchedJob")
+        println("get into getmatchedJobByJobId with jobID: $jobId")
+        val query = reference.orderByChild("jobId").equalTo(jobId)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val matchedJobs = mutableListOf<matchedJobModel>()
+                for (snapshot in dataSnapshot.children) {
+                    val job = snapshot.getValue(matchedJobModel::class.java)
+                    job?.let { matchedJobs.add(it) }
+                }
+                onSuccess(matchedJobs)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError("Failed to retrieve matched job data: ${error.message}")
+            }
+        })
+    }
+
+//    fun getmatchedJobDetailsByJobId(jobId: String?): MutableList<JobModel>{
+//        getmatchedJobByJobId(jobId,
+//            onSuccess = { matchedJobs ->
+//                // Process the matched job data
+//                for (job in matchedJobs) {
+//                    // Do something with each matched job
+//                    if(!matchedJobList.contains(job)){
+//                        matchedJobList.add(job)
+//                        getJobModelByJobId(job.jobId,
+//                            onSuccess = { jobModel ->
+//                                // Process the job model
+//                                if (jobModel != null) {
+//                                    // Job model is not null, use it
+//                                    finalJobList.add(jobModel)
+//                                } else {
+//                                    // Job model is null or not found
+//                                }
+//                            },
+//                            onError = { errorMessage ->
+//                                // Handle the error
+//                                Log.e("GET JOB TABLE ERROR", errorMessage)
+//                            }
+//                        )
+//                    }
+//
+//
+//                }
+//            },
+//            onError = { errorMessage ->
+//                // Handle the error
+//                Log.e("GET MATCHED JOB ERROR", errorMessage)
+//            }
+//        )
+//
+//
+//        return finalJobList
+//
+//    }
+
+    fun getmatchedJobDetailsByJobId(jobId: String?, currentEmployeeCallback: (List<CurrentEmployeeModel>) -> Unit) {
+        val matchedJobList = mutableListOf<matchedJobModel>()
+        val currentEmployeeList = mutableListOf<CurrentEmployeeModel>()
+        println("get into getmatchedJobDetailsByJobId with jobid: $jobId")
+
+        getmatchedJobByJobId(
+            jobId,
+            onSuccess = { matchedJobs ->
+                // Process the matched job data
+                for (job in matchedJobs) {
+                    // Do something with each matched job
+                    println("get multi jobs, inside each loop, id: ${job.jobId_employeeId}")
+                    if (!matchedJobList.contains(job)) {
+                        println("pass already contain check , inside if, id: ${job.jobId_employeeId}")
+                        matchedJobList.add(job)
+                        getUserByEmployeeId(
+                            job.employeeId,
+                            callback = { employeeModel ->
+                                // Process the job model
+                                if (employeeModel != null) {
+                                    // Job model is not null, use it
+                                    println("get employee ID: ${employeeModel.uid}")
+                                    // Check if all jobs have been processed
+                                    var tempCurrentEmployeeModel = CurrentEmployeeModel()
+                                    tempCurrentEmployeeModel.PhoneNum = employeeModel.phone
+                                    tempCurrentEmployeeModel.jobId = job.jobId
+                                    tempCurrentEmployeeModel.employeeName = employeeModel.name
+                                    tempCurrentEmployeeModel.checkOutState = job.checkOutState
+                                    tempCurrentEmployeeModel.checkOutTime = job.checkOutTime
+                                    tempCurrentEmployeeModel.checkInState = job.checkInState
+                                    tempCurrentEmployeeModel.checkInTime = job.checkInTime
+                                    tempCurrentEmployeeModel.uid = employeeModel.uid
+                                    currentEmployeeList.add(tempCurrentEmployeeModel)
+                                    println("now call back with list size: ${currentEmployeeList.size}")
+                                    currentEmployeeCallback(currentEmployeeList)
+                                } else {
+                                    // Job model is null or not found
+                                    println("employee not found ")
+                                }
+                            }
+
+                        )
+
+                    }
+                }
+                // Check if there are no matched jobs
+                if (matchedJobs.isEmpty()) {
+                    // No matched jobs, invoke the callback with an empty list
+                    currentEmployeeCallback(emptyList())
+                }
+            },
+            onError = { errorMessage ->
+                // Handle the error
+                Log.e("GET MATCHED JOB ERROR", errorMessage)
+            }
+        )
+
+    }
 
 }
