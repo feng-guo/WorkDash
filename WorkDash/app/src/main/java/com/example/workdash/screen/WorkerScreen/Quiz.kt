@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.platform.LocalContext
+import com.example.workdash.routes.ID_ARG
+import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.routes.ScreenRoute
 
 
@@ -45,6 +47,7 @@ import com.example.workdash.routes.ScreenRoute
 @Composable
 
 fun Quiz(navController: NavController) {
+
 
     val questions = listOf(
         "Its okay to be 5 minutes late to work as long as no one notices",
@@ -55,6 +58,9 @@ fun Quiz(navController: NavController) {
     var selectedOptions by remember { mutableStateOf(listOf<Boolean?>(null, null, null)) }
     val contextForToast = LocalContext.current
     var enabled by remember { mutableStateOf(true) }
+   val navBackStackEntry = navController.currentBackStackEntry
+    val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
+//    val id = navBackStackEntry?.arguments?.getString(ID_ARG) ?: ""
 //    var contextForToast =
 //    var enabled =
 
@@ -128,8 +134,8 @@ fun Quiz(navController: NavController) {
             onClick = {
                 Toast.makeText(contextForToast, "Passed", Toast.LENGTH_SHORT).show()
                 enabled = false
-                navController.navigate(ScreenRoute.UserDetailsWorker.route) {
-                    popUpTo(ScreenRoute.UserDetailsWorker.route) {
+                navController.navigate(ScreenRoute.Report.passId(locationId)) {
+                    popUpTo(ScreenRoute.Report.route) {
                         inclusive = true
                     }
                 }

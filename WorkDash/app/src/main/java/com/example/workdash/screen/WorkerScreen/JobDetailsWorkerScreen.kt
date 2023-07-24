@@ -261,11 +261,21 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
-                        navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
-                            popUpTo(ScreenRoute.Report.route){
+
+                        //TODO: BUG
+//                        navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
+//                            popUpTo(ScreenRoute.Report.route){
+//                                inclusive = true
+//                            }
+//                        }
+                        navController.navigate(route = ScreenRoute.Quiz.passId(locationId)) {
+                            popUpTo(ScreenRoute.Quiz.route){
                                 inclusive = true
+
                             }
                         }
+
+
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                 )
