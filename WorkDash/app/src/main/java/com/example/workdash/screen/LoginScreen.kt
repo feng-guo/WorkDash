@@ -162,7 +162,7 @@ fun LoginScreen(
                 ).show()
 
                 if (workerPage) {
-                    navController.navigate(route = ScreenRoute.UserDetailsWorker.route) {
+                    navController.navigate(route = ScreenRoute.Quiz.route) {
 
                         popUpTo(ScreenRoute.Login.route){
                             inclusive = true

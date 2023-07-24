@@ -136,8 +136,8 @@ fun Report(navController: NavController) {
         ) {
             Button(
                 onClick = {
-                    ReportService.createReport(id, typedText.toString(),
-                        satisfiedText.toString() == "Do you have any complaints regarding this employee?"
+                    ReportService.createReport(id, typedText.text,
+                        satisfiedText.value == "Do you have any complaints regarding this employee?"
                     )
                     navController.navigate(route = ScreenRoute.Rating.passId(id)) {
                         popUpTo(ScreenRoute.Rating.passId(id)) {

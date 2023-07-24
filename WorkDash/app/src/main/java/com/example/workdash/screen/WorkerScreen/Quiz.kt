@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -33,6 +37,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
+import com.example.workdash.routes.ScreenRoute
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,6 +53,10 @@ fun Quiz(navController: NavController) {
     )
 
     var selectedOptions by remember { mutableStateOf(listOf<Boolean?>(null, null, null)) }
+    val contextForToast = LocalContext.current
+    var enabled by remember { mutableStateOf(true) }
+//    var contextForToast =
+//    var enabled =
 
     Column(
         modifier = Modifier.fillMaxHeight().padding(16.dp),
@@ -110,6 +120,28 @@ fun Quiz(navController: NavController) {
                     )
                 }
             }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                Toast.makeText(contextForToast, "Passed", Toast.LENGTH_SHORT).show()
+                enabled = false
+                navController.navigate(ScreenRoute.UserDetailsWorker.route) {
+                    popUpTo(ScreenRoute.UserDetailsWorker.route) {
+                        inclusive = true
+                    }
+                }
+            },
+            enabled = enabled,
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
+            modifier = Modifier
+                .width(120.dp)
+                .padding(vertical = 16.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Done", color = Color.White)
         }
 
     }
