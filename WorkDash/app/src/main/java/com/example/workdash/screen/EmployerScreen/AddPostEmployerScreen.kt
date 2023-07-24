@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
+import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 
@@ -110,6 +111,7 @@ fun AddPostEmployerScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     JobService.createJob(locationId, jobName, schedule, payPerHour.toLong(), certificationsRequired, totalPositionsRequired.toLong())
+                    navController.navigate(ScreenRoute.CurrentJobPostsEmployer.route)
                 }) {
                     Text(text = "    Post    ")
                 }
