@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.AddressService
 import com.example.workdash.services.LocationService
 
@@ -145,6 +146,7 @@ fun AddLocationEmployerScreen(
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                    navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
                 }) {
                     Text(text = "    Add    ")
                 }

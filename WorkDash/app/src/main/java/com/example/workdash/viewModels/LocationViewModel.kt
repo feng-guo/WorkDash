@@ -1,5 +1,6 @@
 package com.example.workdash.viewModels
 
+import com.example.workdash.models.AddressModel
 import com.example.workdash.models.CoordinateModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
@@ -28,8 +29,16 @@ class LocationViewModel {
                         locationId = locationObj["locationId"].toString()
                         businessId = locationObj["businessId"].toString()
                         locationName = locationObj["locationName"].toString()
-                        //TODO figure out how to retrieve the object
-//                        address = locationObj["address"].toString()
+                        val addressModel = AddressModel()
+                        val addressObj = locationObj["address"]  as HashMap<*, *>
+                        with(addressModel) {
+                            address = addressObj["address"].toString()
+                            city = addressObj["city"].toString()
+                            province = addressObj["province"].toString()
+                            country = addressObj["country"].toString()
+                            postalCode = addressObj["postalCode"].toString()
+                        }
+                        address = addressModel
                         isVerified = locationObj["verified"] as Boolean
                         imageResId = locationObj["imageResId"] as Long
                         imgUrl= locationObj["imageUrl"].toString()
@@ -76,10 +85,6 @@ class LocationViewModel {
         return coordinates
     }
 
-    fun getLocation(num:Int): LocationModel{
-        return locations.get(num)
-    }
-
     fun getLocation(id:String): LocationModel {
         for(location in locations) {
             if (location.locationId == id) {
@@ -96,5 +101,14 @@ class LocationViewModel {
             }
         }
         return JobModel()
+    }
+
+    fun getCoordinate(id: String): CoordinateModel {
+        for(coordinate in coordinates) {
+            if (coordinate.locationId == id) {
+                return coordinate
+            }
+        }
+        return CoordinateModel()
     }
 }

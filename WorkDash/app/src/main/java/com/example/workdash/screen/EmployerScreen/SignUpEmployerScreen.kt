@@ -78,6 +78,7 @@ fun SignUpEmployerScreen(
     var address by remember { mutableStateOf("") }
     val IDs = listOf("Passport", "Driver's Licence", "Health Card", "Employee ID")
     var selectedId by remember { mutableStateOf("") }
+    val emptyList = remember { mutableSetOf("") }
 
     var photoIdUri by remember { mutableStateOf<Uri?>(null) }
     val launcherID = rememberLauncherForActivityResult(contract =
@@ -310,7 +311,7 @@ fun SignUpEmployerScreen(
                     address = address,
                     salary = 0,
                     isVerified = true,
-                    workDays = listOf(),
+                    workDays = emptyList.toList(),
                     startTime = "",
                     endTime = "",
                     selectedId = selectedId

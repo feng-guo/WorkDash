@@ -5,7 +5,7 @@ data class LocationModel(
     var businessId: String,
 
     var locationName: String,
-    val address: AddressModel,
+    var address: AddressModel,
     var isVerified: Boolean,
 
     //TODO we might have to change this later
