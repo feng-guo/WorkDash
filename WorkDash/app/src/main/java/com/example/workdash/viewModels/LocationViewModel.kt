@@ -41,7 +41,7 @@ class LocationViewModel {
                         address = addressModel
                         isVerified = locationObj["verified"] as Boolean
                         imageResId = locationObj["imageResId"] as Long
-                        imgUrl= locationObj["imageUrl"].toString()
+                        imgUrl= locationObj["imgUrl"].toString()
                     }
                     locations.add(location)
                 }
