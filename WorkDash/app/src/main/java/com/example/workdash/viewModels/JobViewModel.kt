@@ -1,24 +1,33 @@
 package com.example.workdash.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
+import com.example.workdash.models.matchedJobModel
+import com.example.workdash.services.CheckInService
+import com.example.workdash.services.CheckInService.getJobDetailsByEmployeeId
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlin.math.log
 
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
     //val isFirstJob: Boolean = false //might delete later
     val jobs = mutableListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
+    var matchedJobs = mutableListOf<JobModel>()
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
     init {
         val dbRef = FirebaseDatabase.getInstance().reference
         initJobPostListener(dbRef)
         initJobApplicationListener(dbRef)
+        initMatchedJobPostListener()
     }
 
     private fun initJobPostListener(dbRef: DatabaseReference) {
@@ -78,6 +87,11 @@ class JobViewModel: ViewModel() {
         jobApplicationList.addValueEventListener(jobApplicationListener)
     }
 
+    private fun initMatchedJobPostListener() {
+
+        matchedJobs = CheckInService.getJobDetailsByEmployeeId(currentUserUid)
+    }
+
     fun getJobList(): List<JobModel>{
         return jobs
     }
@@ -88,5 +102,14 @@ class JobViewModel: ViewModel() {
     fun getJobApplicationList(): List<JobApplicationModel> {
         return jobApplications
     }
+
+    fun getMatchedJobList(): MutableList<JobModel>{
+        if(matchedJobs.isEmpty()){
+            println("empty matched job list!!!")
+        }
+
+        return matchedJobs
+    }
+
 }
 

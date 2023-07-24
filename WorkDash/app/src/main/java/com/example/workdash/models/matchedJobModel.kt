@@ -6,9 +6,10 @@ data class matchedJobModel(
     var checkInState: String,
     var checkOutState: String,
     var checkInTime: String,
-    var checkOutTime: String
+    var checkOutTime: String,
+    var jobId_employeeId: String
 ) {
-    constructor() : this("", "", "False", "False", "", "")
+    constructor() : this("", "", "False", "False", "", "", "")
 
 //    constructor(jobId: String, businessId: String, workerId: String, employeeId: String) : this(jobId, businessId, workerId, employeeId)
 

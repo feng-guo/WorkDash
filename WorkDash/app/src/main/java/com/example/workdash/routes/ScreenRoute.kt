@@ -39,6 +39,8 @@ sealed class ScreenRoute(val route: String){
         fun passJobIdAndLocationId(jobId: String, locationId: String): String {
             return "in_process_worker_screen/$jobId/$locationId"
         }
+        //TODO: PASS EXTRA VALUES
+
     }
     object UserDetailsWorker: ScreenRoute(route = "user_details_worker_screen")
     object ListOfJobs: ScreenRoute(route = "list_of_jobs")

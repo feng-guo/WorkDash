@@ -80,6 +80,7 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
     implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
 
     implementation 'com.stripe:stripe-android:20.27.2'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'

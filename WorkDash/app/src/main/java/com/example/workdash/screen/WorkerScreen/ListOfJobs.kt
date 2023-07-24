@@ -105,7 +105,7 @@ fun ListOfJobs(
                     LazyRow(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
+                        items(jobViewModel.getMatchedJobList()) { job ->
                             ProcessingJobCard(job = job, navController = navController)
                         }
                     }
@@ -271,7 +271,7 @@ fun ProcessingJobCard(job: JobModel, navController: NavController) {
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)
             ) {
                 Text(
-                    text = "Job ID: ",
+                    text = "Job Name: ",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

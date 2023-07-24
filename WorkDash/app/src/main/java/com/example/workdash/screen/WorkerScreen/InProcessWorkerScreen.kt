@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,13 @@ import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.JOB_STATE_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
+import com.example.workdash.services.CheckInService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
+import com.example.workdash.viewModels.CheckInSysWorkerViewModel
+import com.example.workdash.viewModels.CheckInViewModel
+import com.example.workdash.viewModels.JobViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -47,7 +53,8 @@ fun InProcessWorkerScreen(
     val navBackStackEntry = navController.currentBackStackEntry
     val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
-    val jobState = navBackStackEntry?.arguments?.getString(JOB_STATE_ARG) ?: ""
+
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     var jobModel = JobModel()
     val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
@@ -56,7 +63,10 @@ fun InProcessWorkerScreen(
     var locationModel = LocationModel()
     val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
     LocationService.getLocationFromId(locationId, locationCallback)
-
+    val checkInSysWorkerViewModel = CheckInSysWorkerViewModel()
+//    val matchedJobModel = checkInSysWorkerViewModel.GetJobDetailsByJobIdAndEmployeeId(jobId,currentUserUid)
+//    var matchedJobCheckInState = matchedJobModel?.checkInState.toString()
+//    var matchedJobCheckOutState = matchedJobModel?.checkOutState.toString()
 
 
     Scaffold(
@@ -255,40 +265,29 @@ fun InProcessWorkerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 8.dp, start = 30.dp, end = 30.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                when(jobState){
-                    "In Progress" ->
-                        Button(
-                                onClick = {
+                    Button(
+                        onClick = {
+                            checkInSysWorkerViewModel.checkIn(jobId, currentUserUid)
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = checkInSysWorkerViewModel.checkInButtonColor)
+                    )
+                    {
+                        Text(text = "Check In", color = Color.White)
+                    }
+
+                    Button(
+                        onClick = {
+                            checkInSysWorkerViewModel.checkOut(jobId, currentUserUid)
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = checkInSysWorkerViewModel.checkOutButtonColor)
+                    )
+                    {
+                        Text(text = "Check Out", color = Color.White)
+                    }
 
 
-                                },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
-                        )
-                        {
-                            Text(text = "Check In", color = Color.White)
-                        }
-                    "checkedIn" ->
-                        Button(
-                            onClick = {
-
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
-                        )
-                        {
-                            Text(text = "Check Out", color = Color.White)
-                        }
-                    "finished" ->
-                        Button(
-                            onClick = {
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
-                        )
-                        {
-                            Text(text = "Finished", color = Color.White)
-                        }
-                }
 
             }
         }

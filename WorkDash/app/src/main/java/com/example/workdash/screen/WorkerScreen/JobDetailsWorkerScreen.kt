@@ -260,6 +260,7 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
+                        //TODO: BUG
                         navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
                             popUpTo(ScreenRoute.Report.route){
                                 inclusive = true
