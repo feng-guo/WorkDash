@@ -48,9 +48,11 @@ object LocationService {
         val lmd = { key : String ->
             val url = "https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$key"
             val coordinate = sendRequest(url, locationModel.locationId)
-            locationModel.isVerified = true
+            if (coordinate.locationId != "") {
+                locationModel.isVerified = true
+                saveCoordinate(coordinate)
+            }
             saveLocation(locationModel)
-            saveCoordinate(coordinate)
         }
         getGMapsApiKey(lmd)
 
@@ -65,21 +67,26 @@ object LocationService {
         StrictMode.setThreadPolicy(threadPolicy)
         val url = URL(request)
         val connection = url.openConnection()
-        BufferedReader(InputStreamReader(connection.getInputStream())).use { inp ->
-            var line: String?
-            val sb = StringBuilder()
-            while (inp.readLine().also { line = it } != null) {
-                sb.append(line)
+        try {
+            BufferedReader(InputStreamReader(connection.getInputStream())).use { inp ->
+                var line: String?
+                val sb = StringBuilder()
+                while (inp.readLine().also { line = it } != null) {
+                    sb.append(line)
+                }
+                val res = JSONObject(sb.toString())
+                val array = res.getJSONArray("results")
+                val result = array.getJSONObject(0)
+                val geometry = result.getJSONObject("geometry")
+                val location = geometry.getJSONObject("location")
+                val lat = location.getDouble("lat")
+                val lng = location.getDouble("lng")
+                return CoordinateModel(lat, lng, locationId)
             }
-            val res = JSONObject(sb.toString())
-            val array = res.getJSONArray("results")
-            val result = array.getJSONObject(0)
-            val geometry = result.getJSONObject("geometry")
-            val location = geometry.getJSONObject("location")
-            val lat = location.getDouble("lat")
-            val lng = location.getDouble("lng")
-            return CoordinateModel(lat, lng, locationId)
+        } catch (_:Exception) {
+            return CoordinateModel()
         }
+
     }
 
     fun getLocationFromId(locationId: String, callback: (locationModel: LocationModel?) -> Unit) {
