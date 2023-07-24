@@ -56,8 +56,9 @@ class UserViewModel: ViewModel() {
     }
 
     fun getUser(userId: String): WorkerProfileModel {
+        println(users.size)
         users.forEach { user ->
-            if (user.selectedId == userId) {
+            if (user.uid == userId) {
                 return user
             }
         }

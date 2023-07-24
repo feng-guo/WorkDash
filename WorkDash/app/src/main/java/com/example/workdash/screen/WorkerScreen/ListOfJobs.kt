@@ -42,6 +42,7 @@ import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
 import com.example.workdash.viewModels.LocationViewModel
+import com.example.workdash.viewModels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -53,6 +54,7 @@ fun ListOfJobs(
     val jobViewModel = JobViewModel()
     val locationViewModel = LocationViewModel()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+    val userViewModel = UserViewModel()
 
     Scaffold(
         topBar = {
@@ -120,12 +122,9 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
+                        items(jobViewModel.getJobListWithFilter(currentUserUid!!, userViewModel)) { job ->
                             JobCard(job = job, locationModel = locationViewModel.getLocation(job.locationId), navController = navController)
                         }
-//                        items(jobViewModel.getJobListWithFilter(currentUserUid!!)) { job ->
-//                            JobCard(job = job, navController = navController)
-//                        }
                     }
                 }
             }
