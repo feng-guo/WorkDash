@@ -95,8 +95,9 @@ fun UserDetailsWorkerScreen(
     var phone by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var sliderPosition by remember { mutableStateOf(0f) }
-    val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
+    val daysOfWeek = listOf("M", "T", "W", "Th", "F", "S", "S")
     val workDays = remember { mutableSetOf<String>() }
+    val emptyList = remember { mutableSetOf("") }
     val IDs = listOf("Passport", "Driver's Licence", "Health Card", "Employee ID")
     var selectedId by remember { mutableStateOf("") }
 
@@ -415,7 +416,7 @@ fun UserDetailsWorkerScreen(
                     address = address,
                     salary = sliderPosition.toInt(),
                     isVerified = true,
-                    workDays = workDays.toList(),
+                    workDays = if (workDays.isEmpty()) emptyList.toList() else workDays.toList(),
                     startTime = fromTime.value,
                     endTime = toTime.value,
                     selectedId = selectedId
