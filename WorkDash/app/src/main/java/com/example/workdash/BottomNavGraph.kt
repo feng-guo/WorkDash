@@ -143,9 +143,11 @@ fun BottomNavGraph(
             MapOfJobs(navController = navController)
         }
         composable(
-            route = ScreenRoute.Quiz.route
+            route = ScreenRoute.Quiz.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ) {
             Quiz(navController = navController)
+
         }
         composable(
             route = ScreenRoute.Report.route,
