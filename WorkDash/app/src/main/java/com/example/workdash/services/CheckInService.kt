@@ -37,13 +37,11 @@ object CheckInService {
                     // Do something with each matched job
                     if(!matchedJobList.contains(job)){
                         matchedJobList.add(job)
-                        println("get matched job Id: " + job.jobId)
                         getJobModelByJobId(job.jobId,
                             onSuccess = { jobModel ->
                                 // Process the job model
                                 if (jobModel != null) {
                                     // Job model is not null, use it
-                                    println("get final job name: " + jobModel.jobName)
                                     finalJobList.add(jobModel)
                                 } else {
                                     // Job model is null or not found
@@ -68,6 +66,43 @@ object CheckInService {
 
         return finalJobList
 
+    }
+
+    fun updateJobState(jobId: String, state: String) {
+        val reference = dbInt.getReference("Jobs")
+
+        val query = reference.orderByChild("jobId").equalTo(jobId)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val Job = snapshot.getValue(JobModel::class.java)
+                    Job?.let {
+                        // Update the matchedJob model with the new CheckInState and CheckInTime
+                        it.jobState = state
+
+                        // Update the matchedJob in Firebase
+                        val updates = mutableMapOf<String, Any>()
+                        updates[snapshot.key.toString()] = it
+
+                        reference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                // Update successful
+                                // You can perform any action here after the update is successful
+                            }
+                            .addOnFailureListener { error ->
+                                // Handle the error
+                                Log.e("UPDATE MATCHED JOB MODEL ERROR", "Failed to update CheckInState and CheckInTime: ${error.message}")
+                            }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error
+                Log.e("UPDATE MATCHED JOB MODEL ERROR", "Failed to retrieve matched job data: ${error.message}")
+            }
+        })
     }
 
     private fun getJobModelByJobId(jobId: String, onSuccess: (JobModel?) -> Unit, onError: (String) -> Unit) {
@@ -242,6 +277,13 @@ object CheckInService {
                 Log.e("UPDATE MATCHED JOB MODEL ERROR", "Failed to retrieve matched job data: ${error.message}")
             }
         })
+    }
+
+    fun getMatchedJobFromJobIdAndEmployeeId(jobId_employeeId: String, callback: (matchedJobModel: matchedJobModel?) -> Unit) {
+        val matchedJobModel = matchedJobModel()
+        DatabaseService.readSingleObjectFromDbTableWithId(
+            Constants.TableNames.MATCHED_JOB_NAME,
+            Constants.MatchedJob.JOB_EMPLOYEE, jobId_employeeId, matchedJobModel, callback)
     }
 
 

@@ -21,6 +21,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -31,6 +36,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
+import com.example.workdash.models.matchedJobModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.JOB_STATE_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
@@ -60,13 +66,19 @@ fun InProcessWorkerScreen(
     val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
     JobService.getJobFromId(jobId, jobCallback)
 
+    var matchedJobModel by remember { mutableStateOf(matchedJobModel())}
+    val matchedJobCallback = { matchedJob: matchedJobModel? -> matchedJobModel = matchedJob?: matchedJobModel() }
+    CheckInService.getMatchedJobFromJobIdAndEmployeeId(jobId + "_" + currentUserUid, matchedJobCallback)
+    val condition1 = remember { mutableStateOf(false)}
+    val condition2 = remember { mutableStateOf(false)}
+
+
     var locationModel = LocationModel()
     val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
     LocationService.getLocationFromId(locationId, locationCallback)
+
     val checkInSysWorkerViewModel = CheckInSysWorkerViewModel()
-//    val matchedJobModel = checkInSysWorkerViewModel.GetJobDetailsByJobIdAndEmployeeId(jobId,currentUserUid)
-//    var matchedJobCheckInState = matchedJobModel?.checkInState.toString()
-//    var matchedJobCheckOutState = matchedJobModel?.checkOutState.toString()
+
 
 
     Scaffold(
@@ -265,29 +277,52 @@ fun InProcessWorkerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 8.dp, start = 30.dp, end = 30.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                if(!matchedJobModel.checkInState.toBoolean() && !condition1.value && !condition2.value){
                     Button(
                         onClick = {
                             checkInSysWorkerViewModel.checkIn(jobId, currentUserUid)
+                            condition1.value = true
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = checkInSysWorkerViewModel.checkInButtonColor)
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                     )
                     {
                         Text(text = "Check In", color = Color.White)
                     }
-
+                }
+                else if (matchedJobModel.checkInState.toBoolean() && !matchedJobModel.checkOutState.toBoolean() || (condition1.value && !condition2.value)){
                     Button(
                         onClick = {
                             checkInSysWorkerViewModel.checkOut(jobId, currentUserUid)
+                            condition2.value = true
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = checkInSysWorkerViewModel.checkOutButtonColor)
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
                     )
                     {
                         Text(text = "Check Out", color = Color.White)
                     }
+                }
+                else{
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
 
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
+                        )
+                        {
+                            Text(text = "Finished", color = Color.White)
+                        }
+                        Text(text = "Check In Time: " + matchedJobModel.checkInTime)
+                        Text(text = "Check Out Time: " + matchedJobModel.checkOutTime)
+                    }
 
+                }
 
             }
         }

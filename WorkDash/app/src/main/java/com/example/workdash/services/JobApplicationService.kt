@@ -13,6 +13,7 @@ object JobApplicationService {
             saveJobApplication(jobApplicationModel)
         }
         IdGeneratorService.generateJobApplicationId(lmd)
+        CheckInService.updateJobState(jobId, "In Progress")
     }
 
     private fun saveJobApplication(jobApplication: JobApplicationModel) {
