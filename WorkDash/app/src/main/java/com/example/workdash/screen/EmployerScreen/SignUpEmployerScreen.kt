@@ -308,7 +308,12 @@ fun SignUpEmployerScreen(
                     email = email,
                     phone = phone,
                     address = address,
+                    salary = 0,
                     isVerified = true,
+                    workDays = listOf(),
+                    startTime = "",
+                    endTime = "",
+                    selectedId = selectedId
                 )
 
                 if(photoProfileUri != null && photoIdUri != null)
