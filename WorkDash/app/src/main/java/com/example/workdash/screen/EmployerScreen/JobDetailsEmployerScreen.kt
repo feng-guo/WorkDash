@@ -49,6 +49,7 @@ import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
+import com.example.workdash.models.WorkerProfileModel
 import com.example.workdash.models.matchedJobModel
 import com.example.workdash.routes.JOB_ID_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
@@ -58,6 +59,7 @@ import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.UserViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -326,7 +328,6 @@ fun JobDetailsEmployerScreen(
                         .fillMaxWidth()
                         .padding(bottom = 8.dp)
                 ) {
-
                     Text(
                         text = "Candidates: ",
                         modifier = Modifier
@@ -348,6 +349,7 @@ fun JobDetailsEmployerScreen(
                     }
                 }
 
+                }
             }
 
 
@@ -358,7 +360,7 @@ fun JobDetailsEmployerScreen(
 
 
     }
-}
+
 
 @Composable
 fun WorkerCard(currentEmployeeModel: CurrentEmployeeModel, navController: NavController) {
@@ -483,6 +485,8 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
 
     //TODO have to load up actual information based on the user of the application :)
 
+    val workerProfileModel = UserViewModel().getUser(jobApplicationModel.employeeId)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -544,7 +548,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "user certifs",
+                    text = "Passed Quiz",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

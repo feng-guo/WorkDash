@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,8 @@ import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
+import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.LocationViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -139,7 +142,6 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            //TODO not sure what we should put as the location name
                             text = locationModel.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
@@ -221,7 +223,6 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            //TODO convert this row into a list or combine the list
                             text = jobModel.certificationsRequired,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
@@ -260,17 +261,31 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
+
                         //TODO: BUG
-                        navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
-                            popUpTo(ScreenRoute.Report.route){
+//                        navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
+//                            popUpTo(ScreenRoute.Report.route){
+//                                inclusive = true
+//                            }
+//                        }
+                        navController.navigate(route = ScreenRoute.Quiz.passId(locationId)) {
+                            popUpTo(ScreenRoute.Quiz.route){
                                 inclusive = true
+
                             }
                         }
+
+
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                 )
                 {
                     Text(text = "Apply", color = Color.Black)
+                }
+                IconButton(onClick = {
+                    navController.navigate(ScreenRoute.MapOfJobs.passLocationId(locationId))
+                }) {
+                    Icon(Icons.Default.Map, contentDescription = "Map")
                 }
             }
         }

@@ -41,6 +41,8 @@ import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.LocationViewModel
+import com.example.workdash.viewModels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -50,7 +52,9 @@ fun ListOfJobs(
     navController: NavController,
 ) {
     val jobViewModel = JobViewModel()
+    val locationViewModel = LocationViewModel()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+    val userViewModel = UserViewModel()
 
     Scaffold(
         topBar = {
@@ -64,18 +68,6 @@ fun ListOfJobs(
                         navController.popBackStack()
                     }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {
-                        navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
-                    }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add")
-                    }
-                    IconButton(onClick = {
-                        navController.navigate(ScreenRoute.MapOfJobs.route)
-                    }) {
-                        Icon(Icons.Default.Map, contentDescription = "Map")
                     }
                 }
             )
@@ -130,8 +122,8 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobList()) { job ->
-                            JobCard(job = job, navController = navController)
+                        items(jobViewModel.getJobListWithFilter(currentUserUid!!, userViewModel)) { job ->
+                            JobCard(job = job, locationModel = locationViewModel.getLocation(job.locationId), navController = navController)
                         }
                     }
                 }
@@ -143,11 +135,7 @@ fun ListOfJobs(
 }
 
 @Composable
-fun JobCard(job: JobModel, navController: NavController) {
-    var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
-    LocationService.getLocationFromId(job.locationId, locationCallback)
-
+fun JobCard(job: JobModel, locationModel: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,12 +157,11 @@ fun JobCard(job: JobModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                //TODO get image from location
-//                AsyncImage(
-//                    model = job.location.imgUrl,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(100.dp)
-//                )
+                AsyncImage(
+                    model = locationModel.imgUrl,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Row() {

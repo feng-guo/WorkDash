@@ -103,10 +103,39 @@ class JobViewModel: ViewModel() {
         return jobApplications
     }
 
+    fun getJobApplicationListForJob(jobId: String): List<JobApplicationModel> {
+        val result = mutableListOf<JobApplicationModel>()
+        jobApplications.forEach{ jobApplicationModel ->
+            if (jobApplicationModel.jobId == jobId){
+                result.add(jobApplicationModel)
+            }
+        }
+        return result
+    }
+
     fun getMatchedJobList(): MutableList<JobModel>{
 
         return matchedJobs
     }
 
+    fun getJobListWithFilter(userId: String, userViewModel: UserViewModel): MutableList<JobModel> {
+        val user = userViewModel.getUser(userId)
+        val result = mutableListOf<JobModel>()
+        jobs.forEach{ jobModel ->
+            if (jobModel.payPerHour >= user.salary) {
+                result.add(jobModel)
+            }
+        }
+        return result
+    }
+
+    fun getJob(id: String): JobModel {
+        jobs.forEach{ jobModel ->
+            if (jobModel.jobId == id) {
+                return jobModel
+            }
+        }
+        return JobModel()
+    }
 }
 

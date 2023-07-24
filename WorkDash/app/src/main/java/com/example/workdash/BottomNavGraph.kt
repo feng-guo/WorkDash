@@ -25,7 +25,6 @@ import com.example.workdash.screen.HomeScreen
 import com.example.workdash.screen.LoginScreen
 import com.example.workdash.screen.Rating
 import com.example.workdash.screen.Report
-import com.example.workdash.screen.SettingScreen
 import com.example.workdash.screen.UserInfo
 import com.example.workdash.screen.WorkerScreen.InProcessWorkerScreen
 import com.example.workdash.screen.WorkerScreen.JobDetailsWorkerScreen
@@ -66,11 +65,6 @@ fun BottomNavGraph(
             route = ScreenRoute.UserInfo.route
         ){
             UserInfo(navController = navController)
-        }
-        composable(
-            route = ScreenRoute.Settings.route
-        ){
-            SettingScreen(navController = navController)
         }
         composable(
             route = ScreenRoute.Home.route
@@ -144,14 +138,17 @@ fun BottomNavGraph(
             Rating(navController = navController)
         }
         composable(
-            route = ScreenRoute.MapOfJobs.route
+            route = ScreenRoute.MapOfJobs.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ) {
             MapOfJobs(navController = navController)
         }
         composable(
-            route = ScreenRoute.Quiz.route
+            route = ScreenRoute.Quiz.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ) {
             Quiz(navController = navController)
+
         }
         composable(
             route = ScreenRoute.Report.route,
