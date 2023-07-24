@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,8 @@ import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.JobApplicationService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
+import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.LocationViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -49,13 +52,16 @@ fun JobDetailsWorkerScreen(
     val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
 
-    var jobModel = JobModel()
-    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
-    JobService.getJobFromId(jobId, jobCallback)
+    val jobModel = JobViewModel().getJob(jobId)
+    val locationModel = LocationViewModel().getLocation(locationId)
 
-    var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
-    LocationService.getLocationFromId(locationId, locationCallback)
+//    var jobModel = JobModel()
+//    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
+//    JobService.getJobFromId(jobId, jobCallback)
+
+//    var locationModel = LocationModel()
+//    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
+//    LocationService.getLocationFromId(locationId, locationCallback)
 
 
 
@@ -139,7 +145,6 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            //TODO not sure what we should put as the location name
                             text = locationModel.locationName,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
@@ -221,7 +226,6 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            //TODO convert this row into a list or combine the list
                             text = jobModel.certificationsRequired,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
@@ -271,6 +275,12 @@ fun JobDetailsWorkerScreen(
                 )
                 {
                     Text(text = "Apply", color = Color.Black)
+                }
+                IconButton(onClick = {
+                    navController.navigate(ScreenRoute.MapOfJobs.passLocationId(locationId))
+                }) {
+                    Text(text = "View On Map", color = Color.Black)
+                    Icon(Icons.Default.Map, contentDescription = "Map")
                 }
             }
         }

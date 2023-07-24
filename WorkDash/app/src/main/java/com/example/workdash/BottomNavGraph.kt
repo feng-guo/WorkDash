@@ -138,7 +138,8 @@ fun BottomNavGraph(
             Rating(navController = navController)
         }
         composable(
-            route = ScreenRoute.MapOfJobs.route
+            route = ScreenRoute.MapOfJobs.route,
+            arguments = listOf(LOCATION_ID_NAV_ARG)
         ) {
             MapOfJobs(navController = navController)
         }

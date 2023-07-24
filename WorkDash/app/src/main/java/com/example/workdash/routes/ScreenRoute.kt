@@ -50,7 +50,11 @@ sealed class ScreenRoute(val route: String){
             return "rating/$id"
         }
     }
-    object MapOfJobs: ScreenRoute(route = "map_of_jobs")
+    object MapOfJobs: ScreenRoute(route = "map_of_jobs/{$LOCATION_ID_ARG}") {
+        fun passLocationId(locationId: String): String {
+            return "map_of_jobs/$locationId"
+        }
+    }
     object Quiz: ScreenRoute(route = "quiz")
     object Report: ScreenRoute(route = "report/{$ID_ARG}") {
         fun passId(id: String): String {

@@ -76,10 +76,6 @@ class LocationViewModel {
         return coordinates
     }
 
-    fun getLocation(num:Int): LocationModel{
-        return locations.get(num)
-    }
-
     fun getLocation(id:String): LocationModel {
         for(location in locations) {
             if (location.locationId == id) {
@@ -96,5 +92,14 @@ class LocationViewModel {
             }
         }
         return JobModel()
+    }
+
+    fun getCoordinate(id: String): CoordinateModel {
+        for(coordinate in coordinates) {
+            if (coordinate.locationId == id) {
+                return coordinate
+            }
+        }
+        return CoordinateModel()
     }
 }

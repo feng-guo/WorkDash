@@ -41,6 +41,7 @@ import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.LocationViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -64,18 +65,6 @@ fun ListOfJobs(
                         navController.popBackStack()
                     }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {
-                        navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
-                    }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add")
-                    }
-                    IconButton(onClick = {
-                        navController.navigate(ScreenRoute.MapOfJobs.route)
-                    }) {
-                        Icon(Icons.Default.Map, contentDescription = "Map")
                     }
                 }
             )
@@ -144,9 +133,10 @@ fun ListOfJobs(
 
 @Composable
 fun JobCard(job: JobModel, navController: NavController) {
-    var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
-    LocationService.getLocationFromId(job.locationId, locationCallback)
+    val locationModel = LocationViewModel().getLocation(job.locationId)
+//    var locationModel = LocationModel()
+//    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
+//    LocationService.getLocationFromId(job.locationId, locationCallback)
 
     Card(
         modifier = Modifier

@@ -132,5 +132,13 @@ class JobViewModel: ViewModel() {
         return result
     }
 
+    fun getJob(id: String): JobModel {
+        jobs.forEach{ jobModel ->
+            if (jobModel.jobId == id) {
+                return jobModel
+            }
+        }
+        return JobModel()
+    }
 }
 
