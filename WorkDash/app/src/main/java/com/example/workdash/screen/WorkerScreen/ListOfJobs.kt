@@ -51,6 +51,7 @@ fun ListOfJobs(
     navController: NavController,
 ) {
     val jobViewModel = JobViewModel()
+    val locationViewModel = LocationViewModel()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
     Scaffold(
@@ -119,9 +120,12 @@ fun ListOfJobs(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        items(jobViewModel.getJobListWithFilter(currentUserUid!!)) { job ->
-                            JobCard(job = job, navController = navController)
+                        items(jobViewModel.getJobList()) { job ->
+                            JobCard(job = job, locationModel = locationViewModel.getLocation(job.locationId), navController = navController)
                         }
+//                        items(jobViewModel.getJobListWithFilter(currentUserUid!!)) { job ->
+//                            JobCard(job = job, navController = navController)
+//                        }
                     }
                 }
             }
@@ -132,12 +136,7 @@ fun ListOfJobs(
 }
 
 @Composable
-fun JobCard(job: JobModel, navController: NavController) {
-    val locationModel = LocationViewModel().getLocation(job.locationId)
-//    var locationModel = LocationModel()
-//    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
-//    LocationService.getLocationFromId(job.locationId, locationCallback)
-
+fun JobCard(job: JobModel, locationModel: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -159,12 +158,11 @@ fun JobCard(job: JobModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                //TODO get image from location
-//                AsyncImage(
-//                    model = job.location.imgUrl,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(100.dp)
-//                )
+                AsyncImage(
+                    model = locationModel.imgUrl,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Row() {

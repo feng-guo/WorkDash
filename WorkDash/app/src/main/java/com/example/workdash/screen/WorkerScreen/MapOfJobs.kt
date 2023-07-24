@@ -28,19 +28,21 @@ fun MapOfJobs(
         position = CameraPosition.fromLatLngZoom(default, 17f)
     }
     val coordinate = remember {locationViewModel.getCoordinate(locationId)}
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
-    ) {
-        Marker(
-            state = rememberMarkerState(position = LatLng(coordinate.latitude, coordinate.longitude)),
-            title = locationViewModel.getLocation(coordinate.locationId).locationName,
-            snippet = locationViewModel.getLocation(coordinate.locationId).address.address,
-            onInfoWindowLongClick = {
-                navController.navigate(
-                    route = ScreenRoute.JobDetailsWorker.passJobIdAndLocationId(locationViewModel.getJobFromLocation(coordinate.locationId).jobId, coordinate.locationId)
-                )
-            }
-        )
+    if (coordinate.locationId != "") {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = rememberMarkerState(position = LatLng(coordinate.latitude, coordinate.longitude)),
+                title = locationViewModel.getLocation(coordinate.locationId).locationName,
+                snippet = locationViewModel.getLocation(coordinate.locationId).address.address,
+                onInfoWindowLongClick = {
+                    navController.navigate(
+                        route = ScreenRoute.JobDetailsWorker.passJobIdAndLocationId(locationViewModel.getJobFromLocation(coordinate.locationId).jobId, coordinate.locationId)
+                    )
+                }
+            )
+        }
     }
 }

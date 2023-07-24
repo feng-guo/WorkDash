@@ -52,16 +52,13 @@ fun JobDetailsWorkerScreen(
     val jobId = navBackStackEntry?.arguments?.getString(JOB_ID_ARG) ?: ""
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
 
-    val jobModel = JobViewModel().getJob(jobId)
-    val locationModel = LocationViewModel().getLocation(locationId)
+    var jobModel = JobModel()
+    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
+    JobService.getJobFromId(jobId, jobCallback)
 
-//    var jobModel = JobModel()
-//    val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
-//    JobService.getJobFromId(jobId, jobCallback)
-
-//    var locationModel = LocationModel()
-//    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
-//    LocationService.getLocationFromId(locationId, locationCallback)
+    var locationModel = LocationModel()
+    val locationCallback = { location: LocationModel? -> locationModel = location?:LocationModel()}
+    LocationService.getLocationFromId(locationId, locationCallback)
 
 
 
@@ -279,7 +276,6 @@ fun JobDetailsWorkerScreen(
                 IconButton(onClick = {
                     navController.navigate(ScreenRoute.MapOfJobs.passLocationId(locationId))
                 }) {
-                    Text(text = "View On Map", color = Color.Black)
                     Icon(Icons.Default.Map, contentDescription = "Map")
                 }
             }
