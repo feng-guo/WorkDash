@@ -1,6 +1,7 @@
 package com.example.workdash.screen.WorkerScreen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,7 +63,7 @@ fun InProcessWorkerScreen(
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
 
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
+    val contextForToast = LocalContext.current
     var jobModel = JobModel()
     val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
     JobService.getJobFromId(jobId, jobCallback)
@@ -280,11 +282,13 @@ fun InProcessWorkerScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(!matchedJobModel.checkInState.toBoolean() && !condition1.value && !condition2.value){
+                if(!matchedJobModel.checkInState.toBoolean()){
                     Button(
                         onClick = {
                             checkInSysWorkerViewModel.checkIn(jobId, currentUserUid)
                             condition1.value = true
+                            Toast.makeText(contextForToast, "Check In Success", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
                     )
@@ -292,11 +296,13 @@ fun InProcessWorkerScreen(
                         Text(text = "Check In", color = Color.White)
                     }
                 }
-                else if (matchedJobModel.checkInState.toBoolean() && !matchedJobModel.checkOutState.toBoolean() || (condition1.value && !condition2.value)){
+                else if (matchedJobModel.checkInState.toBoolean() && !matchedJobModel.checkOutState.toBoolean()){
                     Button(
                         onClick = {
                             checkInSysWorkerViewModel.checkOut(jobId, currentUserUid)
                             condition2.value = true
+                            Toast.makeText(contextForToast, "Check Out Success", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
                     )

@@ -42,7 +42,7 @@ object CheckInService {
                         getJobModelByJobId(job.jobId,
                             onSuccess = { jobModel ->
                                 // Process the job model
-                                if (jobModel != null) {
+                                if (jobModel != null && !finalJobList.contains(jobModel)) {
                                     // Job model is not null, use it
                                     finalJobList.add(jobModel)
                                 } else {
@@ -121,7 +121,7 @@ object CheckInService {
             }
         })
     }
-    private fun getMatchedJobsByEmployeeId(employeeId: String?, onSuccess: (List<matchedJobModel>) -> Unit, onError: (String) -> Unit) {
+    fun getMatchedJobsByEmployeeId(employeeId: String?, onSuccess: (List<matchedJobModel>) -> Unit, onError: (String) -> Unit) {
         val reference = dbInt.getReference("matchedJob")
 
         val query = reference.orderByChild("employeeId").equalTo(employeeId)

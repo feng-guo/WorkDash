@@ -336,7 +336,7 @@ fun JobDetailsEmployerScreen(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         //TODO this should probably be queried based on the job id lol
-                        items(jobViewModel.getJobApplicationList()) { jobApplicationModel ->
+                        items(jobViewModel.getJobApplicationList(jobId)) { jobApplicationModel ->
                             CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
                         }
                     }
