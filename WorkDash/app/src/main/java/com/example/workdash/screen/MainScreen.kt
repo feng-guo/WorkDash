@@ -1,7 +1,6 @@
 package com.example.workdash.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
@@ -85,7 +84,6 @@ fun RowScope.AddItem(
             val currentUser = getUser()
             if (screen.title == "Home" && currentUser != null) {
                 redirectBaseOnCurrentUser(currentUser.uid) { route ->
-                    Log.d("route", route)
                     navController.navigate(route) {
                         popUpTo(route) {
                             inclusive = true
@@ -124,7 +122,6 @@ fun redirectBaseOnCurrentUser(userId: String, callback: (String) -> Unit) {
                 } else {
                     ScreenRoute.CurrentJobPostsEmployer.route
                 }
-                Log.d("get me that route", route)
             }
             // Call the callback with the route once the query is complete
             callback.invoke(route)
