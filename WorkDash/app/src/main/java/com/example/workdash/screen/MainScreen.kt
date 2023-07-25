@@ -15,6 +15,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.workdash.BottomNavGraph
 import com.example.workdash.routes.BottomBarScreen
+import com.example.workdash.routes.ScreenRoute
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -73,12 +81,54 @@ fun RowScope.AddItem(
         } == true,
         unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
-            navController.navigate(screen.route) {
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
+            val currentUser = getUser()
+            if (screen.title == "Home" && currentUser != null) {
+                redirectBaseOnCurrentUser(currentUser.uid) { route ->
+                    navController.navigate(route) {
+                        popUpTo(route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            } else {
+                navController.navigate(screen.route) {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
             }
         }
 
 
     )
+}
+
+fun getUser(): FirebaseUser? {
+    return FirebaseAuth.getInstance().currentUser
+}
+
+fun redirectBaseOnCurrentUser(userId: String, callback: (String) -> Unit) {
+    val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+    val query = database.child("userProfile").orderByChild("uid").equalTo(userId)
+
+    // Read the data from the database
+    query.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            var route = ""
+            for (snapshot in dataSnapshot.children) {
+                // Access the value of isWorker from each matching employer profile
+                val worker = snapshot.child("worker").getValue(Boolean::class.java)
+                route = if (worker == true) {
+                    ScreenRoute.ListOfJobs.route
+                } else {
+                    ScreenRoute.CurrentJobPostsEmployer.route
+                }
+            }
+            // Call the callback with the route once the query is complete
+            callback.invoke(route)
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Handle db error if needed
+        }
+    })
 }

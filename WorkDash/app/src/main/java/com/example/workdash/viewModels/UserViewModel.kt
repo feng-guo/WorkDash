@@ -39,6 +39,7 @@ class UserViewModel: ViewModel() {
                         startTime = userObj["startTime"].toString()
                         endTime = userObj["endTime"].toString()
                         selectedId = userObj["selectedId"].toString()
+                        profilePic = userObj["profilePic"].toString()
                     }
                     users.add(user)
                 }

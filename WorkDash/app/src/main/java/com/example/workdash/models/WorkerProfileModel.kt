@@ -12,9 +12,11 @@ data class WorkerProfileModel(
     var workDays: List<String>,
     var startTime: String,
     var endTime: String,
-    var selectedId: String
+    var selectedId: String,
+    var profilePic: String,
+    var idPic: String
 ) {
-    constructor() : this("", true, "", "", "", "", 0, false, listOf(), "", "", "")
+    constructor() : this("", true, "", "", "", "", 0, false, listOf(), "", "", "", "", "")
 
     //constructor(uid: String, isWorker: Boolean, name: String, email: String, phone: String, address: String, salary: Int, isVerified: Boolean, workDays: List<String>, startTime: String, endTime: String, selectedId: String) : this(uid, isWorker, name, email, phone, address, salary, isVerified, workDays, startTime, endTime, selectedId)
 }

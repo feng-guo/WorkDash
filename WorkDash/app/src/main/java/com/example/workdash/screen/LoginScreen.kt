@@ -155,11 +155,11 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-                Toast.makeText(
-                    contextForToast,
-                    "$workerPage",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    contextForToast,
+//                    "$workerPage",
+//                    Toast.LENGTH_SHORT
+//                ).show()
 
                 if (workerPage) {
                     navController.navigate(route = ScreenRoute.UserDetailsWorker.route) {
