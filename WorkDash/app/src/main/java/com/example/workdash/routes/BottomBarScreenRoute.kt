@@ -21,11 +21,6 @@ sealed class BottomBarScreen(
         title = "UserInfo",
         icon = Icons.Default.Person
     )
-    object Setting: BottomBarScreen(
-        route = ScreenRoute.Settings.route,
-        title = "Settings",
-        icon = Icons.Default.Settings
-    )
 
 
 }
