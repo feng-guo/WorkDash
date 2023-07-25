@@ -21,6 +21,8 @@ class JobViewModel: ViewModel() {
     val jobs = mutableListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
     var matchedJobs = mutableListOf<JobModel>()
+    //var matchedJobList = mutableListOf<matchedJobModel>()
+
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
     init {
@@ -90,6 +92,24 @@ class JobViewModel: ViewModel() {
     private fun initMatchedJobPostListener() {
 
         matchedJobs = CheckInService.getJobDetailsByEmployeeId(currentUserUid)
+
+//        CheckInService.getMatchedJobsByEmployeeId(currentUserUid,
+//            onSuccess = { matchedJobs ->
+//                // Process the matched job data
+//                for (job in matchedJobs) {
+//                    // Do something with each matched job
+//                    if (!matchedJobList.contains(job) && job.checkOutState == "false") {
+//                        matchedJobList.add(job)
+//                    }
+//
+//
+//                }
+//            },
+//            onError = { errorMessage ->
+//                // Handle the error
+//                Log.e("GET MATCHED JOB ERROR", errorMessage)
+//            }
+//        )
     }
 
     fun getJobList(): List<JobModel>{
@@ -99,8 +119,16 @@ class JobViewModel: ViewModel() {
 
     }
 
-    fun getJobApplicationList(): List<JobApplicationModel> {
-        return jobApplications
+    fun getJobApplicationList(jobId: String): List<JobApplicationModel> {
+        var res = mutableListOf<JobApplicationModel>()
+
+        for(job in jobApplications){
+            if(job.jobId == jobId && job.applicationStatus == "Pending" && !res.contains(job)){
+                res.add(job)
+            }
+        }
+
+        return res
     }
 
     fun getJobApplicationListForJob(jobId: String): List<JobApplicationModel> {
@@ -114,8 +142,15 @@ class JobViewModel: ViewModel() {
     }
 
     fun getMatchedJobList(): MutableList<JobModel>{
+        var res = mutableListOf<JobModel>()
 
-        return matchedJobs
+        for(job in matchedJobs){
+            if(job.jobState != "Finished" && !res.contains(job)){
+                res.add(job)
+            }
+        }
+
+        return res
     }
 
     fun getJobListWithFilter(userId: String, userViewModel: UserViewModel): MutableList<JobModel> {
