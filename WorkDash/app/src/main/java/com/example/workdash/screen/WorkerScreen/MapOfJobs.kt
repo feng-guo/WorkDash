@@ -23,26 +23,26 @@ fun MapOfJobs(
     val navBackStackEntry = navController.currentBackStackEntry
     val locationId = navBackStackEntry?.arguments?.getString(LOCATION_ID_ARG) ?: ""
     val locationViewModel = LocationViewModel()
-    val default = LatLng(43.477057, -80.530969)
+    val default = LatLng(43.4720424, -80.5262535)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(default, 17f)
     }
-    val coordinate = remember {locationViewModel.getCoordinate(locationId)}
-    if (coordinate.locationId != "") {
+    val coordinates = remember {locationViewModel.getCoordinateList()}
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
-            Marker(
-                state = rememberMarkerState(position = LatLng(coordinate.latitude, coordinate.longitude)),
-                title = locationViewModel.getLocation(coordinate.locationId).locationName,
-                snippet = locationViewModel.getLocation(coordinate.locationId).address.address,
-                onInfoWindowLongClick = {
-                    navController.navigate(
-                        route = ScreenRoute.JobDetailsWorker.passJobIdAndLocationId(locationViewModel.getJobFromLocation(coordinate.locationId).jobId, coordinate.locationId)
-                    )
-                }
-            )
+            coordinates.forEach { coordinate ->
+                Marker(
+                    state = rememberMarkerState(position = LatLng(coordinate.latitude, coordinate.longitude)),
+                    title = locationViewModel.getLocation(coordinate.locationId).locationName,
+                    snippet = locationViewModel.getLocation(coordinate.locationId).address.address,
+                    onInfoWindowLongClick = {
+                        navController.navigate(
+                            route = ScreenRoute.JobDetailsWorker.passJobIdAndLocationId(locationViewModel.getJobFromLocation(coordinate.locationId).jobId, coordinate.locationId)
+                        )
+                    }
+                )
+            }
         }
-    }
 }
