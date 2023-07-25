@@ -63,7 +63,7 @@ fun UserInfo(
 
                     if(current?.isWorker == true) {
                         Text(
-                            "USER PROFILE",
+                            text = "${current.name}",
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center
                         )
@@ -72,15 +72,6 @@ fun UserInfo(
                         Column(
                             modifier = Modifier.padding(16.dp)
                         ) {
-                            Text(
-                                text = "Name: ${current.name}",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily.SansSerif,
-                                    color = Color.Black
-                                ),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
                             Text(
                                 text = "Email: ${current.email}",
                                 style = TextStyle(
@@ -155,10 +146,56 @@ fun UserInfo(
                             )
                         }
                     }
-                    else{
+                    else if(current?.isWorker == true){
+                        Text(
+                            text = "${current.name}",
+                            fontSize = 30.sp,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
 
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Email: ${current.email}",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    color = Color.Black
+                                ),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = "Phone: ${current.phone}",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    color = Color.Black
+                                ),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = "Address: ${current.address}",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    color = Color.Black
+                                ),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = "ID: ${current.selectedId}",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    color = Color.Black
+                                ),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     // User is signed in, you can access their information
                     Button(
                         onClick = {
