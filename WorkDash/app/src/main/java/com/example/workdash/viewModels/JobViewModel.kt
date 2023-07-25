@@ -91,7 +91,7 @@ class JobViewModel: ViewModel() {
 
     private fun initMatchedJobPostListener() {
 
-        matchedJobs = CheckInService.getJobDetailsByEmployeeId(currentUserUid)
+        matchedJobs = getJobDetailsByEmployeeId(currentUserUid)
 
 //        CheckInService.getMatchedJobsByEmployeeId(currentUserUid,
 //            onSuccess = { matchedJobs ->
@@ -141,8 +141,9 @@ class JobViewModel: ViewModel() {
         return result
     }
 
-    fun getMatchedJobList(): MutableList<JobModel>{
+    fun getMatchedJobList(): List<JobModel>{
         var res = mutableListOf<JobModel>()
+        res.clear()
         println("get into getMatchedJobList")
         for(job in matchedJobs){
             if(job.jobState != "Finished" && !res.contains(job)){
@@ -150,6 +151,7 @@ class JobViewModel: ViewModel() {
             }
         }
         println("get getMatchedJobList res size : ${res.size}")
+
         return res
     }
 

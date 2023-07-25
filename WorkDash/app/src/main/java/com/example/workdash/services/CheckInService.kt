@@ -35,6 +35,8 @@ object CheckInService {
         getMatchedJobsByEmployeeId(employeeId,
             onSuccess = { matchedJobs ->
                 // Process the matched job data
+                matchedJobList.clear()
+                finalJobList.clear()
                 for (job in matchedJobs) {
                     // Do something with each matched job
                     if(!matchedJobList.contains(job)){
