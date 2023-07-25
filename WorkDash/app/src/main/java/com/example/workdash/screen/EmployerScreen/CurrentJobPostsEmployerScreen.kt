@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,11 +30,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
-import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.JobViewModel
+import com.example.workdash.viewModels.LocationViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,6 +44,8 @@ fun CurrentJobPostsEmployerScreen(
     navController: NavController
 ) {
     val jobViewModel = JobViewModel()
+    val locationViewModel = LocationViewModel()
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,19 +73,15 @@ fun CurrentJobPostsEmployerScreen(
             LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(jobViewModel.getJobList()) { job ->
-                JobCard(jobModel = job, navController = navController)
+            items(jobViewModel.getJobListForEmployer(currentUserUid!!, locationViewModel)) { job ->
+                JobCard(jobModel = job, locationModel = locationViewModel.getLocation(job.locationId), navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun JobCard(jobModel: JobModel, navController: NavController) {
-    var locationModel = LocationModel()
-    val locationCallback = { location: LocationModel? -> locationModel = location?: LocationModel() }
-    LocationService.getLocationFromId(jobModel.locationId, locationCallback)
-
+fun JobCard(jobModel: JobModel, locationModel: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,12 +103,11 @@ fun JobCard(jobModel: JobModel, navController: NavController) {
                     .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                //TODO figure out images
-//                AsyncImage(
-//                    model = job.location.imgUrl,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(100.dp)
-//                )
+                AsyncImage(
+                    model = locationModel.imgUrl,
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Row() {

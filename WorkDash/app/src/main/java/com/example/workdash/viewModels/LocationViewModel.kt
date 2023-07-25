@@ -103,6 +103,16 @@ class LocationViewModel {
         return JobModel()
     }
 
+    fun getLocationListEmployer(userId: String): List<LocationModel> {
+        val result = mutableListOf<LocationModel>()
+        locations.forEach{ locationModel ->
+            if (locationModel.businessId == userId) {
+                result.add(locationModel)
+            }
+        }
+        return result
+    }
+
     fun getCoordinate(id: String): CoordinateModel {
         for(coordinate in coordinates) {
             if (coordinate.locationId == id) {

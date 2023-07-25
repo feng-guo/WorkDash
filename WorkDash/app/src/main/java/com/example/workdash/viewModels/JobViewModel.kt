@@ -129,6 +129,16 @@ class JobViewModel: ViewModel() {
         return result
     }
 
+    fun getJobListForEmployer(userId: String, locationViewModel: LocationViewModel): MutableList<JobModel> {
+        val result = mutableListOf<JobModel>()
+        jobs.forEach{ jobModel ->
+            if (locationViewModel.getLocation(jobModel.locationId).businessId == userId) {
+                result.add(jobModel)
+            }
+        }
+        return result
+    }
+
     fun getJob(id: String): JobModel {
         jobs.forEach{ jobModel ->
             if (jobModel.jobId == id) {

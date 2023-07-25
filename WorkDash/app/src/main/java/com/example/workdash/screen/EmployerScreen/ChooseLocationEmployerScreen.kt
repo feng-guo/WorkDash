@@ -34,6 +34,7 @@ import coil.compose.AsyncImage
 import com.example.workdash.models.LocationModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.LocationViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -42,7 +43,7 @@ fun ChooseLocationEmployerScreen(
     //jobs: List<Job>
 ) {
     val locationsViewModel= LocationViewModel()
-
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,7 +71,7 @@ fun ChooseLocationEmployerScreen(
         LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(locationsViewModel.getLocationList()) { location ->
+            items(locationsViewModel.getLocationListEmployer(currentUserUid!!)) { location ->
                 LocationCard(locationModel = location, navController = navController)
             }
         }
