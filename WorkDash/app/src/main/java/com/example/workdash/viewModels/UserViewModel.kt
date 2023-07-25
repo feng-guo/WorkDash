@@ -1,7 +1,7 @@
 package com.example.workdash.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.example.workdash.models.JobModel
+import com.example.workdash.models.RatingModel
 import com.example.workdash.models.WorkerProfileModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -11,12 +11,39 @@ import com.google.firebase.database.ValueEventListener
 
 class UserViewModel: ViewModel() {
     val users = mutableListOf<WorkerProfileModel>()
+    val ratings = mutableListOf<RatingModel>()
 
     init {
         val dbRef = FirebaseDatabase.getInstance().reference
         initJobPostListener(dbRef)
+        initRatingListener(dbRef)
     }
 
+    private fun initRatingListener(dbRef: DatabaseReference) {
+        val ratingsList = dbRef.child("Ratings")
+
+        val ratingsListListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ratingSnapshot in dataSnapshot.children) {
+                    //TODO filter jobs based on filters
+                    val rating = RatingModel()
+                    val ratingObj = ratingSnapshot.value as HashMap<*, *>
+                    with(rating) {
+                        ratingAverage = (ratingObj["ratingAverage"].toString()).toDouble()
+                        ratingsCount = ratingObj["ratingsCount"] as Long
+                        ratingsTotal = ratingObj["ratingsTotal"] as Long
+                        userId = ratingObj["userId"].toString()
+                    }
+                    ratings.add(rating)
+                }
+
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                //TODO Idk do something if it fails
+            }
+        }
+        ratingsList.addValueEventListener(ratingsListListener)
+    }
     private fun initJobPostListener(dbRef: DatabaseReference) {
         val userList = dbRef.child("userProfile")
 
@@ -64,5 +91,14 @@ class UserViewModel: ViewModel() {
             }
         }
         return WorkerProfileModel()
+    }
+
+    fun getRating(userId: String): RatingModel {
+        ratings.forEach { rating ->
+            if (rating.userId == userId) {
+                return rating
+            }
+        }
+        return RatingModel()
     }
 }

@@ -82,6 +82,8 @@ fun JobDetailsEmployerScreen(
     }
     CheckInService.getmatchedJobDetailsByJobId(jobId,currentEmployeeCallback)
 
+    val userViewModel = UserViewModel()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -337,7 +339,7 @@ fun JobDetailsEmployerScreen(
                     ) {
                         //TODO this should probably be queried based on the job id lol
                         items(jobViewModel.getJobApplicationList(jobId)) { jobApplicationModel ->
-                            CandidateCard(jobApplicationModel = jobApplicationModel, navController = navController)
+                            CandidateCard(jobApplicationModel = jobApplicationModel, userViewModel = userViewModel, navController = navController)
                         }
                     }
                 }
@@ -469,8 +471,10 @@ fun WorkerCard(currentEmployeeModel: CurrentEmployeeModel, navController: NavCon
     }
 }
 @Composable
-fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavController) {
+fun CandidateCard(jobApplicationModel: JobApplicationModel, userViewModel: UserViewModel, navController: NavController) {
     val contextForToast = LocalContext.current.applicationContext
+
+    val rating = userViewModel.getRating(jobApplicationModel.employeeId)
 
     var enabled by remember {
         mutableStateOf(jobApplicationModel.applicationStatus == "Pending")
@@ -501,7 +505,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "f",
+                    text = jobApplicationModel.jobApplicationId,
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -514,14 +518,14 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     .padding(8.dp)
             ) {
                 Text(
-                    text = "Self Description: ",
+                    text = "Rating Count: ",
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.Black
                 )
                 Text(
-                    text = "something about the user",
+                    text = rating.ratingsCount.toString(),
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -561,7 +565,7 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, navController: NavCo
                     color = Color.Black
                 )
                 Text(
-                    text = "user rating",
+                    text = rating.ratingAverage.toString(),
                     style = MaterialTheme.typography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
