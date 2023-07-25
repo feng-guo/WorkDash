@@ -143,13 +143,13 @@ class JobViewModel: ViewModel() {
 
     fun getMatchedJobList(): MutableList<JobModel>{
         var res = mutableListOf<JobModel>()
-
+        println("get into getMatchedJobList")
         for(job in matchedJobs){
             if(job.jobState != "Finished" && !res.contains(job)){
                 res.add(job)
             }
         }
-
+        println("get getMatchedJobList res size : ${res.size}")
         return res
     }
 

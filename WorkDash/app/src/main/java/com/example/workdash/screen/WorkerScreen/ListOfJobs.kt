@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,6 +70,25 @@ fun ListOfJobs(
                     }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    // Refresh Button
+                    IconButton(
+                        onClick = {
+                            navController.navigate(ScreenRoute.ListOfJobs.route){
+                                popUpTo(ScreenRoute.Home.route) {
+                                    inclusive = true
+                                }
+                            }
+                                  },
+                        content = {
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = "Refresh",
+                                tint = Color.White // Change the tint color as needed
+                            )
+                        }
+                    )
                 }
             )
         }

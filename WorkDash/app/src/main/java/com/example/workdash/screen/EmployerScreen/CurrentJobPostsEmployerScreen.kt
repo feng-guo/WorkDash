@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +61,24 @@ fun CurrentJobPostsEmployerScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
+
                 actions = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(ScreenRoute.CurrentJobPostsEmployer.route){
+                                popUpTo(ScreenRoute.Home.route) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        content = {
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = "Refresh",
+                                tint = Color.White // Change the tint color as needed
+                            )
+                        }
+                    )
                     IconButton(onClick = {
                         navController.navigate(ScreenRoute.ChooseLocationEmployer.route)
                     }) {
