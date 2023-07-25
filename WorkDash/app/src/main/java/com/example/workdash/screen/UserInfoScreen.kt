@@ -1,5 +1,6 @@
 package com.example.workdash.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.workdash.models.WorkerProfileModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.viewModels.UserViewModel
@@ -60,8 +63,14 @@ fun UserInfo(
                 } else {
                     val current = userList.firstOrNull { user -> user.email == currentUser.email }
                     // Data is available, show the content
+                    Log.d("pfp", current!!.toString())
 
                     if(current?.isWorker == true) {
+                        AsyncImage(
+                            model = current.profilePic,
+                            contentDescription = "profile",
+                            modifier = Modifier.size(100.dp)
+                        )
                         Text(
                             text = "${current.name}",
                             fontSize = 30.sp,
@@ -146,7 +155,12 @@ fun UserInfo(
                             )
                         }
                     }
-                    else if(current?.isWorker == true){
+                    else if(current?.isWorker != true) {
+                        AsyncImage(
+                            model = current.profilePic,
+                            contentDescription = "profile",
+                            modifier = Modifier.size(100.dp)
+                        )
                         Text(
                             text = "${current.name}",
                             fontSize = 30.sp,

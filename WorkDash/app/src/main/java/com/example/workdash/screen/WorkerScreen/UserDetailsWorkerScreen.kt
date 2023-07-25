@@ -413,43 +413,43 @@ fun UserDetailsWorkerScreen(
                 var profilePicUrl = ""
                 var idPicUrl = ""
                 var uid = auth.currentUser!!.uid
+                var workerProfile: WorkerProfileModel? = null
+
                 if(photoProfileUri != null && photoIdUri != null)
                 {
                     var profilePicTask = uploadImage(photoProfileUri!!)
                     profilePicTask.addOnSuccessListener { taskSnapshot ->
                         profilePicUrl = taskSnapshot.toString()
+
+                        var idPicTask = uploadImage(photoIdUri!!)
+                        idPicTask.addOnSuccessListener { taskSnapshot ->
+                            idPicUrl = taskSnapshot.toString()
+                        }
+
+                        workerProfile = WorkerProfileModel(
+                            uid = uid,
+                            isWorker = true,
+                            name = name,
+                            email = email,
+                            phone = phone,
+                            address = address,
+                            salary = sliderPosition.toInt(),
+                            isVerified = true,
+                            workDays = if (workDays.isEmpty()) emptyList.toList() else workDays.toList(),
+                            startTime = fromTime.value,
+                            endTime = toTime.value,
+                            selectedId = selectedId,
+                            profilePic = profilePicUrl,
+                            idPic = idPicUrl
+                        )
+
+                        if( resumeUri != null)
+                        {
+                            FirebaseStorage.getInstance().reference.child("resume/$uid").child("resume.pdf").putFile(resumeUri!!)
+                        }
+                        FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
                     }
-
-                    var idPicTask = uploadImage(photoIdUri!!)
-                    idPicTask.addOnSuccessListener { taskSnapshot ->
-                        idPicUrl = taskSnapshot.toString()
-                    }
-                    //FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
-                    //FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
                 }
-
-                var workerProfile = WorkerProfileModel(
-                    uid = uid,
-                    isWorker = true,
-                    name = name,
-                    email = email,
-                    phone = phone,
-                    address = address,
-                    salary = sliderPosition.toInt(),
-                    isVerified = true,
-                    workDays = if (workDays.isEmpty()) emptyList.toList() else workDays.toList(),
-                    startTime = fromTime.value,
-                    endTime = toTime.value,
-                    selectedId = selectedId,
-                    profilePic = profilePicUrl,
-                    idPic = idPicUrl
-                )
-
-                if( resumeUri != null)
-                {
-                    FirebaseStorage.getInstance().reference.child("resume/$uid").child("resume.pdf").putFile(resumeUri!!)
-                }
-                FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(workerProfile)
             }
         }
     }

@@ -306,45 +306,44 @@ fun SignUpEmployerScreen(
                 var profilePicUrl = ""
                 var idPicUrl = ""
                 var uid = auth.currentUser!!.uid
+                var employerProfile: EmployerProfileModel? = null
 
                 if(photoProfileUri != null && photoIdUri != null)
                 {
                     var profilePicTask = uploadImages(photoProfileUri!!)
                     profilePicTask.addOnSuccessListener { taskSnapshot ->
                         profilePicUrl = taskSnapshot.toString()
+                        
+                        var idPicTask = uploadImages(photoIdUri!!)
+                        idPicTask.addOnSuccessListener { taskSnapshot ->
+                            idPicUrl = taskSnapshot.toString()
+                        }
+
+                        employerProfile = EmployerProfileModel(
+                            uid = uid,
+                            isWorker = false,
+                            name = name,
+                            email = email,
+                            phone = phone,
+                            address = address,
+                            salary = 0,
+                            isVerified = true,
+                            workDays = emptyList.toList(),
+                            startTime = "",
+                            endTime = "",
+                            selectedId = selectedId,
+                            profilePic = profilePicUrl,
+                            idPic = idPicUrl
+                        )
+
+                        if( licenseUri != null)
+                        {
+                            FirebaseStorage.getInstance().reference.child("license/$uid").child("license.pdf").putFile(licenseUri!!)
+                        }
+
+                        FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(employerProfile)
                     }
-
-                    var idPicTask = uploadImages(photoIdUri!!)
-                    idPicTask.addOnSuccessListener { taskSnapshot ->
-                        idPicUrl = taskSnapshot.toString()
-                    }
-                    //FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
-                    //FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
                 }
-
-                var employerProfile = EmployerProfileModel(
-                    uid = uid,
-                    isWorker = false,
-                    name = name,
-                    email = email,
-                    phone = phone,
-                    address = address,
-                    salary = 0,
-                    isVerified = true,
-                    workDays = emptyList.toList(),
-                    startTime = "",
-                    endTime = "",
-                    selectedId = selectedId,
-                    profilePic = profilePicUrl,
-                    idPic = idPicUrl
-                )
-
-                if( licenseUri != null)
-                {
-                    FirebaseStorage.getInstance().reference.child("license/$uid").child("license.pdf").putFile(licenseUri!!)
-                }
-
-                FirebaseDatabase.getInstance().reference.child("userProfile").child(uid).setValue(employerProfile)
             }
         }
     }
