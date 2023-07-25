@@ -104,6 +104,9 @@ fun UserDetailsWorkerScreen(
     val emptyList = remember { mutableSetOf("") }
     val IDs = listOf("Passport", "Driver's Licence", "Health Card", "Employee ID")
     var selectedId by remember { mutableStateOf("") }
+    var transitNo by remember { mutableStateOf("") }
+    var accnNo by remember { mutableStateOf("") }
+    var instNo by remember { mutableStateOf("") }
 
     val mContext = LocalContext.current
     val mCalendar = Calendar.getInstance()
@@ -396,6 +399,42 @@ fun UserDetailsWorkerScreen(
                 style = MaterialTheme.typography.caption
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Payment Details", style = MaterialTheme.typography.h6)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = transitNo,
+                onValueChange = { transitNo = it },
+                label = { Text("Transit No.") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = instNo,
+                onValueChange = { instNo = it },
+                label = { Text("Institution No.") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = accnNo,
+                onValueChange = { accnNo = it },
+                label = { Text("Account No.") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(16.dp))
 
             SignUpButton(
