@@ -81,6 +81,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import com.example.workdash.screen.EmployerScreen.storageRef
+import com.example.workdash.services.LocationService
+import com.google.android.gms.tasks.Task
+import com.google.firebase.storage.UploadTask
 import org.opencv.core.CvType.CV_32F
 import java.io.InputStream
 
@@ -406,7 +410,24 @@ fun UserDetailsWorkerScreen(
 
             // if the signup is successful, save the users information in the database
             if (auth.currentUser != null) {
+                var profilePicUrl = ""
+                var idPicUrl = ""
                 var uid = auth.currentUser!!.uid
+                if(photoProfileUri != null && photoIdUri != null)
+                {
+                    var profilePicTask = uploadImage(photoProfileUri!!)
+                    profilePicTask.addOnSuccessListener { taskSnapshot ->
+                        profilePicUrl = taskSnapshot.toString()
+                    }
+
+                    var idPicTask = uploadImage(photoIdUri!!)
+                    idPicTask.addOnSuccessListener { taskSnapshot ->
+                        idPicUrl = taskSnapshot.toString()
+                    }
+                    //FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
+                    //FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
+                }
+
                 var workerProfile = WorkerProfileModel(
                     uid = uid,
                     isWorker = true,
@@ -419,14 +440,11 @@ fun UserDetailsWorkerScreen(
                     workDays = if (workDays.isEmpty()) emptyList.toList() else workDays.toList(),
                     startTime = fromTime.value,
                     endTime = toTime.value,
-                    selectedId = selectedId
+                    selectedId = selectedId,
+                    profilePic = profilePicUrl,
+                    idPic = idPicUrl
                 )
 
-                if(photoProfileUri != null && photoIdUri != null)
-                {
-                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
-                    FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
-                }
                 if( resumeUri != null)
                 {
                     FirebaseStorage.getInstance().reference.child("resume/$uid").child("resume.pdf").putFile(resumeUri!!)
@@ -437,6 +455,17 @@ fun UserDetailsWorkerScreen(
     }
 }
 
+fun uploadImage(photoUri: Uri): Task<Uri> {
+    val imageRef = FirebaseStorage.getInstance().reference.child("${System.currentTimeMillis()}.jpg")
+    //val imageRef = storageRef.child("${System.currentTimeMillis()}.jpg")
+    return imageRef.putFile(photoUri)
+        .continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
+            if (!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            imageRef.downloadUrl
+        }
+}
 
 @Composable
 fun dayOfWeekItem(day: String): Boolean {

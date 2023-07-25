@@ -46,11 +46,13 @@ import com.example.workdash.R
 import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.routes.ScreenRoute
 import com.example.workdash.screen.WorkerScreen.AuthenticateWorker
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.Core
@@ -301,7 +303,25 @@ fun SignUpEmployerScreen(
 
             // if the signup is successful, save the users information in the database
             if (auth.currentUser != null) {
+                var profilePicUrl = ""
+                var idPicUrl = ""
                 var uid = auth.currentUser!!.uid
+
+                if(photoProfileUri != null && photoIdUri != null)
+                {
+                    var profilePicTask = uploadImages(photoProfileUri!!)
+                    profilePicTask.addOnSuccessListener { taskSnapshot ->
+                        profilePicUrl = taskSnapshot.toString()
+                    }
+
+                    var idPicTask = uploadImages(photoIdUri!!)
+                    idPicTask.addOnSuccessListener { taskSnapshot ->
+                        idPicUrl = taskSnapshot.toString()
+                    }
+                    //FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
+                    //FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
+                }
+
                 var employerProfile = EmployerProfileModel(
                     uid = uid,
                     isWorker = false,
@@ -314,14 +334,11 @@ fun SignUpEmployerScreen(
                     workDays = emptyList.toList(),
                     startTime = "",
                     endTime = "",
-                    selectedId = selectedId
+                    selectedId = selectedId,
+                    profilePic = profilePicUrl,
+                    idPic = idPicUrl
                 )
 
-                if(photoProfileUri != null && photoIdUri != null)
-                {
-                    FirebaseStorage.getInstance().reference.child("images/profilePic/$uid").child("profilePic.jpg").putFile(photoProfileUri!!)
-                    FirebaseStorage.getInstance().reference.child("images/IDPic/$uid").child("id.jpg").putFile(photoIdUri!!)
-                }
                 if( licenseUri != null)
                 {
                     FirebaseStorage.getInstance().reference.child("license/$uid").child("license.pdf").putFile(licenseUri!!)
@@ -331,6 +348,18 @@ fun SignUpEmployerScreen(
             }
         }
     }
+}
+
+fun uploadImages(photoUri: Uri): Task<Uri> {
+    val imageRef = FirebaseStorage.getInstance().reference.child("${System.currentTimeMillis()}.jpg")
+    //val imageRef = storageRef.child("${System.currentTimeMillis()}.jpg")
+    return imageRef.putFile(photoUri)
+        .continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
+            if (!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            imageRef.downloadUrl
+        }
 }
 
 @Composable

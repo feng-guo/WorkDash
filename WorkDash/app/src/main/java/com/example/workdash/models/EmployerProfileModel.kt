@@ -12,7 +12,9 @@ data class EmployerProfileModel(
     var workDays: List<String>,
     var startTime: String,
     var endTime: String,
-    var selectedId: String
+    var selectedId: String,
+    var profilePic: String,
+    var idPic: String
 ) {
-    constructor() : this("", true, "", "", "", "", 0, false, listOf(), "", "", "")
+    constructor() : this("", true, "", "", "", "", 0, false, listOf(), "", "", "", "", "")
 }
