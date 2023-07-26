@@ -94,7 +94,7 @@ fun JobDetailsWorkerScreen(
                 ) {
                     //TODO real image
                     AsyncImage(
-                        model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
+                        model = locationModel.imgUrl,
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.width(16.dp))
