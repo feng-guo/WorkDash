@@ -118,7 +118,7 @@ fun ListOfJobs(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         items(jobViewModel.getMatchedJobList()) { job ->
-                            ProcessingJobCard(job = job, navController = navController)
+                            ProcessingJobCard(job = job, locationModel = locationViewModel.getLocation(job.locationId), navController = navController)
                         }
                     }
                 }
@@ -259,7 +259,7 @@ fun JobCard(job: JobModel, locationModel: LocationModel, navController: NavContr
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProcessingJobCard(job: JobModel, navController: NavController) {
+fun ProcessingJobCard(job: JobModel, locationModel: LocationModel, navController: NavController) {
     Card(
         modifier = Modifier
             .height(140.dp)
@@ -295,7 +295,7 @@ fun ProcessingJobCard(job: JobModel, navController: NavController) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             AsyncImage(
-                model = "https://perkinswill.com/wp-content/uploads/2019/07/project_Eng5_7_01-2880x1570.jpg",
+                model = locationModel.imgUrl,
                 contentDescription = null,
                 modifier = Modifier.size(100.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
