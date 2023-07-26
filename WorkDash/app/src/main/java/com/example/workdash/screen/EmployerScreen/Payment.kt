@@ -34,9 +34,12 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.workdash.routes.ID_ARG
+import com.example.workdash.routes.ScreenRoute
 
 @Composable
-fun Payment() {
+fun Payment(navController: NavController) {
     var cardNumber by remember { mutableStateOf("") }
     var expiry by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -180,7 +183,8 @@ fun Payment() {
             expiry,
             name,
             cvc,
-            amount
+            amount,
+            navController
         )
     }
 }
@@ -191,9 +195,9 @@ fun PaymentButton(
     expMonth: String,
     expYear: String,
     cvc: String,
-    amount: String
+    amount: String,
+    navController: NavController
 ) {
-
     var isLoading by remember { mutableStateOf(false) }
     var paymentSuccess by remember { mutableStateOf(false) }
     var totalAmount = ""
@@ -205,7 +209,7 @@ fun PaymentButton(
     var customerIdState = ""
     var emphKeyState = ""
     var clientSecretState = ""
-    val apiKey = "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"
+    val apiKey = "sk_test_51NWDtRIlLKn5yit7ctjwXXQ2LLdHcV3n4Uv0X1AVKO5yuhsU8QbIKDzglhls6WGdsLN4cI1aezLGRi3EOZVffcqm00rWdDApDV"
 
     Button(
         onClick = {
@@ -309,6 +313,26 @@ fun PaymentButton(
         }
         else {
             Text("Pay Now", color = Color.White)
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        onClick = {
+            navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+                popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                    inclusive = true
+                }
+            }
+        },
+        modifier = Modifier.fillMaxWidth().height(50.dp)
+    ) {
+        if(!paymentSuccess)
+        {
+            androidx.compose.material.Text(text = "Skip")
+        }
+        else
+        {
+            androidx.compose.material.Text(text = "Home")
         }
     }
 }

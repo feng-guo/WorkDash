@@ -140,9 +140,9 @@ fun Rating(
                                     RatingService.updateRating(currentUserUid, rating.toLong())
                                 }
                                 if(satisfiedText.value == "How satisfied are you with this employee?") {
-                                    navController.navigate(route = ScreenRoute.CurrentJobPostsEmployer.route) {
+                                    navController.navigate(route = ScreenRoute.Payments.route) {
 
-                                        popUpTo(ScreenRoute.CurrentJobPostsEmployer.route) {
+                                        popUpTo(ScreenRoute.Payments.route) {
                                             inclusive = true
                                         }
                                     }
