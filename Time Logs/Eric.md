@@ -36,3 +36,8 @@
 |Jul 23     | 02:30  | Debug|
 |Jul 24     | 02:30  | DEMO Meeting|
 |Jul 24     | 03:00  | Debug|
+|Jul 24     | 02:00  | Group meeting for DEMO preparation|
+|Jul 25     | 02:30  | Debug|
+|Jul 25     | 02:00  | DEMO recording|
+|Jul 26     | 02:00  | D6 App Design part|
+|Jul 27     | 00:30  | D7|
