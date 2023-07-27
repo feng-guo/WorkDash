@@ -48,3 +48,6 @@
 |2023-07-23|1.5|Called group to walk through the app to see what final touches need to be made|
 |2023-07-23|1|Debugged issue for reporting and navgraph routing|
 |2023-07-24|4|Bug fixing and polishing up for the demo|
+|2023-07-25|3|Hotfixes for demo dry run|
+|2023-07-26|2|More hotfixes for bugs and filming demo|
+|2023-07-27|5|Worked on writing D6|
