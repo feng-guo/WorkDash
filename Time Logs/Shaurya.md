@@ -31,3 +31,9 @@
 |2023/07/21|  6.5  | Complete stripe account API implementation for payment gateway |
 |2023/07/21|  1.0  | Change app logo |
 |2023/07/21|  0.5  | Bug fixes |
+|2023-07-23|  1.5  | Called group to walk through the app to see what final touches need to be made |
+|2023/07/23|  5.0  | Fetch users from database and implement profile page |
+|2023/07/24|  3.0  | Removing redundant entries from database and fetching user info |
+|2023/07/24|  2.5  | Fix bugs with asynchrounous fetching of user info |
+|2023/07/25|  1.5  | Reroute payments page and fix final minor bugs |
+|2023/07/25|  3.0  | Prepare final demo |
