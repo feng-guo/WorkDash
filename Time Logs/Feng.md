@@ -51,3 +51,4 @@
 |2023-07-25|3|Hotfixes for demo dry run|
 |2023-07-26|2|More hotfixes for bugs and filming demo|
 |2023-07-27|6|Worked on writing D6|
+|2023-07-27|2|Worked on writing D7|
