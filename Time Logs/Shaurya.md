@@ -37,3 +37,4 @@
 |2023/07/24|  2.5  | Fix bugs with asynchrounous fetching of user info |
 |2023/07/25|  1.5  | Reroute payments page and fix final minor bugs |
 |2023/07/25|  3.0  | Prepare final demo |
+|2023/07/25|  3.0  | Work on writing and editing D6 |
