@@ -1,11 +1,8 @@
 package com.example.workdash.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
-import com.example.workdash.models.matchedJobModel
-import com.example.workdash.services.CheckInService
 import com.example.workdash.services.CheckInService.getJobDetailsByEmployeeId
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -13,7 +10,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlin.math.log
 
 class JobViewModel: ViewModel() {
     private val locationViewModel = LocationViewModel()
@@ -38,7 +34,6 @@ class JobViewModel: ViewModel() {
         val jobPostListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (jobSnapshot in dataSnapshot.children) {
-                    //TODO filter jobs based on filters
                     val job = JobModel()
                     val jobObj = jobSnapshot.value as HashMap<*, *>
                     with(job) {
@@ -57,7 +52,6 @@ class JobViewModel: ViewModel() {
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                //TODO Idk do something if it fails
             }
         }
         jobList.addValueEventListener(jobPostListener)
@@ -69,7 +63,6 @@ class JobViewModel: ViewModel() {
         val jobApplicationListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (jobApplicationSnapshot in dataSnapshot.children) {
-                    //TODO filter job applications based on job id
                     val jobApplication = JobApplicationModel()
                     val jobApplicationObj = jobApplicationSnapshot.value as HashMap<*, *>
                     with(jobApplication) {
@@ -83,7 +76,6 @@ class JobViewModel: ViewModel() {
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                //TODO Idk do something if it fails
             }
         }
         jobApplicationList.addValueEventListener(jobApplicationListener)

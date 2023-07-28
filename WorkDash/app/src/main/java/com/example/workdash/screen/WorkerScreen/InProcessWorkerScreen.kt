@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,16 +37,13 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.workdash.models.JobModel
 import com.example.workdash.models.LocationModel
-import com.example.workdash.models.matchedJobModel
+import com.example.workdash.models.MatchedJobModel
 import com.example.workdash.routes.JOB_ID_ARG
-import com.example.workdash.routes.JOB_STATE_ARG
 import com.example.workdash.routes.LOCATION_ID_ARG
 import com.example.workdash.services.CheckInService
 import com.example.workdash.services.JobService
 import com.example.workdash.services.LocationService
 import com.example.workdash.viewModels.CheckInSysWorkerViewModel
-import com.example.workdash.viewModels.CheckInViewModel
-import com.example.workdash.viewModels.JobViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -68,8 +64,8 @@ fun InProcessWorkerScreen(
     val jobCallback = { job: JobModel? -> jobModel = job?:JobModel()}
     JobService.getJobFromId(jobId, jobCallback)
 
-    var matchedJobModel by remember { mutableStateOf(matchedJobModel())}
-    val matchedJobCallback = { matchedJob: matchedJobModel? -> matchedJobModel = matchedJob?: matchedJobModel() }
+    var matchedJobModel by remember { mutableStateOf(MatchedJobModel())}
+    val matchedJobCallback = { matchedJob: MatchedJobModel? -> matchedJobModel = matchedJob?: MatchedJobModel() }
     CheckInService.getMatchedJobFromJobIdAndEmployeeId(jobId + "_" + currentUserUid, matchedJobCallback)
     val condition1 = remember { mutableStateOf(false)}
     val condition2 = remember { mutableStateOf(false)}

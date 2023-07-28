@@ -1,6 +1,6 @@
 package com.example.workdash.models
 
-data class matchedJobModel(
+data class MatchedJobModel(
     var jobId: String,
     var employeeId: String,
     var checkInState: String,

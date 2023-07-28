@@ -22,7 +22,6 @@ class LocationViewModel {
         val locationListListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (locationSnapshot in dataSnapshot.children) {
-                    //TODO filter locations
                     val location = LocationModel()
                     val locationObj = locationSnapshot.value as HashMap<*, *>
                     with(location) {
@@ -48,7 +47,6 @@ class LocationViewModel {
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                //TODO Idk do something if it fails
             }
         }
         locationList.addValueEventListener(locationListListener)
@@ -57,7 +55,6 @@ class LocationViewModel {
         val coordinateListListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (coordinateSnapshot in dataSnapshot.children) {
-                    //TODO filter locations
                     val coordinate = CoordinateModel()
                     val coordinateObj = coordinateSnapshot.value as HashMap<*, *>
                     with(coordinate) {
@@ -70,7 +67,6 @@ class LocationViewModel {
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                //TODO Idk do something if it fails
             }
         }
         coordinateList.addValueEventListener(coordinateListListener)

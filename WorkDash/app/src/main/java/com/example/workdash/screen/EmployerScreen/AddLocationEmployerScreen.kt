@@ -76,8 +76,6 @@ fun AddLocationEmployerScreen(
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         locationImageUri = uri
     }
-//    var verification by remember { mutableStateOf("") }
-
 
     Scaffold(
         topBar = {
@@ -145,7 +143,6 @@ fun AddLocationEmployerScreen(
                     onValueChange = { address = it },
                     label = { androidx.compose.material3.Text("Address") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-//                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
@@ -155,7 +152,6 @@ fun AddLocationEmployerScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                //TODO this should probably be a dropdown
                 OutlinedTextField(
                     value = province,
                     onValueChange = { province = it },
@@ -163,7 +159,6 @@ fun AddLocationEmployerScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                //TODO This should also probably be a dropdown
                 OutlinedTextField(
                     value = country,
                     onValueChange = { country = it },
@@ -178,14 +173,6 @@ fun AddLocationEmployerScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                //TODO add verification to a location
-//                OutlinedTextField(
-//                    value = verification,
-//                    onValueChange = { verification = it },
-//                    label = { androidx.compose.material3.Text("Verification") },
-//                    visualTransformation = PasswordVisualTransformation()
-//                )
-//                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     val addressModel = AddressService.createAddress(address, city, province, country, postalCode)
                     if (AddressService.verifyAddress(addressModel)) {
@@ -201,7 +188,6 @@ fun AddLocationEmployerScreen(
                     } else {
                         Toast.makeText(
                             contextForToast,
-                            //TODO make this not bad
                             "This is not a real location",
                             Toast.LENGTH_SHORT
                         ).show()

@@ -5,9 +5,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.workdash.models.matchedJobModel
+import com.example.workdash.models.MatchedJobModel
 import com.example.workdash.services.CheckInService
-import com.example.workdash.services.CheckInService.getJobDetailsByJobIdAndEmployeeId
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -34,11 +33,11 @@ class CheckInSysWorkerViewModel : ViewModel(){
         CheckInService.updateJobState(jobId, "Finished")
     }
 
-    fun GetJobDetailsByJobIdAndEmployeeId(jobId:String, employeeId: String) : matchedJobModel?{
-        var res: matchedJobModel? = null
+    fun GetJobDetailsByJobIdAndEmployeeId(jobId:String, employeeId: String) : MatchedJobModel?{
+        var res: MatchedJobModel? = null
         viewModelScope.launch {
                 val jobDetails = CheckInService.getJobDetailsByJobIdAndEmployeeId(jobId, employeeId)
-                res = matchedJobModel().apply {
+                res = MatchedJobModel().apply {
                     if(jobDetails != null){
                         this.employeeId = jobDetails.employeeId
                         this.jobId = jobDetails.jobId

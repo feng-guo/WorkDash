@@ -6,7 +6,7 @@ import com.example.workdash.models.CurrentEmployeeModel
 import com.example.workdash.models.EmployerProfileModel
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
-import com.example.workdash.models.matchedJobModel
+import com.example.workdash.models.MatchedJobModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,10 +18,10 @@ object CheckInService {
 
 
     private val dbInt= FirebaseDatabase.getInstance()
-    private var matchedJobList = mutableListOf<matchedJobModel>()
+    private var matchedJobList = mutableListOf<MatchedJobModel>()
     private var finalJobList = mutableListOf<JobModel>()
     fun createMatchedJobModel(jobApplication: JobApplicationModel){
-        var newmatchedJobModel = matchedJobModel()
+        var newmatchedJobModel = MatchedJobModel()
         newmatchedJobModel.jobId = jobApplication.jobId
         newmatchedJobModel.employeeId = jobApplication.employeeId
         newmatchedJobModel.jobId_employeeId = jobApplication.jobId + "_" + jobApplication.employeeId
@@ -123,15 +123,15 @@ object CheckInService {
             }
         })
     }
-    fun getMatchedJobsByEmployeeId(employeeId: String?, onSuccess: (List<matchedJobModel>) -> Unit, onError: (String) -> Unit) {
+    fun getMatchedJobsByEmployeeId(employeeId: String?, onSuccess: (List<MatchedJobModel>) -> Unit, onError: (String) -> Unit) {
         val reference = dbInt.getReference("matchedJob")
 
         val query = reference.orderByChild("employeeId").equalTo(employeeId)
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val matchedJobs = mutableListOf<matchedJobModel>()
+                val matchedJobs = mutableListOf<MatchedJobModel>()
                 for (snapshot in dataSnapshot.children) {
-                    val job = snapshot.getValue(matchedJobModel::class.java)
+                    val job = snapshot.getValue(MatchedJobModel::class.java)
                     job?.let { matchedJobs.add(it) }
                 }
                 onSuccess(matchedJobs)
@@ -145,14 +145,14 @@ object CheckInService {
 
 
     
-    suspend fun getJobDetailsByJobIdAndEmployeeId(jobId: String, employeeId: String): matchedJobModel?{
+    suspend fun getJobDetailsByJobIdAndEmployeeId(jobId: String, employeeId: String): MatchedJobModel?{
         return withContext(Dispatchers.IO) {
-            var res: matchedJobModel? = null
+            var res: MatchedJobModel? = null
             findMatchedJobByJobIdAndEmployeeId(jobId, employeeId,
                 onSuccess = { matchedJob ->
                     // Process the matched job data
                     if (matchedJob != null) {
-                        res = matchedJobModel().apply {
+                        res = MatchedJobModel().apply {
                             this.employeeId = matchedJob.employeeId
                             this.jobId = matchedJob.jobId
                             this.checkInState = matchedJob.checkInState
@@ -174,7 +174,7 @@ object CheckInService {
     private fun findMatchedJobByJobIdAndEmployeeId(
         jobId: String,
         employeeId: String,
-        onSuccess: (matchedJobModel?) -> Unit,
+        onSuccess: (MatchedJobModel?) -> Unit,
         onError: (String) -> Unit
     ) {
         val reference = dbInt.getReference("matchedJob")
@@ -183,9 +183,9 @@ object CheckInService {
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var matchedJob: matchedJobModel? = null
+                var matchedJob: MatchedJobModel? = null
                 for (snapshot in dataSnapshot.children) {
-                    val job = snapshot.getValue(matchedJobModel::class.java)
+                    val job = snapshot.getValue(MatchedJobModel::class.java)
                     if (job?.jobId == jobId && job.employeeId == employeeId) {
                         matchedJob = job
                         break
@@ -209,7 +209,7 @@ object CheckInService {
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
-                    val matchedJob = snapshot.getValue(matchedJobModel::class.java)
+                    val matchedJob = snapshot.getValue(MatchedJobModel::class.java)
                     matchedJob?.let {
                         // Update the matchedJob model with the new CheckInState and CheckInTime
                         it.checkInState = checkInState
@@ -248,7 +248,7 @@ object CheckInService {
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
-                    val matchedJob = snapshot.getValue(matchedJobModel::class.java)
+                    val matchedJob = snapshot.getValue(MatchedJobModel::class.java)
                     matchedJob?.let {
                         // Update the matchedJob model with the new CheckInState and CheckInTime
                         it.checkOutState = checkOutState
@@ -278,8 +278,8 @@ object CheckInService {
         })
     }
 
-    fun getMatchedJobFromJobIdAndEmployeeId(jobId_employeeId: String, callback: (matchedJobModel: matchedJobModel?) -> Unit) {
-        val matchedJobModel = matchedJobModel()
+    fun getMatchedJobFromJobIdAndEmployeeId(jobId_employeeId: String, callback: (matchedJobModel: MatchedJobModel?) -> Unit) {
+        val matchedJobModel = MatchedJobModel()
         DatabaseService.readSingleObjectFromDbTableWithId(
             Constants.TableNames.MATCHED_JOB_NAME,
             Constants.MatchedJob.JOB_EMPLOYEE, jobId_employeeId, matchedJobModel, callback)
@@ -320,14 +320,14 @@ object CheckInService {
     }
 
 
-    private fun getmatchedJobByJobId(jobId: String?, onSuccess: (List<matchedJobModel>) -> Unit, onError: (String) -> Unit) {
+    private fun getmatchedJobByJobId(jobId: String?, onSuccess: (List<MatchedJobModel>) -> Unit, onError: (String) -> Unit) {
         val reference = dbInt.getReference("matchedJob")
         val query = reference.orderByChild("jobId").equalTo(jobId)
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val matchedJobs = mutableListOf<matchedJobModel>()
+                val matchedJobs = mutableListOf<MatchedJobModel>()
                 for (snapshot in dataSnapshot.children) {
-                    val job = snapshot.getValue(matchedJobModel::class.java)
+                    val job = snapshot.getValue(MatchedJobModel::class.java)
                     job?.let { matchedJobs.add(it) }
                 }
                 onSuccess(matchedJobs)
@@ -340,7 +340,7 @@ object CheckInService {
     }
 
     fun getmatchedJobDetailsByJobId(jobId: String?, currentEmployeeCallback: (List<CurrentEmployeeModel>) -> Unit) {
-        val matchedJobList = mutableListOf<matchedJobModel>()
+        val matchedJobList = mutableListOf<MatchedJobModel>()
         val currentEmployeeList = mutableListOf<CurrentEmployeeModel>()
 
         getmatchedJobByJobId(

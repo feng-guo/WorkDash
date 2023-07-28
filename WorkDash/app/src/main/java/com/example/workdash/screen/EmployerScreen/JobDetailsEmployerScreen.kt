@@ -337,7 +337,6 @@ fun JobDetailsEmployerScreen(
                     LazyRow(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        //TODO this should probably be queried based on the job id lol
                         items(jobViewModel.getJobApplicationList(jobId)) { jobApplicationModel ->
                             CandidateCard(jobApplicationModel = jobApplicationModel, userViewModel = userViewModel, navController = navController)
                         }
@@ -479,11 +478,6 @@ fun CandidateCard(jobApplicationModel: JobApplicationModel, userViewModel: UserV
     var enabled by remember {
         mutableStateOf(jobApplicationModel.applicationStatus == "Pending")
     }
-
-    //TODO have to load up actual information based on the user of the application :)
-
-    val workerProfileModel = UserViewModel().getUser(jobApplicationModel.employeeId)
-
     Card(
         modifier = Modifier
             .fillMaxWidth()

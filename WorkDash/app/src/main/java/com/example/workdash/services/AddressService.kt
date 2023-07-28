@@ -7,7 +7,6 @@ object AddressService {
         return AddressModel(address, city, province, country, postalCode)
     }
 
-    //TODO make this real
     fun verifyAddress(address: AddressModel): Boolean {
         return true
     }

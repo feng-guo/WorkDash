@@ -3,7 +3,7 @@ package com.example.workdash.viewModels
 import android.util.Log
 import com.example.workdash.models.JobApplicationModel
 import com.example.workdash.models.JobModel
-import com.example.workdash.models.matchedJobModel
+import com.example.workdash.models.MatchedJobModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -12,7 +12,7 @@ class CheckInViewModel {
     private val locationViewModel = LocationViewModel()
     val jobs = mutableListOf<JobModel>()
     val jobApplications = mutableListOf<JobApplicationModel>()
-    var currentMatchedJob = matchedJobModel()
+    var currentMatchedJob = MatchedJobModel()
     var currentUserUid = ""
     val dbRef = FirebaseDatabase.getInstance().reference
 

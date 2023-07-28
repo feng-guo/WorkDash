@@ -92,7 +92,6 @@ fun JobDetailsWorkerScreen(
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    //TODO real image
                     AsyncImage(
                         model = locationModel.imgUrl,
                         contentDescription = null,
@@ -162,7 +161,6 @@ fun JobDetailsWorkerScreen(
                             color = Color.Black
                         )
                         Text(
-                            //TODO add more to the address
                             text = locationModel.address.address,
                             style = MaterialTheme.typography.body2,
                             maxLines = 1,
@@ -261,13 +259,6 @@ fun JobDetailsWorkerScreen(
                 Button(
                     onClick = {
                         JobApplicationService.applyToJob(jobModel.jobId)
-
-                        //TODO: BUG
-//                        navController.navigate(route = ScreenRoute.Report.passId(locationId)) {
-//                            popUpTo(ScreenRoute.Report.route){
-//                                inclusive = true
-//                            }
-//                        }
                         navController.navigate(route = ScreenRoute.Quiz.passId(locationId)) {
                             popUpTo(ScreenRoute.Quiz.route){
                                 inclusive = true

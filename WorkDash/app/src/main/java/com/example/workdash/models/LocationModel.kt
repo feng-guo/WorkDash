@@ -7,8 +7,6 @@ data class LocationModel(
     var locationName: String,
     var address: AddressModel,
     var isVerified: Boolean,
-
-    //TODO we might have to change this later
     var imageResId: Long,
     var imgUrl: String
 ) {
