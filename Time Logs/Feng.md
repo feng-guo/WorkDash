@@ -50,5 +50,6 @@
 |2023-07-24|4|Bug fixing and polishing up for the demo|
 |2023-07-25|3|Hotfixes for demo dry run|
 |2023-07-26|2|More hotfixes for bugs and filming demo|
-|2023-07-27|6|Worked on writing D6|
-|2023-07-27|2|Worked on writing D7|
+|2023-07-27|6|Worked on writing D6 for the architect + design patterns used and also created 3 diagrams|
+|2023-07-27|2|Worked on writing D7, adding the work done and some point form notes for the harms mitigated|
+|2023-07-28|2|Worked on writing about the observer design pattern used and created the diagram for it|
