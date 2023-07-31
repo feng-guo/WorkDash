@@ -30,5 +30,5 @@
 |2023-07-23|1.5|Called group to walk through the app to see what final touches need to be made|
 |2023-07-24|3|Edited the navigation to and from the Quiz page|
 |2023-07-25|7|Deliverable 6 (Final presentation)|
-|2023-07-27|4|Deliverable 6 (Arch + Final Document)|
+|2023-07-27|4|Deliverable 6 (Arch + Design Document)|
 |2023-07-30|4|Deliverable 7 (Final Status Report)|
