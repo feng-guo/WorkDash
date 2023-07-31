@@ -31,4 +31,4 @@
 |2023-07-24|3|Edited the navigation to and from the Quiz page|
 |2023-07-25|7|Deliverable 6 (Final presentation)|
 |2023-07-27|4|Deliverable 6 (Arch + Final Document)|
-|2023-07-30|4|Deliverable 6 (Final Status Report)|
+|2023-07-30|4|Deliverable 7 (Final Status Report)|
