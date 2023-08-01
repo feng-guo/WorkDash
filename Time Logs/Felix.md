@@ -1,4 +1,4 @@
-### Timelog for 
+### Timelog for Felix Suen (fwhsuen)
 
 |   Date   | Hours | Task |
 |----------|-------|------|

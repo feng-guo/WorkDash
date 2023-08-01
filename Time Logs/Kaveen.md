@@ -1,4 +1,4 @@
-### Timelog for 
+### Timelog for Kaveen Chamika Makumbura (kcmakumb)
 
 |   Date   | Hours | Task |
 |----------|-------|------|

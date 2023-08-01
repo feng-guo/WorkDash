@@ -1,4 +1,4 @@
-### Timelog for 
+### Timelog for Feng Guo (f35guo)
 
 |   Date   | Hours | Task |
 |----------|-------|------|
